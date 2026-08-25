@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # ==========================================================
+  # PostgreSQL + PostGIS (Database Layer)
+  # ==========================================================
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: primeone_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-primeone}
+      POSTGRES_USER: ${DB_USER:-primeone_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-securepassword123}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-primeone_user} -d ${DB_NAME:-primeone}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - prime_network
+
+  # ==========================================================
+  # Redis 7 (Cache, Presence & BullMQ Queue Layer)
+  # ==========================================================
+  redis:
+    image: redis:7-alpine
+    container_name: primeone_redis
+    restart: unless-stopped
+    command: >
+      redis-server 
+      --requirepass ${REDIS_PASSWORD:-secureredispass123} 
+      --appendonly yes 
+      --maxmemory 512mb 
+      --maxmemory-policy noeviction
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-secureredispass123}", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - prime_network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  prime_network:
+    driver: bridge
