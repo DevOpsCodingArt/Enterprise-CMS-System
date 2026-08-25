@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "project": "Prime One",
+  "version": "3.4.0",
+  "architecture_type": "Multi-Tenant SaaS Telecom Operating System & Customer Management Platform",
+  "last_updated": "2026-08-25",
+  "executive_summary": "Comprehensive 3-Tier Multi-Tenant Architecture & 2-Dimensional Organizational Hierarchy (Branches x Departments) enforcing strict PostgreSQL Row-Level Security (RLS) and granular Role-Based Access Control (RBAC).",
+  "system_tiers": {
+    "tier_1_platform_owner": {
+      "name": "SaaS Platform Owner (Super-Admin)",
+      "scope": "Global SaaS Infrastructure across all ISP Tenant Organizations",
+      "target_users": [
+        "Platform Creator",
+        "SaaS DevOps",
+        "Global Super-Admin"
+      ],
+      "portal_root": "/(platform)/*",
+      "routes": {
+        "/platform": "Global Overview & SaaS Health HUD (Active Tenants, MRR, 48k+ Global Subscribers)",
+        "/platform/companies": "Tenant ISP Provisioning & RLS Schema Allocation",
+        "/platform/subscriptions": "SaaS Tier Plans (Starter, Growth, Enterprise) & Limit Configuration",
+        "/platform/system": "Global API Gateway Latency (0.3ms), Redis Pub/Sub, DB Connection Pools",
+        "/platform/audit": "Platform-Wide Immutable Security & Cross-Tenant Audit Logs"
+      }
+    },
+    "tier_2_company_portal": {
+      "name": "Unified Company CMS Portal",
+      "scope": "Tenant Organization Level with Automatic RBAC Dynamic Filtering",
+      "target_users": [
+        "Company Owner (ISP CEO)",
+        "Regional Branch Managers",
+        "Department Heads",
+        "NOC Engineers",
+        "Helpdesk Agents",
+        "Field Splicers",
+        "Accounts Officers"
+      ],
+      "portal_root": "/(app)/*",
+      "architecture_pattern": "ONE Single Next.js Layout Shell with Dynamic Sidebar & Route Guards",
+      "routes": {
+        "/app/desk": "Prime Desk 3-Column Live Chat Workspace (Inbox, Stream, Customer 360 Telemetry)",
+        "/app/customers": "Subscriber Directory & 360° Optical/Billing Telemetry",
+        "/app/staff": "Staff Directory, Provisioning, Department & Branch Assignment",
+        "/app/roles": "Custom RBAC Permission Matrix Builder (Module x Action Matrix)",
+        "/app/branches": "20 Regional Distribution Hubs, Subnets & Van Fleet Tracking",
+        "/app/supervisor": "Supervisor Live Operations HUD & Real-Time Agent Occupancy / SLA Radar",
+        "/app/reports": "Operational Analytics, MTTR, First Response Time (FRT), CSAT Distribution",
+        "/app/settings/working-hours": "Weekly Shift Schedules & Automated Out-of-Office Responders",
+        "/app/settings/quick-replies": "Canned Template Shortcuts (/) Manager"
+      }
+    },
+    "tier_3_customer_portal": {
+      "name": "Customer Web Chat / Subscriber Interface",
+      "scope": "End-User Subscriber Account Context",
+      "target_users": [
+        "Fiber Broadband Subscribers",
+        "Simulated Web Chat Client"
+      ],
+      "portal_root": "/(customer)/*",
+      "routes": {
+        "/customer/chat": "2-Way Real-Time Chat Stream, Optical Power Status (-19.2 dBm), Payment Slip Upload"
+      }
+    },
+    "tier_4_authentication": {
+      "name": "Universal Multi-Tenant Authentication",
+      "scope": "Tenant Identity & JWT Token Issuance",
+      "portal_root": "/(auth)/*",
+      "routes": {
+        "/login": "Universal Staff Login with Tenant Slug Detection & 1-Click Role Demo Fillers"
+      }
+    }
+  },
+  "organizational_matrix": {
+    "dimension_1_branches": {
+      "description": "Geographic / Regional Distribution Hubs (Physical Location Scope)",
+      "total_first_adopter_branches": 20,
+      "examples": [
+        {
+          "id": "br_isb_f10",
+          "name": "Islamabad F-10 Main Hub",
+          "code": "ISB-F10",
+          "subscribers_count": 4820,
+          "subnet": "192.168.10.0/24",
+          "active_queues": 3,
+          "van_fleet": 4
+        },
+        {
+          "id": "br_isb_g11",
+          "name": "Islamabad G-11 Sub-Station",
+          "code": "ISB-G11",
+          "subscribers_count": 3140,
+          "subnet": "192.168.11.0/24",
+          "active_queues": 1,
+          "van_fleet": 2
+        },
+        {
+          "id": "br_isb_blue",
+          "name": "Blue Area Corporate Core",
+          "code": "ISB-BLUE",
+          "subscribers_count": 5920,
+          "subnet": "192.168.20.0/24",
+          "active_queues": 2,
+          "van_fleet": 6
+        },
+        {
+          "id": "br_rwp_sdr",
+          "name": "Rawalpindi Saddar Regional Hub",
+          "code": "RWP-SDR",
+          "subscribers_count": 4540,
+          "subnet": "192.168.30.0/24",
+          "active_queues": 4,
+          "van_fleet": 5
+        }
+      ]
+    },
+    "dimension_2_departments": {
+      "description": "Functional Operational Units (Job Responsibility Scope)",
+      "departments": [
+        {
+          "id": "dept_helpdesk",
+          "name": "Helpdesk & Customer Support",
+          "code": "HD",
+          "lead_title": "Head of Customer Support",
+          "functions": [
+            "Incoming Chat Triage",
+            "Customer 360 Lookup",
+            "1st-Level Troubleshooting",
+            "Ticket Escalation"
+          ]
+        },
+        {
+          "id": "dept_noc",
+          "name": "Network Operations Center (NOC)",
+          "code": "NOC",
+          "lead_title": "NOC Team Lead",
+          "functions": [
+            "SmartOLT Core Telemetry",
+            "PON-Port Optical Diagnostics",
+            "Subnet Isolation",
+            "Core BGP/MikroTik Sweeps"
+          ]
+        },
+        {
+          "id": "dept_field",
+          "name": "Field Engineering & Splicing",
+          "code": "FIELD",
+          "lead_title": "Field Operations Manager",
+          "functions": [
+            "OTDR Splicing",
+            "Van Fleet GPS Dispatch",
+            "ONU Replacement",
+            "Physical Fiber Break Repair"
+          ]
+        },
+        {
+          "id": "dept_accounts",
+          "name": "Accounts & Billing",
+          "code": "ACC",
+          "lead_title": "Billing Supervisor",
+          "functions": [
+            "Payment Slip Verification",
+            "ZL Ultra Ledger Sync",
+            "Invoice Reconciliation",
+            "Billing Cycle Renewals"
+          ]
+        },
+        {
+          "id": "dept_admin",
+          "name": "Branch Administration & Regional Management",
+          "code": "ADMIN",
+          "lead_title": "Regional Branch Head",
+          "functions": [
+            "Branch Staff Oversight",
+            "Regional Ticket SLAs",
+            "Branch Inventory Stock",
+            "Local Operations"
+          ]
+        }
+      ]
+    }
+  },
+  "roles_and_access_hierarchy": [
+    {
+      "level": 1,
+      "role_code": "PLATFORM_OWNER",
+      "title": "SaaS Platform Super-Admin",
+      "data_scope": "GLOBAL_ALL_TENANTS",
+      "description": "Creator of the SaaS Platform. Operates at the multi-tenant infrastructure layer.",
+      "permissions": [
+        "*.*"
+      ],
+      "accessible_portal": "TIER 1 (/(platform)/*)",
+      "key_capabilities": [
+        "Create, suspend, and configure ISP tenant companies",
+        "Define global SaaS subscription pricing and limits",
+        "Monitor global database latency, Redis cluster, and Cloudflare R2 storage",
+        "Perform cross-tenant security audits"
+      ]
+    },
+    {
+      "level": 2,
+      "role_code": "COMPANY_OWNER",
+      "title": "Company Owner (ISP CEO / Root)",
+      "data_scope": "TENANT_ORGANIZATION_ALL_BRANCHES",
+      "description": "Executive owner of the specific ISP tenant company (e.g. Prime Networks).",
+      "permissions": [
+        "company.*",
+        "branch.*",
+        "chat.*",
+        "customers.*",
+        "staff.*",
+        "roles.*",
+        "reports.*",
+        "settings.*"
+      ],
+      "accessible_portal": "TIER 2 (/(app)/*) - Full Unrestricted View",
+      "key_capabilities": [
+        "Manage all 20 regional distribution branches",
+        "Add/invite all staff and assign them to branches & departments",
+        "Build custom RBAC permission matrices",
+        "Full view of all 18,420 subscribers across all branches",
+        "Executive analytics, CSAT ratings, and MTTR compliance reports",
+        "Switch branch view context with 1-click topbar dropdown"
+      ]
+    },
+    {
+      "level": 3,
+      "role_code": "BRANCH_MANAGER",
+      "title": "Regional Branch Manager (Branch Head)",
+      "data_scope": "ASSIGNED_BRANCH_ONLY",
+      "description": "Executive manager responsible for a single regional distribution hub (e.g. Islamabad F-10).",
+      "permissions": [
+        "branch.view_self",
+        "chat.view_branch",
+        "customers.view_branch",
+        "tickets.view_branch",
+        "tickets.assign_branch",
+        "staff.view_branch",
+        "reports.view_branch"
+      ],
+      "accessible_portal": "TIER 2 (/(app)/*) - Branch Isolated",
+      "key_capabilities": [
+        "View all customers, tickets, and active chat queues inside assigned branch",
+        "Monitor attendance and active occupancy of branch staff",
+        "Track branch GPS van fleet (4 vans in F-10) and stock inventory",
+        "Access branch-level MTTR and CSAT performance metrics",
+        "Cannot view or alter financial/staff data of other branches"
+      ]
+    },
+    {
+      "level": 4,
+      "role_code": "DEPARTMENT_HEAD",
+      "title": "Department Manager (e.g. Head of Support / NOC Director)",
+      "data_scope": "DEPARTMENT_ALL_BRANCHES",
+      "description": "Functional lead overseeing their specific department across all branches.",
+      "permissions": [
+        "department.manage",
+        "chat.supervisor_hud",
+        "chat.whisper",
+        "chat.transfer_all",
+        "reports.department"
+      ],
+      "accessible_portal": "TIER 2 (/(app)/*) - Department Scoped",
+      "key_capabilities": [
+        "Oversee all helpdesk agents or NOC engineers company-wide",
+        "Monitor Supervisor Live HUD with real-time agent occupancy and SLA breach timers",
+        "Whisper / silently monitor ongoing chats between staff and subscribers",
+        "Configure canned quick-reply templates (/) and working-hour auto-responders"
+      ]
+    },
+    {
+      "level": 5,
+      "role_code": "NOC_ENGINEER",
+      "title": "NOC Core / Lead Engineer",
+      "data_scope": "NETWORK_TELEMETRY_ALL_BRANCHES",
+      "description": "Specialist engineer responsible for core network integrity, OLTs, and subnets.",
+      "permissions": [
+        "chat.view",
+        "chat.reply",
+        "chat.internal_notes",
+        "network.smartolt_telemetry",
+        "network.pon_diagnostics",
+        "network.subnet_sweeps",
+        "tickets.create",
+        "tickets.escalate"
+      ],
+      "accessible_portal": "TIER 2 (/(app)/*) - NOC Telemetry View",
+      "key_capabilities": [
+        "Inspect real-time SmartOLT optical attenuation dBm gauge on customer 360",
+        "Simulate/detect optical fiber breaks (-32.54 dBm) and trigger joint box dispatch",
+        "Log private confidential staff audit notes (🔒) invisible to customers",
+        "Verify PPPoE live sessions, IP/MAC bindings, and MikroTik core throughput"
+      ]
+    },
+    {
+      "level": 6,
+      "role_code": "HELPDESK_AGENT",
+      "title": "Helpdesk & Customer Support Officer",
+      "data_scope": "ACTIVE_CHATS_AND_SEARCH",
+      "description": "1st-level frontline support answering customer chats in Prime Desk.",
+      "permissions": [
+        "chat.view",
+        "chat.reply",
+        "chat.transfer",
+        "chat.close",
+        "chat.quick_replies",
+        "customers.view_basic",
+        "tickets.create"
+      ],
+      "accessible_portal": "TIER 2 (/(app)/*) - Desk Centric",
+      "key_capabilities": [
+        "Receive and respond to incoming customer messages in real-time",
+        "Insert canned template shortcuts (e.g. /signal, /dispatch, /bill, /reboot)",
+        "Transfer chat with mandatory audit reason to specialist engineers",
+        "Record mandatory closure outcomes (Resolved, Ticket Created, Unreachable, Spam)",
+        "1-Click convert unresolved fiber cuts to field trouble tickets"
+      ]
+    },
+    {
+      "level": 7,
+      "role_code": "FIELD_TECHNICIAN",
+      "title": "Field Engineer / Fiber Splicer (Van Fleet)",
+      "data_scope": "ASSIGNED_TASKS_ONLY",
+      "description": "On-ground field engineer dispatched in mobile vans equipped with OTDR meters.",
+      "permissions": [
+        "chat.assigned_only",
+        "tickets.view_assigned",
+        "tickets.update_progress",
+        "tickets.upload_evidence",
+        "hardware.scan_qr"
+      ],
+      "accessible_portal": "TIER 2 (/(app)/*) - Field/Mobile View",
+      "key_capabilities": [
+        "Receive real-time push dispatch notifications on mobile/tablet",
+        "Navigate to subscriber address via GPS coordinates",
+        "Upload OTDR fiber splicing test evidence and resolution photos",
+        "Scan hardware ONU QR codes to verify serial replacement (e.g. HWTC-98B2-F104)"
+      ]
+    },
+    {
+      "level": 8,
+      "role_code": "ACCOUNTS_OFFICER",
+      "title": "Accounts & Billing Officer",
+      "data_scope": "BILLING_LEDGER_ALL_BRANCHES",
+      "description": "Finance officer verifying recharge slips and syncing ZL Ultra billing.",
+      "permissions": [
+        "payments.view_queue",
+        "payments.verify",
+        "billing.zl_ultra_sync",
+        "customers.view_billing"
+      ],
+      "accessible_portal": "TIER 2 (/(app)/*) - Finance Scoped",
+      "key_capabilities": [
+        "Review uploaded payment proof screenshots (Nayapay, JazzCash, Bank slips)",
+        "Mark receipts verified and post credits directly to ZL Ultra billing ledger",
+        "Reactivate suspended PPPoE accounts upon payment confirmation"
+      ]
+    },
+    {
+      "level": 9,
+      "role_code": "CUSTOMER",
+      "title": "End-User Subscriber",
+      "data_scope": "SELF_ACCOUNT_ONLY",
+      "description": "Residential or corporate broadband subscriber.",
+      "permissions": [
+        "chat.customer_initiate",
+        "payment.upload_slip",
+        "tickets.view_self"
+      ],
+      "accessible_portal": "TIER 3 (/(customer)/*)",
+      "key_capabilities": [
+        "Start live web chat conversation with Helpdesk",
+        "Upload recharge proof screenshots",
+        "View active bandwidth package speed (e.g. 50 Mbps Ultra) and optical status",
+        "Rate interaction CSAT (1 to 5 stars)"
+      ]
+    }
+  ],
+  "cross_role_interaction_lifecycle": [
+    {
+      "step": 1,
+      "action": "Customer initiates live chat inquiry",
+      "actor": "CUSTOMER",
+      "target": "Helpdesk Waiting Queue"
+    },
+    {
+      "step": 2,
+      "action": "Helpdesk Agent accepts chat & performs remote optical/speed diagnosis",
+      "actor": "HELPDESK_AGENT",
+      "tools": [
+        "SmartOLT Telemetry",
+        "Customer 360",
+        "Canned Replies (/)"
+      ]
+    },
+    {
+      "step": 3,
+      "action": "If optical cut is detected (-32.54 dBm), agent logs private note and transfers case with mandatory audit reason",
+      "actor": "HELPDESK_AGENT",
+      "system_audit": "Recorded in central audit trail with timestamp and reason"
+    },
+    {
+      "step": 4,
+      "action": "NOC Lead inspects PON-4 joint box and generates Field Dispatch Ticket",
+      "actor": "NOC_ENGINEER",
+      "target": "Van 04 (Eng. Imran Khan)"
+    },
+    {
+      "step": 5,
+      "action": "Field Splicer arrives on-site, executes OTDR repair, and verifies signal recovery to -19.24 dBm",
+      "actor": "FIELD_TECHNICIAN",
+      "evidence": "Photo & QR scan attached"
+    },
+    {
+      "step": 6,
+      "action": "Chat is closed with recorded outcome: 'ISSUE RESOLVED' and customer submits 5-star CSAT rating",
+      "actor": "HELPDESK_AGENT / CUSTOMER",
+      "sla_compliance": "Resolved in 18 minutes (SLA Compliant)"
+    }
+  ]
+}
