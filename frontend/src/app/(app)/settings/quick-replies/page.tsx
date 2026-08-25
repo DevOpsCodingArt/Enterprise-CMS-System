@@ -55,15 +55,17 @@ export default function QuickRepliesPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto w-full space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-warning" />
-            <h1 className="font-heading font-black text-2xl tracking-tight uppercase">
-              CANNED TEMPLATE REPLIES (/) MANAGER
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-warning/15 text-warning-foreground dark:text-warning">
+              <Zap className="w-5 h-5" />
+            </div>
+            <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
+              Canned Template Replies (/) Manager
             </h1>
           </div>
-          <p className="text-xs font-mono text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Configure shortcut templates that helpdesk agents trigger instantly by typing &apos;/&apos; in Prime Desk.
           </p>
         </div>
@@ -74,7 +76,7 @@ export default function QuickRepliesPage() {
           onClick={() => setIsAddModalOpen(true)}
           leftIcon={<Plus className="w-3.5 h-3.5" />}
         >
-          CREATE CANNED SHORTCUT
+          Create Canned Shortcut
         </Button>
       </div>
 
@@ -83,30 +85,30 @@ export default function QuickRepliesPage() {
         {replies.map((r) => (
           <div
             key={r.id}
-            className="bg-card border-2 border-border p-4 shadow-sm flex flex-col justify-between space-y-3 font-mono text-xs"
+            className="bg-card rounded-xl border border-border p-4 shadow-xs flex flex-col justify-between space-y-3 text-xs"
           >
             <div>
-              <div className="flex items-center justify-between pb-2 border-b border-border">
+              <div className="flex items-center justify-between pb-2.5 border-b border-border/70">
                 <div className="flex items-center gap-2">
                   <Badge variant="primary" size="sm">
-                    {r.shortcut}
+                    <span className="font-mono">{r.shortcut}</span>
                   </Badge>
-                  <span className="font-heading font-bold text-foreground truncate">{r.title}</span>
+                  <span className="font-heading font-semibold text-foreground truncate">{r.title}</span>
                 </div>
                 <Badge variant="outline" size="xs">
                   {r.category}
                 </Badge>
               </div>
 
-              <p className="mt-2.5 text-muted-foreground text-xs leading-relaxed bg-card-subtle p-3 border border-border">
+              <p className="font-body text-xs text-muted-foreground mt-3 leading-relaxed">
                 &ldquo;{r.content}&rdquo;
               </p>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-border">
+            <div className="pt-2 border-t border-border/60 flex items-center justify-end gap-1">
               <button
                 onClick={() => handleDelete(r.id)}
-                className="p-1 text-destructive hover:bg-destructive-light border border-transparent hover:border-destructive transition-colors"
+                className="p-1.5 rounded-md border border-border bg-muted/40 hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors"
                 title="Delete Shortcut"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -116,60 +118,57 @@ export default function QuickRepliesPage() {
         ))}
       </div>
 
-      {/* Add Canned Reply Modal */}
+      {/* Add Modal */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title="CREATE CANNED TEMPLATE SHORTCUT"
-        subtitle="Staff can invoke this response by pressing '/' in active chat conversations."
+        title="Create Canned Chat Shortcut"
+        subtitle="Quick template response accessible via '/' slash command in chat"
         size="md"
+        footer={
+          <div className="flex items-center justify-end gap-2 w-full">
+            <Button variant="outline" size="sm" onClick={() => setIsAddModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="sm" onClick={handleAdd}>
+              Save Shortcut
+            </Button>
+          </div>
+        }
       >
-        <form onSubmit={handleAdd} className="space-y-4 font-mono text-xs">
+        <form onSubmit={handleAdd} className="space-y-4">
           <Input
-            label="TEMPLATE TITLE"
-            placeholder="e.g. Fiber Restoration Confirmed"
+            label="Template Title"
+            placeholder="e.g. Optical Power Signal Normal"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             required
           />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input
-              label="SHORTCUT TRIGGER (START WITH /)"
-              placeholder="/restore"
+              label="Trigger Shortcut (starts with /)"
+              placeholder="e.g. /signal"
               value={newShortcut}
               onChange={(e) => setNewShortcut(e.target.value)}
               required
             />
             <Input
-              label="CATEGORY"
-              placeholder="e.g. NOC Diagnostics"
+              label="Category"
+              placeholder="e.g. Technical Support"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
             />
           </div>
 
           <Textarea
-            label="EXPANDED MESSAGE CONTENT"
-            placeholder="Write the full response message template..."
+            label="Message Template Content"
+            placeholder="Write the exact reply sent to the customer..."
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
+            rows={4}
             required
           />
-
-          <div className="pt-4 border-t border-border flex justify-end gap-2.5">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setIsAddModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" variant="primary" size="sm">
-              SAVE TEMPLATE
-            </Button>
-          </div>
         </form>
       </Modal>
     </div>

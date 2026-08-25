@@ -96,15 +96,17 @@ export default function CustomersPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto w-full space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-primary" />
-            <h1 className="font-heading font-black text-2xl tracking-tight uppercase">
-              SUBSCRIBER DIRECTORY // CUSTOMER 360°
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <Users className="w-5 h-5" />
+            </div>
+            <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
+              Subscriber Directory & Customer 360°
             </h1>
           </div>
-          <p className="text-xs font-mono text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Manage 18,420 fiber subscribers across all 20 regional distribution hubs.
           </p>
         </div>
@@ -116,7 +118,7 @@ export default function CustomersPage() {
             onClick={() => alert('Exporting subscriber ledger to CSV...')}
             leftIcon={<Download className="w-3.5 h-3.5" />}
           >
-            EXPORT CSV
+            Export CSV
           </Button>
 
           <Button
@@ -125,13 +127,13 @@ export default function CustomersPage() {
             onClick={() => setIsAddModalOpen(true)}
             leftIcon={<Plus className="w-3.5 h-3.5" />}
           >
-            ADD NEW SUBSCRIBER
+            Add New Subscriber
           </Button>
         </div>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-card border-2 border-border p-4 shadow-sm grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+      <div className="bg-card rounded-xl border border-border p-3.5 shadow-xs grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
         <div className="sm:col-span-7 relative">
           <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
           <input
@@ -139,7 +141,7 @@ export default function CustomersPage() {
             placeholder="Search by Name, PPPoE Username, CNIC, Phone number..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-card-subtle border-2 border-border pl-9 pr-4 py-2 text-xs font-mono text-foreground focus:outline-none focus:border-primary"
+            className="w-full bg-muted/30 rounded-lg border border-border/80 pl-9 pr-4 py-2 text-xs font-sans text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
           />
         </div>
 
@@ -147,9 +149,9 @@ export default function CustomersPage() {
           <select
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
-            className="w-full bg-card-subtle border-2 border-border px-3 py-2 text-xs font-mono text-foreground focus:outline-none focus:border-primary"
+            className="w-full bg-muted/30 rounded-lg border border-border/80 px-3 py-2 text-xs font-sans text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors cursor-pointer"
           >
-            <option value="all">ALL REGIONAL HUBS (20)</option>
+            <option value="all">All Regional Hubs (20)</option>
             <option value="ISB-F10">Islamabad F-10 Main</option>
             <option value="ISB-G11">Islamabad G-11 Sub-Station</option>
             <option value="ISB-BLUE">Blue Area Corporate</option>
@@ -159,87 +161,82 @@ export default function CustomersPage() {
       </div>
 
       {/* Customer Directory Table */}
-      <div className="bg-card border-2 border-border shadow-md overflow-hidden">
+      <div className="bg-card rounded-xl border border-border shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-mono text-xs">
-            <thead className="bg-card-subtle border-b-2 border-border text-muted-foreground uppercase text-[10px]">
+          <table className="w-full text-left font-sans text-xs">
+            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
               <tr>
-                <th className="p-3.5">SUBSCRIBER CODE & NAME</th>
-                <th className="p-3.5">PPPOE USERNAME</th>
-                <th className="p-3.5">BRANCH HUB</th>
-                <th className="p-3.5">PACKAGE & BILLING</th>
-                <th className="p-3.5">SMARTOLT SIGNAL</th>
-                <th className="p-3.5">STATUS</th>
-                <th className="p-3.5 text-right">ACTIONS</th>
+                <th className="p-3.5">Subscriber Code & Name</th>
+                <th className="p-3.5">PPPoE Username</th>
+                <th className="p-3.5">Branch Hub</th>
+                <th className="p-3.5">Package & Billing</th>
+                <th className="p-3.5">SmartOLT Signal</th>
+                <th className="p-3.5">Status</th>
+                <th className="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y-2 divide-border">
+            <tbody className="divide-y divide-border/70">
               {filteredCustomers.map((c) => {
                 const opticalHealth = getOpticalHealthStatus(c.onuSignalDbm);
                 return (
-                  <tr key={c.id} className="hover:bg-card-subtle/70 transition-colors">
+                  <tr key={c.id} className="hover:bg-muted/20 transition-colors">
                     <td className="p-3.5">
-                      <div className="font-heading font-bold text-foreground text-sm">
-                        {c.fullName}
-                      </div>
-                      <div className="text-[10px] text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                        <Badge variant="outline" size="xs">
-                          {c.customerCode}
-                        </Badge>
-                        <span>{c.phone}</span>
-                      </div>
-                    </td>
-
-                    <td className="p-3.5">
-                      <div className="text-primary font-bold flex items-center gap-1">
-                        <Wifi className="w-3.5 h-3.5" />
-                        <span>{c.username}</span>
-                      </div>
-                      <div className="text-[10px] text-muted-foreground mt-0.5">
-                        IP: {c.currentIp || '192.168.10.1'}
+                      <div>
+                        <div className="font-heading font-semibold text-foreground text-sm">
+                          {c.fullName}
+                        </div>
+                        <div className="text-[11px] text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                          <span className="font-mono">{c.customerCode}</span>
+                          <span>·</span>
+                          <span className="font-mono">{c.phone}</span>
+                        </div>
                       </div>
                     </td>
 
                     <td className="p-3.5">
-                      <div className="font-bold">{c.branch?.name}</div>
-                      <div className="text-[10px] text-muted-foreground">{c.area}</div>
+                      <div className="flex items-center gap-1.5 font-medium text-foreground">
+                        <Wifi className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                        <span className="font-mono text-primary">{c.username || 'n/a'}</span>
+                      </div>
                     </td>
 
                     <td className="p-3.5">
-                      <div className="font-bold text-foreground">{c.packageName}</div>
-                      <div className="text-[10px] text-muted-foreground">
-                        {formatCurrencyPKR(c.monthlyBilling)} // Exp: {c.billingExpiryDate}
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Building2 className="w-3.5 h-3.5 text-muted-foreground/80 flex-shrink-0" />
+                        <span>{c.branch?.name || 'Islamabad F-10'}</span>
+                      </div>
+                    </td>
+
+                    <td className="p-3.5">
+                      <div className="font-medium text-foreground">{c.packageName || '50 Mbps Unlimited'}</div>
+                      <div className="text-[11px] text-muted-foreground font-semibold text-primary">
+                        {formatCurrencyPKR(c.monthlyBilling || 3500)} / mo
                       </div>
                     </td>
 
                     <td className="p-3.5">
                       <span
-                        className={`inline-block px-2 py-0.5 font-bold text-[10px] border ${opticalHealth.bgClass} ${opticalHealth.colorClass} ${opticalHealth.borderClass}`}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-medium text-xs border ${opticalHealth.bgClass} ${opticalHealth.colorClass} ${opticalHealth.borderClass}`}
                       >
-                        {c.onuSignalDbm} dBm ({opticalHealth.label})
+                        <Activity className="w-3 h-3" />
+                        <span className="font-mono">{c.onuSignalDbm} dBm</span>
                       </span>
-                      <div className="text-[9px] text-muted-foreground mt-0.5">
-                        {c.oltPonPort}
-                      </div>
                     </td>
 
                     <td className="p-3.5">
-                      <Badge
-                        variant={c.status === 'active' ? 'primary' : 'destructive'}
-                        size="xs"
-                      >
-                        {c.status.toUpperCase()}
+                      <Badge variant="primary" size="xs">
+                        {c.status}
                       </Badge>
                     </td>
 
                     <td className="p-3.5 text-right">
-                      <Link
-                        href="/app/desk"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 bg-card hover:bg-card-subtle border border-border hover:border-primary text-[10px] font-bold text-foreground uppercase shadow-sm mr-2"
-                      >
-                        <MessageSquare className="w-3 h-3 text-primary" />
-                        <span>OPEN CHAT</span>
-                      </Link>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Link href="/desk">
+                          <Button variant="outline" size="xs" leftIcon={<MessageSquare className="w-3 h-3" />}>
+                            Chat
+                          </Button>
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -249,75 +246,72 @@ export default function CustomersPage() {
         </div>
       </div>
 
-      {/* Add New Subscriber Modal */}
+      {/* Add Subscriber Modal */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title="PROVISION NEW SUBSCRIBER // ZL ULTRA SYNC"
-        subtitle="Registers new optical GPON customer account and binds to regional branch subnet."
+        title="Provision New Fiber Subscriber"
+        subtitle="Create PPPoE credentials and bind to OLT PON port"
         size="md"
+        footer={
+          <div className="flex items-center justify-end gap-2 w-full">
+            <Button variant="outline" size="sm" onClick={() => setIsAddModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="sm" onClick={handleAddCustomer}>
+              Provision Subscriber
+            </Button>
+          </div>
+        }
       >
-        <form onSubmit={handleAddCustomer} className="space-y-4 font-mono text-xs">
+        <form onSubmit={handleAddCustomer} className="space-y-4">
           <Input
-            label="FULL NAME"
-            placeholder="e.g. Muhammad Usman"
+            label="Full Name"
+            placeholder="e.g. Imran Khan"
             value={newCustName}
             onChange={(e) => setNewCustName(e.target.value)}
             required
           />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input
-              label="PHONE NUMBER"
-              placeholder="+92 300 1234567"
+              label="Phone Number"
+              placeholder="+92 300 9876543"
               value={newCustPhone}
               onChange={(e) => setNewCustPhone(e.target.value)}
               required
             />
             <Input
-              label="PPPOE USERNAME"
-              placeholder="e.g. usman_f10"
+              label="PPPoE Username"
+              placeholder="e.g. imran_f10"
               value={newCustUsername}
               onChange={(e) => setNewCustUsername(e.target.value)}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Select
-              label="REGIONAL HUB"
+              label="Broadband Package"
+              value={newCustPackage}
+              onChange={(e) => setNewCustPackage(e.target.value)}
               options={[
-                { value: 'ISB-F10', label: 'Islamabad F-10 Main' },
+                { value: '50M', label: '50 Mbps Ultra (PKR 3,500/mo)' },
+                { value: '100M', label: '100 Mbps Boost (PKR 5,500/mo)' },
+                { value: '250M', label: '250 Mbps Enterprise (PKR 12,000/mo)' },
+              ]}
+            />
+
+            <Select
+              label="Branch Hub"
+              value={newCustBranch}
+              onChange={(e) => setNewCustBranch(e.target.value)}
+              options={[
+                { value: 'ISB-F10', label: 'Islamabad F-10 Main Hub' },
                 { value: 'ISB-G11', label: 'Islamabad G-11 Sub-Station' },
                 { value: 'ISB-BLUE', label: 'Blue Area Corporate' },
                 { value: 'RWP-SDR', label: 'Rawalpindi Saddar' },
               ]}
-              value={newCustBranch}
-              onChange={(e) => setNewCustBranch(e.target.value)}
             />
-            <Select
-              label="BANDWIDTH PLAN"
-              options={[
-                { value: '50M', label: '50 Mbps Ultra (PKR 3,500)' },
-                { value: '100M', label: '100 Mbps Boost (PKR 5,500)' },
-                { value: '250M', label: '250 Mbps Enterprise (PKR 9,500)' },
-              ]}
-              value={newCustPackage}
-              onChange={(e) => setNewCustPackage(e.target.value)}
-            />
-          </div>
-
-          <div className="pt-4 border-t border-border flex justify-end gap-2.5">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setIsAddModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" variant="primary" size="sm">
-              PROVISION & SYNC ZL ULTRA
-            </Button>
           </div>
         </form>
       </Modal>

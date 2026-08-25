@@ -36,15 +36,17 @@ export default function RBACRolesPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto w-full space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-warning" />
-            <h1 className="font-heading font-black text-2xl tracking-tight uppercase">
-              CUSTOM RBAC PERMISSION MATRIX BUILDER
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-warning/15 text-warning-foreground dark:text-warning">
+              <Shield className="w-5 h-5" />
+            </div>
+            <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
+              Custom RBAC Permission Matrix Builder
             </h1>
           </div>
-          <p className="text-xs font-mono text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Build custom permission sets with hybrid module-level and action-level security controls.
           </p>
         </div>
@@ -56,7 +58,7 @@ export default function RBACRolesPage() {
             onClick={handleSave}
             leftIcon={<Save className="w-3.5 h-3.5" />}
           >
-            SAVE MATRIX CHANGES
+            Save Matrix Changes
           </Button>
         </div>
       </div>
@@ -64,14 +66,14 @@ export default function RBACRolesPage() {
       {/* 2-Column Layout: Roles on Left, Matrix on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Role Selector (4 cols) */}
-        <div className="lg:col-span-4 bg-card border-2 border-border p-4 shadow-md space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b-2 border-border">
-            <span className="font-heading font-bold text-xs uppercase text-muted-foreground">
-              PERMISSION GROUPS (ROLES)
+        <div className="lg:col-span-4 bg-card rounded-xl border border-border p-4 shadow-xs space-y-3">
+          <div className="flex items-center justify-between pb-2 border-b border-border/70">
+            <span className="font-heading font-semibold text-xs uppercase text-muted-foreground tracking-wider">
+              Permission Groups (Roles)
             </span>
             <button
               onClick={() => alert('New role builder')}
-              className="p-1 border border-border bg-card-subtle hover:bg-card text-foreground"
+              className="p-1 rounded-md border border-border bg-muted/40 hover:bg-muted text-foreground transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
             </button>
@@ -82,20 +84,21 @@ export default function RBACRolesPage() {
               <button
                 key={r.id}
                 onClick={() => setSelectedRole(r.id)}
-                className={`w-full text-left p-3 border-2 font-mono text-xs transition-all ${selectedRole === r.id
-                    ? 'bg-card-subtle border-primary shadow-sm font-bold'
-                    : 'bg-card border-border hover:border-primary/50'
-                  }`}
+                className={`w-full text-left p-3 rounded-lg border text-xs transition-all ${
+                  selectedRole === r.id
+                    ? 'bg-primary/5 border-primary shadow-xs font-semibold'
+                    : 'bg-card border-border hover:border-primary/40 hover:bg-muted/30'
+                }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="truncate">{r.name}</span>
+                  <span className="truncate text-foreground font-medium">{r.name}</span>
                   {r.isSystem && (
                     <Badge variant="outline" size="xs">
-                      SYSTEM
+                      System
                     </Badge>
                   )}
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-1">
+                <div className="text-[11px] text-muted-foreground mt-1">
                   {r.usersCount} Active Staff Bound
                 </div>
               </button>
@@ -103,104 +106,127 @@ export default function RBACRolesPage() {
           </div>
         </div>
 
-        {/* Right Column: Interactive Permission Checkbox Matrix (8 cols) */}
-        <div className="lg:col-span-8 bg-card border-2 border-border shadow-md overflow-hidden">
-          <div className="p-4 border-b-2 border-border bg-card-subtle flex items-center justify-between">
+        {/* Right Column: Permission Matrix Table (8 cols) */}
+        <div className="lg:col-span-8 bg-card rounded-xl border border-border shadow-xs overflow-hidden">
+          <div className="p-4 border-b border-border/70 bg-card flex items-center justify-between">
             <div>
-              <div className="font-heading font-black text-sm uppercase">
-                {roles.find((r) => r.id === selectedRole)?.name}
-              </div>
-              <div className="text-[10px] font-mono text-muted-foreground mt-0.5">
-                Toggle individual action capabilities for this role
-              </div>
+              <h3 className="font-heading font-semibold text-sm text-foreground">
+                Action Matrix: {roles.find((r) => r.id === selectedRole)?.name}
+              </h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Toggle action permissions across system operational modules.
+              </p>
             </div>
-
-            <Badge variant="primary" size="xs">
-              ACTIVE EDITING
-            </Badge>
+            {selectedRole === 'role_owner' && (
+              <span className="inline-flex items-center gap-1 text-xs text-warning-foreground dark:text-warning font-medium">
+                <Lock className="w-3.5 h-3.5" /> Read-Only Root Role
+              </span>
+            )}
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-xs">
-              <thead className="bg-card-subtle border-b-2 border-border text-muted-foreground uppercase text-[10px]">
+            <table className="w-full text-left font-sans text-xs">
+              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
                 <tr>
-                  <th className="p-3.5">MODULE / RESOURCE</th>
-                  <th className="p-3.5 text-center">VIEW</th>
-                  <th className="p-3.5 text-center">CREATE</th>
-                  <th className="p-3.5 text-center">EDIT</th>
-                  <th className="p-3.5 text-center">TRANSFER</th>
-                  <th className="p-3.5 text-center">EXPORT</th>
-                  <th className="p-3.5 text-center">DELETE</th>
+                  <th className="p-3.5">Module & Description</th>
+                  <th className="p-3.5 text-center">View</th>
+                  <th className="p-3.5 text-center">Create</th>
+                  <th className="p-3.5 text-center">Edit</th>
+                  <th className="p-3.5 text-center">Delete</th>
+                  <th className="p-3.5 text-center">Transfer</th>
+                  <th className="p-3.5 text-center">Export</th>
                 </tr>
               </thead>
-              <tbody className="divide-y-2 divide-border">
+              <tbody className="divide-y divide-border/70">
                 {currentRows.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-card-subtle/50 transition-colors">
+                  <tr key={row.module} className="hover:bg-muted/20 transition-colors">
                     <td className="p-3.5">
-                      <div className="font-heading font-bold text-foreground">{row.module}</div>
-                      <div className="text-[10px] text-muted-foreground leading-snug">
-                        {row.description}
-                      </div>
+                      <div className="font-medium text-foreground">{row.module}</div>
+                      <div className="text-[11px] text-muted-foreground mt-0.5">{row.description}</div>
                     </td>
 
                     {/* View */}
                     <td className="p-3.5 text-center">
-                      <input
-                        type="checkbox"
-                        checked={row.canView}
-                        onChange={() => handleToggle(idx, 'canView')}
-                        className="w-4 h-4 accent-primary cursor-pointer"
-                      />
+                      <button
+                        onClick={() => handleToggle(idx, 'canView')}
+                        className={`p-1 rounded-md border transition-colors ${
+                          row.canView
+                            ? 'bg-primary/10 border-primary text-primary'
+                            : 'bg-muted border-border text-muted-foreground'
+                        }`}
+                      >
+                        {row.canView ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </button>
                     </td>
 
                     {/* Create */}
                     <td className="p-3.5 text-center">
-                      <input
-                        type="checkbox"
-                        checked={row.canCreate}
-                        onChange={() => handleToggle(idx, 'canCreate')}
-                        className="w-4 h-4 accent-primary cursor-pointer"
-                      />
+                      <button
+                        onClick={() => handleToggle(idx, 'canCreate')}
+                        className={`p-1 rounded-md border transition-colors ${
+                          row.canCreate
+                            ? 'bg-primary/10 border-primary text-primary'
+                            : 'bg-muted border-border text-muted-foreground'
+                        }`}
+                      >
+                        {row.canCreate ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </button>
                     </td>
 
                     {/* Edit */}
                     <td className="p-3.5 text-center">
-                      <input
-                        type="checkbox"
-                        checked={row.canEdit}
-                        onChange={() => handleToggle(idx, 'canEdit')}
-                        className="w-4 h-4 accent-primary cursor-pointer"
-                      />
-                    </td>
-
-                    {/* Transfer */}
-                    <td className="p-3.5 text-center">
-                      <input
-                        type="checkbox"
-                        checked={row.canTransfer}
-                        onChange={() => handleToggle(idx, 'canTransfer')}
-                        className="w-4 h-4 accent-primary cursor-pointer"
-                      />
-                    </td>
-
-                    {/* Export */}
-                    <td className="p-3.5 text-center">
-                      <input
-                        type="checkbox"
-                        checked={row.canExport}
-                        onChange={() => handleToggle(idx, 'canExport')}
-                        className="w-4 h-4 accent-primary cursor-pointer"
-                      />
+                      <button
+                        onClick={() => handleToggle(idx, 'canEdit')}
+                        className={`p-1 rounded-md border transition-colors ${
+                          row.canEdit
+                            ? 'bg-primary/10 border-primary text-primary'
+                            : 'bg-muted border-border text-muted-foreground'
+                        }`}
+                      >
+                        {row.canEdit ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </button>
                     </td>
 
                     {/* Delete */}
                     <td className="p-3.5 text-center">
-                      <input
-                        type="checkbox"
-                        checked={row.canDelete}
-                        onChange={() => handleToggle(idx, 'canDelete')}
-                        className="w-4 h-4 accent-destructive cursor-pointer"
-                      />
+                      <button
+                        onClick={() => handleToggle(idx, 'canDelete')}
+                        className={`p-1 rounded-md border transition-colors ${
+                          row.canDelete
+                            ? 'bg-destructive/10 border-destructive text-destructive'
+                            : 'bg-muted border-border text-muted-foreground'
+                        }`}
+                      >
+                        {row.canDelete ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </button>
+                    </td>
+
+                    {/* Transfer */}
+                    <td className="p-3.5 text-center">
+                      <button
+                        onClick={() => handleToggle(idx, 'canTransfer')}
+                        className={`p-1 rounded-md border transition-colors ${
+                          row.canTransfer
+                            ? 'bg-info/10 border-info text-info-foreground dark:text-info'
+                            : 'bg-muted border-border text-muted-foreground'
+                        }`}
+                      >
+                        {row.canTransfer ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </button>
+                    </td>
+
+                    {/* Export */}
+                    <td className="p-3.5 text-center">
+                      <button
+                        onClick={() => handleToggle(idx, 'canExport')}
+                        className={`p-1 rounded-md border transition-colors ${
+                          row.canExport
+                            ? 'bg-primary/10 border-primary text-primary'
+                            : 'bg-muted border-border text-muted-foreground'
+                        }`}
+                      >
+                        {row.canExport ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </button>
                     </td>
                   </tr>
                 ))}

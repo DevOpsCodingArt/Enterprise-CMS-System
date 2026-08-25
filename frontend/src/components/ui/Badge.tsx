@@ -20,22 +20,22 @@ export const Badge: React.FC<BadgeProps> = ({
   children,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center font-mono font-bold uppercase border';
+  const baseStyles = 'inline-flex items-center font-sans font-medium rounded-full transition-colors';
 
   const variants = {
-    default: 'bg-card-subtle text-foreground border-border',
-    primary: 'bg-primary text-primary-foreground border-border shadow-sm',
-    secondary: 'bg-secondary text-secondary-foreground border-border',
-    destructive: 'bg-destructive text-destructive-foreground border-border shadow-sm',
-    warning: 'bg-warning text-warning-foreground border-border',
-    info: 'bg-info text-info-foreground border-border',
-    outline: 'bg-transparent text-foreground border-border',
+    default: 'bg-muted text-muted-foreground border border-border/80',
+    primary: 'bg-primary/10 text-primary border border-primary/20',
+    secondary: 'bg-secondary/10 text-secondary-foreground border border-secondary/20',
+    destructive: 'bg-destructive/10 text-destructive border border-destructive/20',
+    warning: 'bg-warning/15 text-warning-foreground dark:text-warning border border-warning/25',
+    info: 'bg-info/10 text-info-foreground dark:text-info border border-info/20',
+    outline: 'bg-transparent text-foreground border border-border',
   };
 
   const sizes = {
-    xs: 'px-1.5 py-0.2 text-[9px]',
-    sm: 'px-2 py-0.5 text-[10px]',
-    md: 'px-2.5 py-1 text-xs',
+    xs: 'px-2 py-0.5 text-[11px]',
+    sm: 'px-2.5 py-0.5 text-xs',
+    md: 'px-3 py-1 text-xs font-semibold',
   };
 
   return (

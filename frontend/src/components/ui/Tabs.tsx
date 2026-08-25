@@ -26,7 +26,7 @@ export const Tabs: React.FC<TabsProps> = ({
   return (
     <div
       className={cn(
-        'flex items-center gap-1.5 p-1 bg-card-subtle border-2 border-border overflow-x-auto',
+        'flex items-center gap-1 p-1 bg-muted/40 rounded-lg border border-border/70 overflow-x-auto',
         className
       )}
     >
@@ -37,11 +37,11 @@ export const Tabs: React.FC<TabsProps> = ({
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(
-              'flex items-center gap-1.5 font-mono font-bold uppercase whitespace-nowrap cursor-pointer',
-              size === 'sm' ? 'px-2.5 py-1 text-[10px]' : 'px-3.5 py-1.5 text-xs',
+              'flex items-center gap-1.5 font-sans font-medium rounded-md whitespace-nowrap cursor-pointer transition-all duration-150',
+              size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3.5 py-1.5 text-sm',
               isActive
-                ? 'bg-primary text-primary-foreground border border-border shadow-sm'
-                : 'bg-transparent text-muted-foreground hover:text-foreground hover:bg-card border border-transparent'
+                ? 'bg-card text-foreground shadow-xs font-semibold'
+                : 'bg-transparent text-muted-foreground hover:text-foreground hover:bg-card/50'
             )}
           >
             {tab.icon && <span>{tab.icon}</span>}
@@ -49,10 +49,10 @@ export const Tabs: React.FC<TabsProps> = ({
             {tab.count !== undefined && (
               <span
                 className={cn(
-                  'px-1.5 py-0.2 text-[9px] border',
+                  'px-1.5 py-0.2 text-[11px] rounded-full font-medium',
                   isActive
-                    ? 'bg-card text-foreground border-border'
-                    : 'bg-card border-border text-muted-foreground'
+                    ? 'bg-primary/10 text-primary'
+                    : 'bg-muted text-muted-foreground'
                 )}
               >
                 {tab.count}

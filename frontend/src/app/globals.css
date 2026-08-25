@@ -1,54 +1,50 @@
 @import "tailwindcss";
 
 /* -------------------------------------------------------------------------
-   PRIME ONE — FLUID MODERN NOC & TELECOM DESIGN SYSTEM
-   Theme: Blueprint (Light) / Terminal (Dark) — Fluid & Ambient
+   PRIME ONE — TELECOM OPERATING SYSTEM DESIGN SYSTEM
+   Typography: Space Grotesk (Headings) + Inter (Body) + JetBrains Mono (Telemetry)
+   Theme: Ergonomic Technical Slate & Navy
 ------------------------------------------------------------------------- */
 
 :root {
-  /* Brand Identity (Blueprint Light) */
-  --primary: #0047FF;
-  /* High-Velocity Optic Blue */
-  --primary-hover: #0033CC;
-  --primary-light: #E5EDFF;
-  --primary-dark: #001A66;
+  /* Ergonomic Optic Blue - Professional and fatigue-free */
+  --primary: #2563EB;                    
+  --primary-hover: #1D4ED8;
+  --primary-light: #EFF6FF;
+  --primary-dark: #1E3A8A;
   --primary-foreground: #FFFFFF;
 
-  --destructive: #FF3300;
-  /* Industrial Safety Orange/Red (LOS/Faults) */
-  --destructive-hover: #CC2900;
-  --destructive-light: #FFEAE5;
+  /* Muted Safety Red (LOS / Faults) */
+  --destructive: #DC2626;                
+  --destructive-hover: #B91C1C;
+  --destructive-light: #FEF2F2;
   --destructive-foreground: #FFFFFF;
 
-  --info: #00E5FF;
-  /* Luminous Cyan (Active Data/Throughput) */
-  --info-hover: #00B3CC;
-  --info-light: #E5FCFF;
-  --info-foreground: #001A1F;
+  /* Luminous Cyan (Active Data & Throughput) */
+  --info: #0284C7;
+  --info-hover: #0369A1;
+  --info-light: #F0F9FF;
+  --info-foreground: #0C4A6E;
 
-  --secondary: #1E293B;
   /* Slate Navy */
+  --secondary: #1E293B;
   --secondary-hover: #0F172A;
   --secondary-light: #F1F5F9;
   --secondary-foreground: #FFFFFF;
 
-  --warning: #FFDD00;
-  /* High-Vis Yellow (SLA Warnings) */
-  --warning-hover: #CCB100;
-  --warning-light: #FFFBE5;
-  --warning-foreground: #111111;
+  /* Readable Warning / Audit Amber */
+  --warning: #D97706;                    
+  --warning-hover: #B45309;
+  --warning-light: #FEF3C7;
+  --warning-foreground: #78350F;
 
-  /* Canvas & Surfaces (Blueprint Light) */
-  --background: #F8FAFC;
-  /* Clean Soft Slate Canvas */
-  --foreground: #0F172A;
-  /* Slate 900 */
-
-  --card: #FFFFFF;
-  /* Pure White Floating Panels */
+  /* Canvas & Surfaces (Soft Slate Canvas to reduce glare) */
+  --background: #F8FAFC;                 
+  --foreground: #0F172A;                 
+  
+  --card: #FFFFFF;                       
   --card-foreground: #0F172A;
-  --card-subtle: #F1F5F9;
-  /* Inset Surfaces */
+  --card-subtle: #F8FAFC;
 
   --popover: #FFFFFF;
   --popover-foreground: #0F172A;
@@ -57,97 +53,91 @@
   --muted-foreground: #64748B;
   --subtle-foreground: #94A3B8;
 
-  --accent: #E5EDFF;
-  --accent-foreground: #0047FF;
+  --accent: #EFF6FF;
+  --accent-foreground: #2563EB;
 
-  --border: #E2E8F0;
-  /* Soft 1px dividers */
+  --border: #E2E8F0;                     /* Soft 1px dividers */
   --border-subtle: #F1F5F9;
-  --input: #F1F5F9;
-  --ring: #0047FF;
+  --input: #F8FAFC;
+  --ring: #2563EB;
 
   /* Typography */
-  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
-  --font-body: 'Epilogue', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Geist Mono', monospace;
+  --font-heading: var(--font-heading-main, 'Space Grotesk', sans-serif);
+  --font-body: var(--font-body-main, 'Inter', sans-serif);
+  --font-sans: var(--font-body-main, 'Inter', sans-serif);
+  --font-mono: var(--font-mono-main, 'JetBrains Mono', monospace);
 
-  /* Radii & Shadows - Fluid & Modern (Non-Boxy) */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  /* Radii - Subtle & Ergonomic */
+  --radius-sm: 4px;                      
+  --radius-md: 6px;             
+  --radius-lg: 8px; 
+  --radius-xl: 12px;
   --radius-full: 9999px;
 
-  /* Soft, organic diffuse multi-layer shadows */
-  --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.05);
-  --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 20px 40px -8px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
-  --shadow-primary: 0 8px 25px -4px rgba(0, 71, 255, 0.35);
-  --shadow-destructive: 0 8px 25px -4px rgba(255, 51, 0, 0.35);
+  /* Soft diffuse shadows */
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-primary: 0 4px 14px 0 rgba(37, 99, 235, 0.25);
+  --shadow-destructive: 0 4px 14px 0 rgba(220, 38, 38, 0.25);
 }
 
-/* Dark Mode Overrides (Terminal / NOC Night Shift) */
+/* Dark Mode Overrides (Ergonomic Night Shift) */
 .dark,
 [data-theme="dark"] {
-  --primary: #00FFAA;
-  /* Laser Green */
-  --primary-hover: #00CC88;
-  --primary-light: rgba(0, 255, 170, 0.12);
-  --primary-dark: #006644;
-  --primary-foreground: #000000;
+  --primary: #3B82F6;
+  --primary-hover: #60A5FA;
+  --primary-light: rgba(59, 130, 246, 0.15);
+  --primary-dark: #1E3A8A;
+  --primary-foreground: #FFFFFF;
 
-  --destructive: #FF0055;
-  /* Neon Crimson */
-  --destructive-hover: #CC0044;
-  --destructive-light: rgba(255, 0, 85, 0.14);
+  --destructive: #EF4444;
+  --destructive-hover: #F87171;
+  --destructive-light: rgba(239, 68, 68, 0.15);
   --destructive-foreground: #FFFFFF;
 
-  --info: #00FFFF;
-  /* Electric Cyan */
-  --info-hover: #00CCCC;
-  --info-light: rgba(0, 255, 255, 0.12);
-  --info-foreground: #000000;
+  --info: #38BDF8;
+  --info-hover: #7DD3FC;
+  --info-light: rgba(56, 189, 248, 0.15);
+  --info-foreground: #082F49;
 
   --secondary: #334155;
   --secondary-hover: #475569;
   --secondary-light: rgba(255, 255, 255, 0.08);
   --secondary-foreground: #FFFFFF;
 
-  --warning: #FFBB00;
-  --warning-hover: #CC9600;
-  --warning-light: rgba(255, 187, 0, 0.14);
-  --warning-foreground: #000000;
+  --warning: #F59E0B;
+  --warning-hover: #FBBF24;
+  --warning-light: rgba(245, 158, 11, 0.18);
+  --warning-foreground: #FDE68A;
 
-  --background: #060913;
-  /* Fluid Deep Obsidian */
+  --background: #0B1120;
   --foreground: #F8FAFC;
 
-  --card: #0D1322;
-  /* Elevated Glass Card */
+  --card: #111C33;
   --card-foreground: #F8FAFC;
-  --card-subtle: #131D31;
+  --card-subtle: #0F172A;
 
-  --popover: #0D1322;
+  --popover: #111C33;
   --popover-foreground: #F8FAFC;
 
-  --muted: #131D31;
+  --muted: #1E293B;
   --muted-foreground: #94A3B8;
   --subtle-foreground: #64748B;
 
-  --accent: rgba(0, 255, 170, 0.12);
-  --accent-foreground: #00FFAA;
+  --accent: rgba(59, 130, 246, 0.15);
+  --accent-foreground: #60A5FA;
 
-  --border: #1A263E;
-  --border-subtle: #141F33;
-  --input: #131D31;
-  --ring: #00FFAA;
+  --border: #1E293B;
+  --border-subtle: #162032;
+  --input: #0F172A;
+  --ring: #3B82F6;
 
-  /* Glowing hardware shadows */
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.7);
-  --shadow-primary: 0 8px 30px rgba(0, 255, 170, 0.3);
-  --shadow-destructive: 0 8px 30px rgba(255, 0, 85, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.5);
+  --shadow-primary: 0 4px 16px rgba(59, 130, 246, 0.3);
+  --shadow-destructive: 0 4px 16px rgba(239, 68, 68, 0.3);
 }
 
 @theme inline {
@@ -171,10 +161,12 @@
   --color-info-foreground: var(--info-foreground);
 
   --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
   --color-secondary-light: var(--secondary-light);
   --color-secondary-foreground: var(--secondary-foreground);
 
   --color-warning: var(--warning);
+  --color-warning-hover: var(--warning-hover);
   --color-warning-light: var(--warning-light);
   --color-warning-foreground: var(--warning-foreground);
 
@@ -199,6 +191,7 @@
 
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 
   --radius-sm: var(--radius-sm);
@@ -215,7 +208,7 @@
 }
 
 /* -------------------------------------------------------------------------
-   Fluid Ambient Backgrounds & Clean Canvas (Zero Boxy Grid Lines)
+   Global Base & Typography
 ------------------------------------------------------------------------- */
 * {
   box-sizing: border-box;
@@ -225,26 +218,11 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth Ambient Glow Canvas (No Boxy Grid Lines) */
-.ambient-glow-canvas {
-  background-image:
-    radial-gradient(at 0% 0%, rgba(0, 71, 255, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(0, 229, 255, 0.05) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(0, 71, 255, 0.03) 0px, transparent 50%);
-}
-
-.dark .ambient-glow-canvas {
-  background-image:
-    radial-gradient(at 0% 0%, rgba(0, 255, 170, 0.07) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(0, 255, 255, 0.07) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(0, 255, 170, 0.04) 0px, transparent 50%);
-}
-
-/* Typography (Natural, Elegant Casing) */
 h1,
 h2,
 h3,
@@ -252,7 +230,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
 }
 
@@ -261,22 +239,4 @@ pre,
 .telemetry-data,
 [data-mono] {
   font-family: var(--font-mono);
-  font-size: 0.92em;
-}
-
-/* Smooth Fluid Reveal Animation */
-@keyframes fluid-reveal {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fluid-boot {
-  animation: fluid-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

@@ -1,24 +1,27 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Epilogue, IBM_Plex_Mono } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import { AppProviders } from "@/components/providers/AppProviders";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
+const spaceGrotesk = Space_Grotesk({
   variable: "--font-heading-main",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["500", "600", "700"],
+  display: "swap",
 });
 
-const epilogue = Epilogue({
+const inter = Inter({
   variable: "--font-body-main",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono-main",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -34,10 +37,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${epilogue.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-body bg-background text-foreground">
+      <body className="min-h-full flex flex-col font-body bg-background text-foreground selection:bg-primary/20 selection:text-primary">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

@@ -18,13 +18,13 @@ export const Avatar: React.FC<AvatarProps> = ({
   className,
 }) => {
   const sizes = {
-    sm: 'w-7 h-7 text-[10px]',
-    md: 'w-9 h-9 text-xs',
-    lg: 'w-12 h-12 text-sm',
+    sm: 'w-7 h-7 text-xs',
+    md: 'w-9 h-9 text-sm',
+    lg: 'w-11 h-11 text-base',
   };
 
   const statusColors = {
-    online: 'bg-primary',
+    online: 'bg-emerald-500',
     busy: 'bg-destructive',
     away: 'bg-warning',
     offline: 'bg-muted-foreground',
@@ -34,7 +34,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     <div className="relative inline-block flex-shrink-0">
       <div
         className={cn(
-          'border-2 border-border bg-card-subtle flex items-center justify-center font-mono font-black text-foreground overflow-hidden uppercase shadow-sm',
+          'rounded-full border border-border/80 bg-muted/60 flex items-center justify-center font-sans font-semibold text-foreground overflow-hidden shadow-2xs',
           sizes[size],
           className
         )}
@@ -49,7 +49,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       {status && (
         <span
           className={cn(
-            'absolute bottom-0 right-0 w-2.5 h-2.5 border-2 border-card rounded-none',
+            'absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-card ring-1 ring-background',
             statusColors[status]
           )}
           title={`Status: ${status}`}
