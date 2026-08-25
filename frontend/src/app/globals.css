@@ -8,14 +8,14 @@
 
 :root {
   /* Ergonomic Optic Blue - Professional and fatigue-free */
-  --primary: #2563EB;                    
+  --primary: #2563EB;
   --primary-hover: #1D4ED8;
   --primary-light: #EFF6FF;
   --primary-dark: #1E3A8A;
   --primary-foreground: #FFFFFF;
 
   /* Muted Safety Red (LOS / Faults) */
-  --destructive: #DC2626;                
+  --destructive: #DC2626;
   --destructive-hover: #B91C1C;
   --destructive-light: #FEF2F2;
   --destructive-foreground: #FFFFFF;
@@ -33,16 +33,16 @@
   --secondary-foreground: #FFFFFF;
 
   /* Readable Warning / Audit Amber */
-  --warning: #D97706;                    
+  --warning: #D97706;
   --warning-hover: #B45309;
   --warning-light: #FEF3C7;
   --warning-foreground: #78350F;
 
   /* Canvas & Surfaces (Soft Slate Canvas to reduce glare) */
-  --background: #F8FAFC;                 
-  --foreground: #0F172A;                 
-  
-  --card: #FFFFFF;                       
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+
+  --card: #FFFFFF;
   --card-foreground: #0F172A;
   --card-subtle: #F8FAFC;
 
@@ -56,7 +56,8 @@
   --accent: #EFF6FF;
   --accent-foreground: #2563EB;
 
-  --border: #E2E8F0;                     /* Soft 1px dividers */
+  --border: #E2E8F0;
+  /* Soft 1px dividers */
   --border-subtle: #F1F5F9;
   --input: #E2E8F0;
   --ring: #2563EB;
@@ -110,10 +111,10 @@
   --warning-foreground: #FEF3C7;
 
   /* Ergonomic Charcoal Dark Mode */
-  --background: #0B0F17;                 
-  --foreground: #F8FAFC;                 
-  
-  --card: #111827;                       
+  --background: #0B0F17;
+  --foreground: #F8FAFC;
+
+  --card: #111827;
   --card-foreground: #F8FAFC;
   --card-subtle: #0F172A;
 
@@ -213,7 +214,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   max-height: 100%;
   overflow: hidden;

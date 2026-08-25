@@ -79,8 +79,8 @@ export default function LoginPage() {
         router.push('/platform');
       } else if (email.toLowerCase().includes('customer')) {
         // Customer
-        showToast('Customer Authenticated', 'Launching Customer Web Chat Simulator', 'success');
-        router.push('/chat');
+        showToast('Customer Authenticated', 'Entering Prime One Customer Portal', 'success');
+        router.push('/customer');
       } else {
         // ISP Staff / Owner
         setAuth(
@@ -225,8 +225,8 @@ export default function LoginPage() {
       router.push('/desk');
     } else {
       setEmail('customer@nayatel.pk');
-      showToast('Customer Mode', 'Entering Customer Web Chat Simulator', 'info');
-      router.push('/chat');
+      showToast('Customer Portal', 'Entering Customer Command Center & Dashboard', 'info');
+      router.push('/customer');
     }
     setIsLoading(false);
   };

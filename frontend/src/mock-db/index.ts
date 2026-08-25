@@ -10,6 +10,17 @@ import { mockRoles, mockPermissionMatrix, MockRole, PermissionMatrixRow } from '
 import { mockSupervisorAgents, MockSupervisorAgent } from './supervisor.mock';
 import { mockOperationalReports, MockOperationalReports } from './reports.mock';
 import { mockQuickReplies, mockWorkingHours, MockQuickReply, MockWorkingDay } from './settings.mock';
+import {
+  mockCustomerPortalSubscriber,
+  mockCustomerInvoices,
+  mockCustomerTickets,
+  mockCustomerChatMessages,
+  mockPaymentGateways,
+  CustomerInvoice,
+  CustomerTicket,
+  CustomerChatMessage,
+  PaymentGatewayChannel,
+} from './customer-portal.mock';
 import { Customer, Customer360 } from '@/types/customer.types';
 import { Conversation, Message } from '@/types/chat.types';
 
@@ -25,6 +36,7 @@ export * from './roles.mock';
 export * from './supervisor.mock';
 export * from './reports.mock';
 export * from './settings.mock';
+export * from './customer-portal.mock';
 
 export const mockDb = {
   // Tenants
@@ -56,6 +68,13 @@ export const mockDb = {
   getCustomers: (): Customer[] => mockCustomers,
   getCustomerById: (id: string): Customer | undefined =>
     mockCustomers.find((c) => c.id === id),
+
+  // Customer Portal (Tier 3)
+  getCustomerPortalSubscriber: (): Customer => mockCustomerPortalSubscriber,
+  getCustomerInvoices: (): CustomerInvoice[] => mockCustomerInvoices,
+  getCustomerTickets: (): CustomerTicket[] => mockCustomerTickets,
+  getCustomerChatMessages: (): CustomerChatMessage[] => mockCustomerChatMessages,
+  getPaymentGateways: (): PaymentGatewayChannel[] => mockPaymentGateways,
 
   // Live Prime Desk
   getDeskConversations: (): Conversation[] => mockDeskConversations,

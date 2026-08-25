@@ -21,12 +21,18 @@ export default function WorkingHoursPage() {
   );
 
   const [offlineMessage, setOfflineMessage] = useState(
-    'Salam! Our support helpdesk is currently offline outside scheduled working hours. Your inquiry has been queued with High Priority, and our on-duty NOC engineer will respond as soon as our shift starts. For emergency link down issues, please call our 24/7 Helpline: +92 51 111-PRIME.'
+    'Hello! Our support helpdesk is currently offline outside scheduled working hours. Your inquiry has been queued with High Priority, and our on-duty NOC engineer will respond as soon as our shift starts. For emergency link down issues, please call our 24/7 Helpline: +92 51 111-PRIME.'
   );
 
   const handleToggleDay = (idx: number) => {
     const updated = [...schedule];
     updated[idx].isWorking = !updated[idx].isWorking;
+    setSchedule(updated);
+  };
+
+  const handleTimeChange = (idx: number, field: 'start' | 'end', value: string) => {
+    const updated = [...schedule];
+    updated[idx][field] = value;
     setSchedule(updated);
   };
 
@@ -94,6 +100,7 @@ export default function WorkingHoursPage() {
                   <input
                     type="time"
                     value={item.start}
+                    onChange={(e) => handleTimeChange(idx, 'start', e.target.value)}
                     disabled={!item.isWorking}
                     className="bg-card rounded-md border border-border px-2 py-1 text-xs font-mono disabled:opacity-40"
                   />
@@ -101,6 +108,7 @@ export default function WorkingHoursPage() {
                   <input
                     type="time"
                     value={item.end}
+                    onChange={(e) => handleTimeChange(idx, 'end', e.target.value)}
                     disabled={!item.isWorking}
                     className="bg-card rounded-md border border-border px-2 py-1 text-xs font-mono disabled:opacity-40"
                   />

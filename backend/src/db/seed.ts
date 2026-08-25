@@ -511,7 +511,7 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       senderCustomerId: custAli.id,
       senderName: 'Muhammad Ali Khan',
       messageType: 'text',
-      content: 'Salam, my internet speed is dropping significantly every evening around 8 PM. Can you check my connection?',
+      content: 'Hello, my internet speed is dropping significantly every evening around 8 PM. Can you check my connection?',
       status: 'read',
     },
     {
@@ -521,7 +521,7 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       senderUserId: agentUser.id,
       senderName: 'Agent Ali',
       messageType: 'text',
-      content: 'Wa Alaikum Assalam Muhammad Ali! Let me check your optical signal power and MikroTik live session right now.',
+      content: 'Hello Muhammad Ali! Let me check your optical signal power and MikroTik live session right now.',
       status: 'read',
     },
     {
