@@ -1,26 +1,266 @@
 @import "tailwindcss";
 
+/* -------------------------------------------------------------------------
+   PRIME ONE — FLUID MODERN NOC & TELECOM DESIGN SYSTEM
+   Theme: Blueprint (Light) / Terminal (Dark) — Fluid & Ambient
+------------------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Identity (Blueprint Light) */
+  --primary: #0047FF;                     /* High-Velocity Optic Blue */
+  --primary-hover: #0033CC;
+  --primary-light: #E5EDFF;
+  --primary-dark: #001A66;
+  --primary-foreground: #FFFFFF;
+
+  --destructive: #FF3300;                 /* Industrial Safety Orange/Red (LOS/Faults) */
+  --destructive-hover: #CC2900;
+  --destructive-light: #FFEAE5;
+  --destructive-foreground: #FFFFFF;
+
+  --info: #00E5FF;                        /* Luminous Cyan (Active Data/Throughput) */
+  --info-hover: #00B3CC;
+  --info-light: #E5FCFF;
+  --info-foreground: #001A1F;
+
+  --secondary: #1E293B;                  /* Slate Navy */
+  --secondary-hover: #0F172A;
+  --secondary-light: #F1F5F9;
+  --secondary-foreground: #FFFFFF;
+
+  --warning: #FFDD00;                    /* High-Vis Yellow (SLA Warnings) */
+  --warning-hover: #CCB100;
+  --warning-light: #FFFBE5;
+  --warning-foreground: #111111;
+
+  /* Canvas & Surfaces (Blueprint Light) */
+  --background: #F8FAFC;                 /* Clean Soft Slate Canvas */
+  --foreground: #0F172A;                 /* Slate 900 */
+
+  --card: #FFFFFF;                       /* Pure White Floating Panels */
+  --card-foreground: #0F172A;
+  --card-subtle: #F1F5F9;                /* Inset Surfaces */
+
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --subtle-foreground: #94A3B8;
+
+  --accent: #E5EDFF;
+  --accent-foreground: #0047FF;
+
+  --border: #E2E8F0;                     /* Soft 1px dividers */
+  --border-subtle: #F1F5F9;
+  --input: #F1F5F9;
+  --ring: #0047FF;
+
+  /* Typography */
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Epilogue', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Geist Mono', monospace;
+  --font-urdu: 'Noto Nastaliq Urdu', serif;
+
+  /* Radii & Shadows - Fluid & Modern (Non-Boxy) */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Soft, organic diffuse multi-layer shadows */
+  --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 20px 40px -8px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+  --shadow-primary: 0 8px 25px -4px rgba(0, 71, 255, 0.35);
+  --shadow-destructive: 0 8px 25px -4px rgba(255, 51, 0, 0.35);
+}
+
+/* Dark Mode Overrides (Terminal / NOC Night Shift) */
+.dark,
+[data-theme="dark"] {
+  --primary: #00FFAA;                     /* Laser Green */
+  --primary-hover: #00CC88;
+  --primary-light: rgba(0, 255, 170, 0.12);
+  --primary-dark: #006644;
+  --primary-foreground: #000000;
+
+  --destructive: #FF0055;                 /* Neon Crimson */
+  --destructive-hover: #CC0044;
+  --destructive-light: rgba(255, 0, 85, 0.14);
+  --destructive-foreground: #FFFFFF;
+
+  --info: #00FFFF;                        /* Electric Cyan */
+  --info-hover: #00CCCC;
+  --info-light: rgba(0, 255, 255, 0.12);
+  --info-foreground: #000000;
+
+  --secondary: #334155;
+  --secondary-hover: #475569;
+  --secondary-light: rgba(255, 255, 255, 0.08);
+  --secondary-foreground: #FFFFFF;
+
+  --warning: #FFBB00;
+  --warning-hover: #CC9600;
+  --warning-light: rgba(255, 187, 0, 0.14);
+  --warning-foreground: #000000;
+
+  --background: #060913;                 /* Fluid Deep Obsidian */
+  --foreground: #F8FAFC;
+
+  --card: #0D1322;                       /* Elevated Glass Card */
+  --card-foreground: #F8FAFC;
+  --card-subtle: #131D31;
+
+  --popover: #0D1322;
+  --popover-foreground: #F8FAFC;
+
+  --muted: #131D31;
+  --muted-foreground: #94A3B8;
+  --subtle-foreground: #64748B;
+
+  --accent: rgba(0, 255, 170, 0.12);
+  --accent-foreground: #00FFAA;
+
+  --border: #1A263E;
+  --border-subtle: #141F33;
+  --input: #131D31;
+  --ring: #00FFAA;
+
+  /* Glowing hardware shadows */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.7);
+  --shadow-primary: 0 8px 30px rgba(0, 255, 170, 0.3);
+  --shadow-destructive: 0 8px 30px rgba(255, 0, 85, 0.3);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-hover: var(--destructive-hover);
+  --color-destructive-light: var(--destructive-light);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-info: var(--info);
+  --color-info-hover: var(--info-hover);
+  --color-info-light: var(--info-light);
+  --color-info-foreground: var(--info-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-light: var(--warning-light);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-subtle: var(--card-subtle);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+  --font-urdu: var(--font-urdu);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-primary: var(--shadow-primary);
+  --shadow-destructive: var(--shadow-destructive);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* -------------------------------------------------------------------------
+   Fluid Ambient Backgrounds & Clean Canvas (Zero Boxy Grid Lines)
+------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Smooth Ambient Glow Canvas (No Boxy Grid Lines) */
+.ambient-glow-canvas {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 71, 255, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 229, 255, 0.05) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(0, 71, 255, 0.03) 0px, transparent 50%);
+}
+
+.dark .ambient-glow-canvas {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 255, 170, 0.07) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 255, 255, 0.07) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(0, 255, 170, 0.04) 0px, transparent 50%);
+}
+
+/* Typography (Natural, Elegant Casing) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+code, pre, .telemetry-data, [data-mono] {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+[dir="rtl"] {
+  font-family: var(--font-urdu);
+  line-height: 2;
+}
+
+/* Smooth Fluid Reveal Animation */
+@keyframes fluid-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fluid-boot {
+  animation: fluid-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
