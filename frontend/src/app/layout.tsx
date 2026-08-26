@@ -6,6 +6,7 @@ import {
 } from "next/font/google";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { ToastProvider } from "@/components/ui/toast";
+import { AgentationProvider } from "@/components/providers/AgentationProvider";
 import "./globals.css";
 
 /* ----------------------------------------------------------------
@@ -103,7 +104,10 @@ export default function RootLayout({
         className="min-h-screen bg-background text-foreground font-body antialiased selection:bg-primary selection:text-primary-foreground tracking-[-0.01em]"
       >
         <QueryProvider>
-          <ToastProvider>{children}</ToastProvider>
+          <ToastProvider>
+            {children}
+            <AgentationProvider />
+          </ToastProvider>
         </QueryProvider>
       </body>
     </html>

@@ -48,12 +48,20 @@ export function Avatar({
     offline: "bg-muted-foreground",
   };
 
+  const roundedStyles = {
+    sm: "rounded-lg",
+    md: "rounded-xl",
+    lg: "rounded-xl",
+    xl: "rounded-2xl",
+  };
+
   return (
     <div className={cn("relative inline-flex shrink-0", className)} {...props}>
       <div
         className={cn(
-          "flex items-center justify-center rounded-full border border-border bg-card-subtle font-heading font-bold text-foreground overflow-hidden select-none",
-          sizeStyles[size]
+          "flex items-center justify-center border border-border bg-card-subtle font-heading font-bold text-foreground overflow-hidden select-none",
+          sizeStyles[size],
+          roundedStyles[size]
         )}
       >
         {src && !hasImageError ? (

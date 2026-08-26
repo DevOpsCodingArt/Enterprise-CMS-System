@@ -7,13 +7,13 @@ import {
   PhoneCall,
   Sun,
   Moon,
-  ArrowLeft,
   LifeBuoy,
   Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { CustomerNav } from "@/components/customer/CustomerNav";
 
 export default function CustomerLayout({
   children,
@@ -33,18 +33,10 @@ export default function CustomerLayout({
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground font-body">
+    <div className="flex min-h-screen flex-col bg-background text-foreground font-body pb-16 md:pb-6">
       {/* Customer Header */}
       <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card/90 backdrop-blur-md px-4 md:px-6">
         <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mr-2"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Gateway</span>
-          </Link>
-
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground font-heading font-extrabold text-sm shadow-sm">
             P1
           </div>
@@ -69,29 +61,44 @@ export default function CustomerLayout({
             variant="outline"
             size="sm"
             onClick={toggleTheme}
-            className="h-8 px-2.5 font-mono text-xs"
+            className="h-9 w-9 p-0 font-mono text-xs cursor-pointer rounded-lg shrink-0"
+            title="Toggle theme"
           >
             {isDarkMode ? (
-              <Sun className="h-3.5 w-3.5 text-warning" />
+              <Sun className="h-4 w-4 text-warning" />
             ) : (
-              <Moon className="h-3.5 w-3.5 text-primary" />
+              <Moon className="h-4 w-4 text-primary" />
             )}
           </Button>
 
-          <div className="flex items-center gap-2 border-l border-border pl-3">
-            <Avatar name="Ahmed Malik" presence="online" size="sm" />
-            <div className="hidden md:flex flex-col">
-              <span className="text-xs font-bold text-foreground">Ahmed Malik</span>
-              <span className="font-mono text-[9px] text-muted-foreground">
-                CUS-99482
+          <Link
+            href="/portal/profile"
+            className="flex items-center gap-3 border-l border-border pl-3.5 py-0.5 rounded-lg hover:bg-card-subtle transition-colors cursor-pointer"
+          >
+            <div className="relative">
+              <Avatar name="Ahmed Malik" size="md" />
+              <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
+            </div>
+            <div className="hidden sm:flex flex-col text-left">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-bold text-foreground">
+                  Ahmed Malik
+                </span>
+                <Badge variant="success" className="text-[8px] py-0 px-1 font-mono uppercase">
+                  ACTIVE
+                </Badge>
+              </div>
+              <span className="font-mono text-[10px] text-muted-foreground">
+                CUS-99482 • Islamabad HQ
               </span>
             </div>
-          </div>
+          </Link>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-4 md:p-6 max-w-6xl mx-auto w-full space-y-6">
+      <main className="flex-1 p-3 md:p-6 max-w-6xl mx-auto w-full space-y-4">
+        <CustomerNav />
         {children}
       </main>
     </div>
