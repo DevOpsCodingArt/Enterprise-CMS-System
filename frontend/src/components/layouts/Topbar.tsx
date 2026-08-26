@@ -10,6 +10,8 @@ import {
   Shield,
   Activity,
   CheckCircle2,
+  Command,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +32,6 @@ export function Topbar() {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Synchronize with documentElement dark class
   useEffect(() => {
     const isDark = document.documentElement.classList.contains("dark");
     setIsDarkMode(isDark);
@@ -43,7 +44,7 @@ export function Topbar() {
   };
 
   const branchOptions = [
-    { label: "🏢 All 20 Branches (Consolidated)", value: "all" },
+    { label: "🏢 All 20 Branch Offices", value: "all" },
     ...branches.map((b) => ({
       label: `📍 ${b.name} (${b.code})`,
       value: b.id,
@@ -61,92 +62,102 @@ export function Topbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card/90 backdrop-blur-xs px-4 md:px-6">
-      {/* Left: Tenant Branding & Branch Selector */}
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
+    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card/90 backdrop-blur-md px-4 md:px-6 transition-colors">
+      {/* 1. Left: Tenant Branding & Branch Selector */}
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center gap-2 rounded-lg bg-card-subtle px-2.5 py-1.5 border border-border">
           <Building2 className="h-4 w-4 text-primary shrink-0" />
-          <span className="font-heading font-extrabold text-sm text-foreground tracking-tight hidden sm:inline">
+          <span className="font-heading font-bold text-xs text-foreground tracking-tight truncate max-w-[140px] sm:max-w-[200px]">
             {company?.name || "Prime Networks"}
           </span>
+          <Badge variant="success" className="text-[9px] py-0 px-1.5 uppercase font-mono hidden sm:inline-flex">
+            PRO
+          </Badge>
         </div>
 
-        <span className="text-border-subtle hidden sm:inline">|</span>
-
-        {/* Branch Selector */}
+        {/* Branch Filter Dropdown */}
         <DropdownMenu
           items={branchOptions}
           value={selectedBranchId || "all"}
           onSelect={(val) => {
             selectBranch(val === "all" ? null : val);
-            const branchName = val === "all" ? "All Branches" : branches.find((b) => b.id === val)?.name;
-            toast.info("Branch Switched", `Active scope filtered to: ${branchName}`);
+            const branchName =
+              val === "all" ? "All Branches" : branches.find((b) => b.id === val)?.name;
+            toast.info("Branch Filter", `Active view set to: ${branchName}`);
           }}
-          className="w-56 md:w-64"
+          className="w-48 sm:w-56"
         />
       </div>
 
-      {/* Center: Global Search Bar */}
-      <div className="hidden lg:flex items-center max-w-xs w-full">
-        <div className="relative flex items-center w-full">
-          <Search className="absolute left-3 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+      {/* 2. Center: Global Search Bar */}
+      <div className="hidden md:flex items-center max-w-sm w-full mx-4">
+        <div className="relative flex items-center w-full group">
+          <Search className="absolute left-3 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
           <input
             type="text"
-            placeholder="Quick search subscriber, ONU, ticket... (Ctrl+K)"
-            className="h-9 w-full rounded-md border border-input bg-card-subtle pl-9 pr-3 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            placeholder="Search subscribers, OLT, tickets... (Ctrl+K)"
+            className="h-9 w-full rounded-lg border border-input bg-card-subtle pl-9 pr-12 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all"
           />
+          <div className="absolute right-2.5 flex items-center gap-0.5 rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+            <Command className="h-2.5 w-2.5" />
+            <span>K</span>
+          </div>
         </div>
       </div>
 
-      {/* Right: Telemetry Status, Notifications, Theme & Profile */}
-      <div className="flex items-center gap-2.5">
-        {/* Real-time Connection Status Badge */}
-        <Tooltip content={isDegraded ? "Real-time socket offline. Operating in resilient REST polling mode." : "WebSocket connected to live telemetry gateway."}>
+      {/* 3. Right: Live Radar, Theme Toggle, Persona Switcher & Profile */}
+      <div className="flex items-center gap-2 shrink-0">
+        {/* Live Radar Connection Badge */}
+        <Tooltip content={isDegraded ? "Real-time socket offline (REST polling active)" : "Live WebSocket connected (0ms telemetry lag)"}>
           <Badge
             variant={isDegraded ? "warning" : "success"}
             hasPulse
-            className="text-[10px] py-1 px-2.5 cursor-help"
+            className="text-[10px] py-1 px-2.5 font-mono font-bold cursor-help border shadow-xs"
           >
-            {isDegraded ? "🟡 DEGRADED" : "🟢 LIVE WS"}
+            {isDegraded ? "🟡 DEGRADED" : "🟢 LIVE RADAR"}
           </Badge>
         </Tooltip>
 
         {/* Notifications Tray */}
-        <Tooltip content="Recent Operational Alerts">
+        <Tooltip content="NOC Incident Alerts">
           <button
-            onClick={() => toast.info("NOC Radar Alert", "All 20 branch gateways are operating normally.")}
-            className="relative rounded-md p-2 text-muted-foreground hover:bg-card-subtle hover:text-foreground transition-colors cursor-pointer"
+            onClick={() => toast.info("NOC Telemetry", "All 20 branch core routers operating normally.")}
+            className="relative rounded-lg p-2 text-muted-foreground hover:bg-card-subtle hover:text-foreground transition-colors cursor-pointer border border-transparent hover:border-border"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-primary" />
+            <span className="absolute top-1.5 right-1.5 flex h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
           </button>
         </Tooltip>
 
-        {/* Theme Toggle (Light / Dark Mode) */}
+        {/* Theme Switcher (Light / Dark) */}
         <Tooltip content={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}>
           <Button
             variant="outline"
             size="sm"
             onClick={toggleTheme}
-            className="gap-1.5 font-mono text-xs h-9 px-3"
+            className="h-9 px-3 gap-1.5 font-mono text-xs shadow-xs"
           >
-            {isDarkMode ? <Sun className="h-3.5 w-3.5 text-warning" /> : <Moon className="h-3.5 w-3.5 text-primary" />}
-            <span className="hidden md:inline">{isDarkMode ? "Light" : "Dark"}</span>
+            {isDarkMode ? (
+              <Sun className="h-3.5 w-3.5 text-warning transition-transform hover:rotate-45" />
+            ) : (
+              <Moon className="h-3.5 w-3.5 text-primary transition-transform hover:-rotate-12" />
+            )}
+            <span className="hidden lg:inline">{isDarkMode ? "Light" : "Dark"}</span>
           </Button>
         </Tooltip>
 
-        {/* Role Switcher Dropdown */}
+        {/* Persona Switcher Dropdown */}
         <DropdownMenu
           items={roleOptions}
           value={user?.role}
           onSelect={(val) => {
             switchDemoRole(val as UserRole);
-            toast.info("Persona Switched", `Switched to ${val.replace(/_/g, " ").toUpperCase()}`);
+            toast.info("Switched Role", `Active persona: ${val.replace(/_/g, " ").toUpperCase()}`);
           }}
-          className="w-44 hidden md:inline-block"
+          className="w-44 hidden xl:inline-block"
         />
 
-        {/* User Avatar */}
+        {/* User Profile Avatar */}
         <Avatar name={user?.name || "Admin"} presence="online" size="md" />
       </div>
     </header>

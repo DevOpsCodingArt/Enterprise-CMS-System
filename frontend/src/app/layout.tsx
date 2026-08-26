@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import {
-  Bricolage_Grotesque,
-  DM_Sans,
+  Plus_Jakarta_Sans,
+  Inter,
   JetBrains_Mono,
 } from "next/font/google";
 import { QueryProvider } from "@/components/providers/QueryProvider";
@@ -9,22 +10,22 @@ import { ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 
 /* ----------------------------------------------------------------
-   FONT LOADING
-   - Bricolage Grotesque: Headings & Display
-   - DM Sans: Body
-   - JetBrains Mono: Telemetry / Data / Codes
+   PREMIUM TYPOGRAPHY
+   - Plus Jakarta Sans: Editorial / Modern Headings & Display
+   - Inter: Pixel-perfect UI body & high-density data readability
+   - JetBrains Mono: Telemetry / IP Addresses / Optical dBm / Codes
    ---------------------------------------------------------------- */
 
-const bricolage = Bricolage_Grotesque({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-bricolage",
+  variable: "--font-plus-jakarta",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["500", "600", "700", "800"],
 });
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-inter",
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
 });
@@ -80,31 +81,26 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${bricolage.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
+      className={`${plusJakarta.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <head>
-        {/*
-          Inline theme-init script: Defaults to Light Mode unless the user has
-          explicitly saved 'dark' in localStorage.
-        */}
-        <script
+      <head />
+      <body className="min-h-screen bg-background text-foreground font-body antialiased selection:bg-primary selection:text-primary-foreground tracking-[-0.01em]">
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('theme');
-                  if (stored === 'dark') {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                  }
-                } catch (e) {}
-              })();
+              try {
+                var stored = localStorage.getItem('theme');
+                if (stored === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
             `,
           }}
         />
-      </head>
-      <body className="min-h-screen bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground">
         <QueryProvider>
           <ToastProvider>{children}</ToastProvider>
         </QueryProvider>

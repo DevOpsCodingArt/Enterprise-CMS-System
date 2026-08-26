@@ -1,19 +1,9 @@
 @import "tailwindcss";
 
 /* ================================================================
-   PRIME ONE — DESIGN SYSTEM FOUNDATION
-   ColorHunt Palette: #091540 | #1B2CC1 | #7692FF | #ABD2FA
-   
-   Typography:  Bricolage Grotesque / DM Sans / JetBrains Mono
-   Light Mode:  "Ice Cobalt" — crisp ice canvas, #1B2CC1 Royal brand
-   Dark Mode:   "Midnight Cobalt" — #091540 Canvas, #7692FF Luminous accent
+   PRIME ONE TELECOM OS — DESIGN SYSTEM TOKENS
+   Calibrated Enterprise Theme (Light Mode Default & Dark Mode #091540)
    ================================================================ */
-
-
-/* ----------------------------------------------------------------
-   TAILWIND v4 THEME TOKEN MAPPINGS
-   Maps CSS custom properties → Tailwind utility classes
-   ---------------------------------------------------------------- */
 
 @theme inline {
   /* Canvas & Surfaces */
@@ -27,7 +17,7 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
 
-  /* Brand (ColorHunt: #1B2CC1 & #7692FF) */
+  /* Brand Colors */
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -45,13 +35,13 @@
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
 
-  /* Borders & Rings */
+  /* Borders & Focus Rings */
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Sidebar */
+  /* Sidebar Navigation */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-muted: var(--sidebar-muted);
@@ -60,17 +50,10 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Charts & Data Visualization */
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
   /* Typography */
-  --font-heading: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, "Courier New", monospace;
+  --font-heading: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Radius Scale */
   --radius-sm: calc(var(--radius) - 4px);
@@ -81,619 +64,130 @@
   --radius-full: 9999px;
 }
 
-
-/* ----------------------------------------------------------------
-   LIGHT MODE — "ICE COBALT"
-   Crisp Ice Canvas (#F3F8FE), #091540 Text, #1B2CC1 Brand CTA, #ABD2FA Chips
-   ---------------------------------------------------------------- */
-
+/* ================================================================
+   LIGHT MODE (DEFAULT) — Crisp Slate Canvas & Electric Indigo
+   ================================================================ */
 :root {
-  color-scheme: light;
+  --radius: 0.5rem;
 
   /* Canvas & Surfaces */
-  --background: #F3F8FE;
-  --foreground: #091540;
-  --card: #FFFFFF;
-  --card-foreground: #091540;
-  --card-subtle: #E5EFFB;
+  --background: #F8FAFC;        /* Clean Slate 50 */
+  --foreground: #0F172A;        /* Slate 900 primary text */
+  --card: #FFFFFF;              /* Crisp white cards */
+  --card-foreground: #0F172A;
+  --card-subtle: #F1F5F9;       /* Slate 100 subtle surface */
   --popover: #FFFFFF;
-  --popover-foreground: #091540;
-  --muted: #D8E7F8;
-  --muted-foreground: #4C618A;
+  --popover-foreground: #0F172A;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;  /* Slate 500 */
 
-  /* Brand — ColorHunt #1B2CC1 (Royal Cobalt) & #ABD2FA (Soft Ice) */
-  --primary: #1B2CC1;
+  /* Brand Palette */
+  --primary: #2563EB;           /* Royal Electric Blue */
   --primary-foreground: #FFFFFF;
-  --secondary: #ABD2FA;
-  --secondary-foreground: #091540;
-  --accent: #E5EFFB;
-  --accent-foreground: #1B2CC1;
+  --secondary: #EFF6FF;         /* Soft Blue 50 */
+  --secondary-foreground: #1D4ED8;
+  --accent: #F8FAFC;
+  --accent-foreground: #0F172A;
 
-  /* Status & Telemetry */
-  --destructive: #DC2626;
-  --destructive-foreground: #FFFFFF;
-  --warning: #D97706;
-  --warning-foreground: #FFFFFF;
-  --success: #059669;
+  /* Operational Status & Telemetry */
+  --success: #10B981;
   --success-foreground: #FFFFFF;
-  --info: #7692FF;
+  --warning: #F59E0B;
+  --warning-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --info: #0284C7;
   --info-foreground: #FFFFFF;
 
   /* Borders & Inputs */
-  --border: #C4DCF5;
-  --border-subtle: #DFEDFC;
-  --input: #C4DCF5;
-  --ring: #1B2CC1;
+  --border: #E2E8F0;            /* Crisp Slate 200 border */
+  --border-subtle: #F1F5F9;
+  --input: #E2E8F0;
+  --ring: #2563EB;
 
-  /* Sidebar — #091540 Deep Midnight Anchor */
-  --sidebar: #091540;
-  --sidebar-foreground: #ABD2FA;
-  --sidebar-muted: #627AA8;
-  --sidebar-border: #13245C;
-  --sidebar-accent: #1B2CC1;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-ring: #7692FF;
-
-  /* Charts & Data Visualization */
-  --chart-1: #1B2CC1;
-  --chart-2: #059669;
-  --chart-3: #D97706;
-  --chart-4: #7692FF;
-  --chart-5: #DB2777;
-
-  /* Radius */
-  --radius: 0.625rem;
-
-  /* Shadows — Royal Tint */
-  --shadow-xs: 0 1px 2px 0 rgba(9, 21, 64, 0.04);
-  --shadow-sm: 0 1px 3px 0 rgba(9, 21, 64, 0.06), 0 1px 2px -1px rgba(9, 21, 64, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(9, 21, 64, 0.07), 0 2px 4px -2px rgba(9, 21, 64, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(9, 21, 64, 0.08), 0 4px 6px -4px rgba(9, 21, 64, 0.06);
-  --shadow-xl: 0 20px 25px -5px rgba(9, 21, 64, 0.10), 0 8px 10px -6px rgba(9, 21, 64, 0.06);
-
-  /* Transitions */
-  --transition-fast: 120ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  --transition-base: 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  --transition-slow: 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Sidebar (Exact same background color for flawless consistency) */
+  --sidebar: #F8FAFC;
+  --sidebar-foreground: #0F172A;
+  --sidebar-muted: #64748B;
+  --sidebar-border: #E2E8F0;
+  --sidebar-accent: #F1F5F9;
+  --sidebar-accent-foreground: #0F172A;
+  --sidebar-ring: #2563EB;
 }
 
-
-/* ----------------------------------------------------------------
-   DARK MODE — "MIDNIGHT COBALT"
-   #091540 Canvas, #101F56 Cards, #7692FF Luminous Primary, #ABD2FA Text Highlights
-   ---------------------------------------------------------------- */
-
+/* ================================================================
+   DARK MODE — Calibrated Midnight Navy (#091540)
+   Harmonious surface hierarchy without harsh oversaturation
+   ================================================================ */
 .dark {
-  color-scheme: dark;
+  /* Canvas & Elevated Surfaces */
+  --background: #091540;        /* Midnight Navy base canvas requested */
+  --foreground: #FFFFFF;        /* Pure white primary text */
+  --card: #0D1C4E;              /* Harmonious elevated surface */
+  --card-foreground: #FFFFFF;
+  --card-subtle: #081335;       /* Sunken surface for inputs / inner containers */
+  --popover: #0D1C4E;
+  --popover-foreground: #FFFFFF;
+  --muted: #081335;
+  --muted-foreground: #94A3B8;  /* High-legibility Slate 400 */
 
-  /* Canvas & Surfaces — ColorHunt #091540 Base */
-  --background: #091540;
-  --foreground: #F0F6FF;
-  --card: #101F56;
-  --card-foreground: #F0F6FF;
-  --card-subtle: #17296B;
-  --popover: #101F56;
-  --popover-foreground: #F0F6FF;
-  --muted: #1A2E78;
-  --muted-foreground: #ABD2FA;
+  /* Brand Palette */
+  --primary: #3B82F6;           /* Vivid Blue 500 */
+  --primary-foreground: #FFFFFF;
+  --secondary: #14255C;         /* Subtle elevated pill surface */
+  --secondary-foreground: #93C5FD;
+  --accent: #14255C;
+  --accent-foreground: #FFFFFF;
 
-  /* Brand — ColorHunt #7692FF (Luminous Primary) & #1B2CC1 (Cobalt) */
-  --primary: #7692FF;
-  --primary-foreground: #091540;
-  --secondary: #1B2CC1;
-  --secondary-foreground: #FFFFFF;
-  --accent: #233A94;
-  --accent-foreground: #F0F6FF;
-
-  /* Status & Telemetry */
-  --destructive: #F87171;
-  --destructive-foreground: #091540;
-  --warning: #FBBF24;
-  --warning-foreground: #091540;
-  --success: #34D399;
+  /* Status Tokens (High-visibility glowing pills) */
+  --success: #34D399;           /* Emerald 400 */
   --success-foreground: #091540;
-  --info: #7692FF;
+  --warning: #FBBF24;           /* Amber 400 */
+  --warning-foreground: #091540;
+  --destructive: #F87171;       /* Rose 400 */
+  --destructive-foreground: #091540;
+  --info: #38BDF8;              /* Sky 400 */
   --info-foreground: #091540;
 
-  /* Borders & Inputs */
-  --border: #1E347E;
-  --border-subtle: #14245C;
-  --input: #1A2E78;
-  --ring: #7692FF;
+  /* Crisp 1px Subtle Borders (Not glowing blue) */
+  --border: rgba(255, 255, 255, 0.1);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #3B82F6;
 
-  /* Sidebar — Deepest Midnight */
-  --sidebar: #060E2C;
-  --sidebar-foreground: #ABD2FA;
-  --sidebar-muted: #627AA8;
-  --sidebar-border: #101F56;
-  --sidebar-accent: #1B2CC1;
+  /* Sidebar (Exact same #091540 background color) */
+  --sidebar: #091540;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-muted: #94A3B8;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-accent: rgba(255, 255, 255, 0.06);
   --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-ring: #7692FF;
-
-  /* Charts & Data Visualization */
-  --chart-1: #7692FF;
-  --chart-2: #34D399;
-  --chart-3: #FBBF24;
-  --chart-4: #ABD2FA;
-  --chart-5: #F472B6;
-
-  /* Shadows — Deep Midnight Glow */
-  --shadow-xs: 0 1px 2px 0 rgba(4, 9, 30, 0.45);
-  --shadow-sm: 0 1px 3px 0 rgba(4, 9, 30, 0.5), 0 1px 2px -1px rgba(4, 9, 30, 0.5);
-  --shadow-md: 0 4px 6px -1px rgba(4, 9, 30, 0.5), 0 2px 4px -2px rgba(4, 9, 30, 0.45);
-  --shadow-lg: 0 10px 15px -3px rgba(4, 9, 30, 0.55), 0 4px 6px -4px rgba(4, 9, 30, 0.5);
-  --shadow-xl: 0 20px 25px -5px rgba(4, 9, 30, 0.6), 0 8px 10px -6px rgba(4, 9, 30, 0.55);
+  --sidebar-ring: #3B82F6;
 }
 
-
-/* ----------------------------------------------------------------
-   BASE STYLES
-   Typography scale, body defaults, focus rings, selections
-   ---------------------------------------------------------------- */
-
-@layer base {
-
-  /* ---- Smooth color transitions on theme change ---- */
-  *,
-  *::before,
-  *::after {
-    border-color: var(--border);
-  }
-
-  html {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    scroll-behavior: smooth;
-  }
-
-  body {
-    font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-    color: var(--foreground);
-    background-color: var(--background);
-    font-feature-settings: "rlig" 1, "calt" 1;
-    line-height: 1.6;
-    letter-spacing: -0.011em;
-    transition:
-      background-color var(--transition-slow),
-      color var(--transition-slow);
-  }
-
-  /* ---- Heading typography ---- */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.025em;
-    color: var(--foreground);
-    text-wrap: balance;
-  }
-
-  h1 {
-    font-size: 2.25rem; /* 36px */
-    font-weight: 800;
-    letter-spacing: -0.035em;
-  }
-  h2 {
-    font-size: 1.75rem; /* 28px */
-    letter-spacing: -0.03em;
-  }
-  h3 {
-    font-size: 1.375rem; /* 22px */
-    letter-spacing: -0.02em;
-  }
-  h4 {
-    font-size: 1.125rem; /* 18px */
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-  h5 {
-    font-size: 1rem; /* 16px */
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-  h6 {
-    font-size: 0.875rem; /* 14px */
-    font-weight: 600;
-    letter-spacing: 0;
-    text-transform: uppercase;
-    color: var(--muted-foreground);
-  }
-
-  /* ---- Paragraph & small text ---- */
-  p {
-    line-height: 1.65;
-    color: var(--foreground);
-  }
-
-  small {
-    font-size: 0.8125rem; /* 13px */
-    color: var(--muted-foreground);
-  }
-
-  /* ---- Monospaced data (IPs, dBm, ticket IDs) ---- */
-  code, kbd, samp, pre {
-    font-family: var(--font-jetbrains), ui-monospace, monospace;
-    font-size: 0.8125rem;
-    font-feature-settings: "liga" 0;
-  }
-
-  code {
-    padding: 0.125rem 0.375rem;
-    border-radius: var(--radius-sm);
-    background-color: var(--muted);
-    color: var(--foreground);
-    font-weight: 500;
-  }
-
-  pre {
-    overflow-x: auto;
-    padding: 1rem;
-    border-radius: var(--radius-lg);
-    background-color: var(--card-subtle);
-    border: 1px solid var(--border);
-  }
-
-  pre code {
-    padding: 0;
-    background: none;
-    font-size: 0.8125rem;
-  }
-
-  /* ---- Links ---- */
-  a {
-    color: var(--primary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-  }
-
-  a:hover {
-    color: color-mix(in srgb, var(--primary) 80%, var(--foreground));
-  }
-
-  /* ---- Focus Ring — accessible, brand-colored ---- */
-  :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
-
-  /* ---- Selection ---- */
-  ::selection {
-    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
-    color: var(--foreground);
-  }
-
-  /* ---- Horizontal Rules ---- */
-  hr {
-    border: none;
-    border-top: 1px solid var(--border-subtle);
-    margin: 1.5rem 0;
-  }
-
-  /* ---- Tables ---- */
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th {
-    font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--muted-foreground);
-    text-align: left;
-    padding: 0.625rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    background-color: var(--card-subtle);
-  }
-
-  td {
-    padding: 0.625rem 0.75rem;
-    border-bottom: 1px solid var(--border-subtle);
-    font-size: 0.875rem;
-    vertical-align: middle;
-  }
-
-  tr:hover td {
-    background-color: color-mix(in srgb, var(--muted) 50%, transparent);
-  }
-
-  /* ---- Form Defaults ---- */
-  input, textarea, select {
-    font-family: inherit;
-    font-size: 0.875rem;
-    color: var(--foreground);
-    background-color: var(--card);
-    border: 1px solid var(--input);
-    border-radius: var(--radius-md);
-    padding: 0.5rem 0.75rem;
-    transition:
-      border-color var(--transition-fast),
-      box-shadow var(--transition-fast);
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: var(--muted-foreground);
-    opacity: 0.7;
-  }
-
-  input:focus,
-  textarea:focus,
-  select:focus {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 15%, transparent);
-    outline: none;
-  }
-
-  /* ---- Labels ---- */
-  label {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--foreground);
-    letter-spacing: -0.005em;
-  }
-
-  /* ---- Buttons (base reset — components extend these) ---- */
-  button {
-    font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition:
-      background-color var(--transition-fast),
-      color var(--transition-fast),
-      border-color var(--transition-fast),
-      box-shadow var(--transition-fast),
-      transform var(--transition-fast);
-  }
-
-  button:active {
-    transform: scale(0.98);
-  }
-
-  /* ---- Disabled States ---- */
-  :disabled,
-  [disabled] {
-    pointer-events: none;
-    opacity: 0.5;
-  }
+/* Base resets & typography */
+* {
+  border-color: var(--border);
 }
 
-
-/* ----------------------------------------------------------------
-   CUSTOM SCROLLBARS
-   Thin, unobtrusive scrollbars that respect the color scheme
-   ---------------------------------------------------------------- */
-
-@layer base {
-  /* Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-
-  /* Webkit (Chrome, Edge, Safari) */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--border);
-    border-radius: 9999px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--muted-foreground);
-  }
-
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
 }
 
-
-/* ----------------------------------------------------------------
-   ANIMATION KEYFRAMES
-   Orchestrated transitions for page load, modals, drawers
-   ---------------------------------------------------------------- */
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-@keyframes fade-down {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
 }
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes drawer-slide {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes shimmer {
-  from { background-position: -200% 0; }
-  to { background-position: 200% 0; }
-}
-
-@keyframes pulse-dot {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(0.85);
-  }
-}
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-
-/* ----------------------------------------------------------------
-   UTILITY CLASSES
-   Reusable patterns for the telecom command center UI
-   ---------------------------------------------------------------- */
-
-@layer utilities {
-  /* Animation application classes */
-  .animate-fade-in     { animation: fade-in 400ms var(--transition-base) both; }
-  .animate-fade-up     { animation: fade-up 400ms cubic-bezier(0.25, 0.1, 0.25, 1) both; }
-  .animate-fade-down   { animation: fade-down 400ms cubic-bezier(0.25, 0.1, 0.25, 1) both; }
-  .animate-slide-right { animation: slide-in-right 350ms cubic-bezier(0.25, 0.1, 0.25, 1) both; }
-  .animate-slide-left  { animation: slide-in-left 350ms cubic-bezier(0.25, 0.1, 0.25, 1) both; }
-  .animate-scale-in    { animation: scale-in 250ms cubic-bezier(0.25, 0.1, 0.25, 1) both; }
-  .animate-drawer      { animation: drawer-slide 300ms cubic-bezier(0.25, 0.1, 0.25, 1) both; }
-  .animate-pulse-dot   { animation: pulse-dot 2s ease-in-out infinite; }
-
-  /* Staggered reveal delays for page load orchestration */
-  .delay-1 { animation-delay: 50ms; }
-  .delay-2 { animation-delay: 100ms; }
-  .delay-3 { animation-delay: 150ms; }
-  .delay-4 { animation-delay: 200ms; }
-  .delay-5 { animation-delay: 250ms; }
-  .delay-6 { animation-delay: 300ms; }
-  .delay-7 { animation-delay: 350ms; }
-  .delay-8 { animation-delay: 400ms; }
-
-  /* Skeleton shimmer — structural loading placeholder */
-  .skeleton {
-    background: linear-gradient(
-      90deg,
-      var(--muted) 0%,
-      color-mix(in srgb, var(--muted) 60%, var(--card)) 50%,
-      var(--muted) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-    border-radius: var(--radius-md);
-  }
-
-  /* Online presence indicator dot */
-  .presence-online {
-    width: 8px;
-    height: 8px;
-    border-radius: 9999px;
-    background-color: var(--success);
-    box-shadow: 0 0 0 2px var(--card);
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-
-  .presence-offline {
-    width: 8px;
-    height: 8px;
-    border-radius: 9999px;
-    background-color: var(--muted-foreground);
-    box-shadow: 0 0 0 2px var(--card);
-  }
-
-  /* Telemetry signal strength gauge backgrounds */
-  .signal-good    { background-color: color-mix(in srgb, var(--success) 12%, transparent); color: var(--success); }
-  .signal-warning { background-color: color-mix(in srgb, var(--warning) 12%, transparent); color: var(--warning); }
-  .signal-danger  { background-color: color-mix(in srgb, var(--destructive) 12%, transparent); color: var(--destructive); }
-
-  /* Glass backdrop for modals/overlays */
-  .backdrop-blur-overlay {
-    backdrop-filter: blur(8px) saturate(180%);
-    background-color: color-mix(in srgb, var(--background) 70%, transparent);
-  }
-
-  /* Hide scrollbar but keep scroll functionality */
-  .scrollbar-hidden {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hidden::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Respect reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    .animate-fade-in,
-    .animate-fade-up,
-    .animate-fade-down,
-    .animate-slide-right,
-    .animate-slide-left,
-    .animate-scale-in,
-    .animate-drawer {
-      animation: none !important;
-    }
-
-    .animate-pulse-dot {
-      animation: none !important;
-    }
-
-    .skeleton {
-      animation: none !important;
-    }
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }
