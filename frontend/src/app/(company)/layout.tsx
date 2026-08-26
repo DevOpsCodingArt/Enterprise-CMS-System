@@ -25,7 +25,7 @@ export default function CompanyOperationsLayout({
 
       {/* 2. Main Workspace Body */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-        <Topbar />
+        <Topbar onOpenNotificationCenter={() => setActiveCompanyTab("audit")} />
 
         <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
           {children}

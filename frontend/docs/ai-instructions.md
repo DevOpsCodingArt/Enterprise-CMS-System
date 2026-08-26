@@ -184,3 +184,12 @@ The helpdesk live chat interface follows a high-efficiency 3-column layout:
 - **Root Directory Purity:** Never create scratch files, temporary `.tsx`/`.js` files, or standalone scripts in the project root or inside `src/`.
 - **Allowed Script Paths:** Place temporary mock generators or test scripts in `scripts/` or `_dev_scripts/`.
 - **Response Format:** Always specify the exact file path before code blocks (e.g. `src/components/chat/ConversationInbox.tsx`). Provide clean, production-ready TypeScript code with concise architectural rationale.
+
+---
+
+## 7. NEXT.JS 16+ CONVENTIONS: PROXY CONVENTION (STRICT RULE: NO MIDDLEWARE)
+
+- **STRICTLY FORBIDDEN:** Never create or use `middleware.ts` or `src/middleware.ts` files in this project. The `middleware` file convention is deprecated in Next.js 16+.
+- **MANDATORY CONVENTION:** Always use `src/proxy.ts` exporting `export function proxy(request: NextRequest)` for all Edge routing interception, JWT verification, and route permission enforcement.
+- **Single Source of Truth:** All route guards in `src/proxy.ts` must reference `src/config/route-permissions.ts`.
+

@@ -35,6 +35,7 @@ export interface BranchOffice {
   managerPhone: string;
   totalStaff: number;
   totalEngineers: number;
+  totalSubscribers?: number;
   openTickets: number;
   slaCompliancePercent: number;
   subnets: string[];
