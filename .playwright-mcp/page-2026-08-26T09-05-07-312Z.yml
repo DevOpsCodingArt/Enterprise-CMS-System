@@ -1,0 +1,178 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: P1
+          - generic [ref=e7]:
+            - generic [ref=e8]: Prime One
+            - generic [ref=e11]: Telecom OS
+        - button "Collapse Sidebar" [ref=e12] [cursor=pointer]
+      - generic [ref=e16]:
+        - text: OPERATIONS
+        - button "Command Overview" [ref=e18] [cursor=pointer]
+        - button "Prime Desk 2" [ref=e25] [cursor=pointer]:
+          - generic [ref=e28]:
+            - generic [ref=e29]: Prime Desk
+            - generic [ref=e30]: "2"
+        - button "Trouble Tickets 2" [ref=e32] [cursor=pointer]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: Trouble Tickets
+            - generic [ref=e37]: "2"
+      - generic [ref=e70]:
+        - generic [ref=e71]: "Fatima Noor (CSR #03)"
+        - generic [ref=e72]: helpdesk agent
+    - generic [ref=e73]:
+      - banner [ref=e74]:
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - generic [ref=e81]: Prime Networks Pakistan
+            - generic [ref=e82]: PRO
+          - button "🏢 All 20 Branch Offices" [ref=e85] [cursor=pointer]
+        - generic [ref=e90]:
+          - textbox "Search subscribers, OLT, tickets... (Ctrl+K)" [ref=e91]
+          - generic [ref=e92]: K
+        - generic [ref=e96]:
+          - generic [ref=e97]: 🟢 LIVE RADAR
+          - button [ref=e103] [cursor=pointer]
+          - button "Light" [ref=e403] [cursor=pointer]
+          - button "💬 Helpdesk CSR Agent" [ref=e429] [cursor=pointer]
+          - generic [ref=e112]: FN
+      - main [ref=e116]:
+        - generic [ref=e117]:
+          - generic [ref=e118]:
+            - generic [ref=e119]:
+              - generic [ref=e120]: Active Subscribers
+              - generic [ref=e123]:
+                - generic [ref=e124]: 142,850
+                - generic [ref=e125]: +1.4% MoM
+              - generic [ref=e126]: Across 20 Operational Hubs
+            - generic [ref=e127]:
+              - generic [ref=e128]:
+                - generic [ref=e129]: Optical Health (Rx)
+                - generic [ref=e130]: "-18.4 dBm"
+              - generic [ref=e131]:
+                - generic [ref=e132]: 98.4%
+                - generic [ref=e133]: Nominal
+              - generic [ref=e134]: SmartOLT Fleet Diagnostics
+            - generic [ref=e135]:
+              - generic [ref=e136]:
+                - generic [ref=e137]: Inquiries Queue
+                - generic [ref=e138]: LIVE
+              - generic [ref=e139]:
+                - generic [ref=e140]: 3 Active
+                - generic [ref=e141]: Avg 1.4m ETTR
+              - generic [ref=e142]: WhatsApp • App • Web Chat
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - generic [ref=e145]: SLA Compliance
+                - generic [ref=e146]: 0 BREACH
+              - generic [ref=e147]:
+                - generic [ref=e148]: 99.8%
+                - generic [ref=e149]: "Target: 99.5%"
+              - generic [ref=e150]: ETTR Monitored Dispatch
+          - generic [ref=e151]:
+            - button "Operations Overview" [ref=e152] [cursor=pointer]
+            - button "Prime Desk Live Chat (3)" [ref=e153] [cursor=pointer]
+            - button "Trouble Tickets (2)" [ref=e154] [cursor=pointer]
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - generic [ref=e161]:
+                - generic [ref=e162]:
+                  - heading "Live Subscriber Inquiries Feed" [level=3] [ref=e163]
+                  - paragraph [ref=e164]: Real-time WhatsApp & customer portal inquiries.
+                - button "Open Desk" [ref=e165] [cursor=pointer]
+              - generic [ref=e170]:
+                - generic [ref=e171] [cursor=pointer]:
+                  - generic [ref=e172]:
+                    - generic [ref=e173]: AM
+                    - generic [ref=e177]:
+                      - generic [ref=e178]:
+                        - generic [ref=e179]: Ahmed Malik
+                        - generic [ref=e180]: whatsapp
+                      - generic [ref=e181]: ahmed_malik_isb • Islamabad Blue Area
+                      - paragraph [ref=e182]: Hello, my optical light is blinking red and the connection has dropped.
+                  - generic [ref=e183]:
+                    - generic [ref=e184]: 01:54 PM
+                    - generic [ref=e185]: "-27.4 dBm (LOW)"
+                - generic [ref=e186] [cursor=pointer]:
+                  - generic [ref=e187]:
+                    - generic [ref=e188]: ZB
+                    - generic [ref=e192]:
+                      - generic [ref=e193]:
+                        - generic [ref=e194]: Zainab Bibi
+                        - generic [ref=e195]: mobile_app
+                      - generic [ref=e196]: zainab_lhr_50m • Lahore Gulberg III
+                      - paragraph [ref=e197]: My monthly bill is paid but the speed is restricted to 10Mbps instead of 50Mbps.
+                  - generic [ref=e198]:
+                    - generic [ref=e199]: 01:50 PM
+                    - generic [ref=e200]: OPTIMAL
+                - generic [ref=e201] [cursor=pointer]:
+                  - generic [ref=e202]:
+                    - generic [ref=e203]: KA
+                    - generic [ref=e207]:
+                      - generic [ref=e208]:
+                        - generic [ref=e209]: Kamran Akmal
+                        - generic [ref=e210]: web_chat
+                      - generic [ref=e211]: kamran_khi_100m • Karachi Clifton Hub
+                      - paragraph [ref=e212]: Complaint resolved. Optical signal calibrated to -17.2 dBm nominal.
+                  - generic [ref=e213]:
+                    - generic [ref=e214]: 01:11 PM
+                    - generic [ref=e215]: OPTIMAL
+            - generic [ref=e216]:
+              - generic [ref=e217]:
+                - generic [ref=e218]:
+                  - heading "SmartOLT Optical Health" [level=3] [ref=e219]
+                  - paragraph [ref=e220]: Optical signal telemetry across core OLT hardware.
+                - generic [ref=e221]: POLLING
+              - generic [ref=e225]:
+                - generic [ref=e226]:
+                  - generic [ref=e227]:
+                    - generic [ref=e228]: OLT-ISB-CORE-01
+                    - generic [ref=e236]: optimal
+                  - generic [ref=e237]:
+                    - generic [ref=e238]:
+                      - generic [ref=e239]: Port
+                      - text: GPON 0/2/4
+                    - generic [ref=e240]:
+                      - generic [ref=e241]: Rx Power
+                      - generic [ref=e242]: "-18.4 dBm"
+                    - generic [ref=e243]:
+                      - generic [ref=e244]: Board Temp
+                      - generic [ref=e245]: 42.1 °C
+                - generic [ref=e246]:
+                  - generic [ref=e247]:
+                    - generic [ref=e248]: OLT-LHR-METRO-03
+                    - generic [ref=e256]: warning
+                  - generic [ref=e257]:
+                    - generic [ref=e258]:
+                      - generic [ref=e259]: Port
+                      - text: EPON 1/1/8
+                    - generic [ref=e260]:
+                      - generic [ref=e261]: Rx Power
+                      - generic [ref=e262]: "-24.8 dBm"
+                    - generic [ref=e263]:
+                      - generic [ref=e264]: Board Temp
+                      - generic [ref=e265]: 48.6 °C
+                - generic [ref=e266]:
+                  - generic [ref=e267]:
+                    - generic [ref=e268]: OLT-KHI-SOUTH-02
+                    - generic [ref=e276]: optimal
+                  - generic [ref=e277]:
+                    - generic [ref=e278]:
+                      - generic [ref=e279]: Port
+                      - text: GPON 0/4/12
+                    - generic [ref=e280]:
+                      - generic [ref=e281]: Rx Power
+                      - generic [ref=e282]: "-17.2 dBm"
+                    - generic [ref=e283]:
+                      - generic [ref=e284]: Board Temp
+                      - generic [ref=e285]: 39.4 °C
+  - generic [ref=e430]:
+    - generic [ref=e433]:
+      - paragraph [ref=e434]: Switched Role
+      - paragraph [ref=e435]: "Active persona: HELPDESK AGENT"
+    - button [ref=e436] [cursor=pointer]
+  - button "Open Tanstack query devtools" [ref=e353] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=e291] [cursor=pointer]
+  - alert [ref=e402]

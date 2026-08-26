@@ -3,21 +3,22 @@
 import React, { useState } from "react";
 import { SidebarNav } from "@/components/layouts/SidebarNav";
 import { Topbar } from "@/components/layouts/Topbar";
+import { useTenantStore } from "@/stores/useTenantStore";
 
 export default function CompanyOperationsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [activeTab, setActiveTab] = useState("overview");
+  const { activeCompanyTab, setActiveCompanyTab } = useTenantStore();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-background text-foreground font-body">
       {/* 1. Collapsible Operations Sidebar */}
       <SidebarNav
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
+        activeTab={activeCompanyTab}
+        onTabChange={setActiveCompanyTab}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />

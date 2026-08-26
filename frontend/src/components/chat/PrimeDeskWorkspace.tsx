@@ -46,6 +46,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { PermissionGuard } from "@/components/guards/PermissionGuard";
 
 export function PrimeDeskWorkspace() {
   const toast = useToast();
@@ -210,26 +211,30 @@ export function PrimeDeskWorkspace() {
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
-              <Tooltip content="Transfer chat with mandatory reason">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsTransferDialogOpen(true)}
-                  className="h-8 text-xs"
-                >
-                  Transfer
-                </Button>
-              </Tooltip>
-              <Tooltip content="Close conversation with outcome note">
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => setIsCloseDialogOpen(true)}
-                  className="h-8 text-xs"
-                >
-                  Close
-                </Button>
-              </Tooltip>
+              <PermissionGuard permission="chat.transfer">
+                <Tooltip content="Transfer chat with mandatory reason">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsTransferDialogOpen(true)}
+                    className="h-8 text-xs"
+                  >
+                    Transfer
+                  </Button>
+                </Tooltip>
+              </PermissionGuard>
+              <PermissionGuard permission="chat.close">
+                <Tooltip content="Close conversation with outcome note">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setIsCloseDialogOpen(true)}
+                    className="h-8 text-xs"
+                  >
+                    Close
+                  </Button>
+                </Tooltip>
+              </PermissionGuard>
             </div>
           </CardHeader>
 
@@ -250,10 +255,12 @@ export function PrimeDeskWorkspace() {
                     {msg.content}
                   </div>
                 ) : msg.isPrivateNote ? (
-                  <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-xs font-mono text-amber-500 flex items-center gap-2">
-                    <Lock className="h-3.5 w-3.5 shrink-0" />
-                    <span>{msg.content}</span>
-                  </div>
+                  <PermissionGuard permission="chat.view_internal_notes">
+                    <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-xs font-mono text-amber-500 flex items-center gap-2">
+                      <Lock className="h-3.5 w-3.5 shrink-0" />
+                      <span>{msg.content}</span>
+                    </div>
+                  </PermissionGuard>
                 ) : (
                   <div
                     className={`max-w-[85%] rounded-xl p-3 text-xs leading-relaxed shadow-xs ${
@@ -297,16 +304,18 @@ export function PrimeDeskWorkspace() {
             </form>
 
             <div className="flex items-center justify-between w-full text-[11px]">
-              <button
-                type="button"
-                onClick={() => setIsPrivateNoteMode(!isPrivateNoteMode)}
-                className={`font-mono flex items-center gap-1 cursor-pointer transition-colors ${
-                  isPrivateNoteMode ? "text-amber-500 font-bold" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Lock className="h-3 w-3" />
-                <span>{isPrivateNoteMode ? "Private Note Mode Active" : "Add Private Staff Note"}</span>
-              </button>
+              <PermissionGuard permission="chat.add_internal_note">
+                <button
+                  type="button"
+                  onClick={() => setIsPrivateNoteMode(!isPrivateNoteMode)}
+                  className={`font-mono flex items-center gap-1 cursor-pointer transition-colors ${
+                    isPrivateNoteMode ? "text-amber-500 font-bold" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Lock className="h-3 w-3" />
+                  <span>{isPrivateNoteMode ? "Private Note Mode Active" : "Add Private Staff Note"}</span>
+                </button>
+              </PermissionGuard>
               <span className="text-muted-foreground font-mono">Press &apos;/&apos; for Quick Replies</span>
             </div>
           </CardFooter>

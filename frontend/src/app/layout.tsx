@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import {
   Plus_Jakarta_Sans,
   Inter,
@@ -69,7 +68,7 @@ export const viewport: Viewport = {
 };
 
 /* ----------------------------------------------------------------
-   ROOT LAYOUT (Light Mode Default)
+   ROOT LAYOUT (Light Mode Default & Hydration Safe)
    ---------------------------------------------------------------- */
 
 export default function RootLayout({
@@ -83,11 +82,8 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${plusJakarta.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <head />
-      <body className="min-h-screen bg-background text-foreground font-body antialiased selection:bg-primary selection:text-primary-foreground tracking-[-0.01em]">
-        <Script
-          id="theme-init"
-          strategy="beforeInteractive"
+      <head>
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
@@ -101,6 +97,11 @@ export default function RootLayout({
             `,
           }}
         />
+      </head>
+      <body
+        suppressHydrationWarning
+        className="min-h-screen bg-background text-foreground font-body antialiased selection:bg-primary selection:text-primary-foreground tracking-[-0.01em]"
+      >
         <QueryProvider>
           <ToastProvider>{children}</ToastProvider>
         </QueryProvider>

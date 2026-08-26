@@ -53,16 +53,18 @@ import { useChatStore } from "@/stores/useChatStore";
 import { mockDb, TroubleTicket } from "@/mock/db";
 import { PrimeDeskWorkspace } from "@/components/chat/PrimeDeskWorkspace";
 import { RBACMatrix } from "@/components/admin/RBACMatrix";
+import { PermissionGuard } from "@/components/guards/PermissionGuard";
 
 export default function CompanyDashboardPage() {
   const toast = useToast();
-  const { user } = useAuthStore();
-  const { branches, selectedBranchId } = useTenantStore();
+  const {
+    branches,
+    selectedBranchId,
+    activeCompanyTab: activeTab,
+    setActiveCompanyTab: setActiveTab,
+  } = useTenantStore();
   const { conversations, setActiveConversationId } = useChatStore();
 
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "desk" | "tickets" | "noc" | "branches" | "rbac"
-  >("overview");
   const [isCustomerDrawerOpen, setIsCustomerDrawerOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<TroubleTicket | null>(null);
 
@@ -166,6 +168,7 @@ export default function CompanyDashboardPage() {
       </div>
 
       {/* 2. Operations Navigation Tabs */}
+      {/* 2. Operations Workspace Navigation Ribbon */}
       <div className="flex items-center gap-2 border-b border-border pb-3 overflow-x-auto">
         <Button
           variant={activeTab === "overview" ? "primary" : "outline"}
@@ -175,46 +178,56 @@ export default function CompanyDashboardPage() {
         >
           Operations Overview
         </Button>
-        <Button
-          variant={activeTab === "desk" ? "primary" : "outline"}
-          size="sm"
-          onClick={() => setActiveTab("desk")}
-          className="text-xs"
-        >
-          Prime Desk Live Chat ({conversations.length})
-        </Button>
-        <Button
-          variant={activeTab === "tickets" ? "primary" : "outline"}
-          size="sm"
-          onClick={() => setActiveTab("tickets")}
-          className="text-xs"
-        >
-          Trouble Tickets ({filteredTickets.length})
-        </Button>
-        <Button
-          variant={activeTab === "noc" ? "primary" : "outline"}
-          size="sm"
-          onClick={() => setActiveTab("noc")}
-          className="text-xs"
-        >
-          NOC Optical Radar
-        </Button>
-        <Button
-          variant={activeTab === "branches" ? "primary" : "outline"}
-          size="sm"
-          onClick={() => setActiveTab("branches")}
-          className="text-xs"
-        >
-          20 Branch Offices
-        </Button>
-        <Button
-          variant={activeTab === "rbac" ? "primary" : "outline"}
-          size="sm"
-          onClick={() => setActiveTab("rbac")}
-          className="text-xs"
-        >
-          RBAC Permissions
-        </Button>
+        <PermissionGuard permission="chat.view">
+          <Button
+            variant={activeTab === "desk" ? "primary" : "outline"}
+            size="sm"
+            onClick={() => setActiveTab("desk")}
+            className="text-xs"
+          >
+            Prime Desk Live Chat ({conversations.length})
+          </Button>
+        </PermissionGuard>
+        <PermissionGuard permission="tickets.view">
+          <Button
+            variant={activeTab === "tickets" ? "primary" : "outline"}
+            size="sm"
+            onClick={() => setActiveTab("tickets")}
+            className="text-xs"
+          >
+            Trouble Tickets ({filteredTickets.length})
+          </Button>
+        </PermissionGuard>
+        <PermissionGuard permission="noc.view">
+          <Button
+            variant={activeTab === "noc" ? "primary" : "outline"}
+            size="sm"
+            onClick={() => setActiveTab("noc")}
+            className="text-xs"
+          >
+            NOC Optical Radar
+          </Button>
+        </PermissionGuard>
+        <PermissionGuard permission="branch.view">
+          <Button
+            variant={activeTab === "branches" ? "primary" : "outline"}
+            size="sm"
+            onClick={() => setActiveTab("branches")}
+            className="text-xs"
+          >
+            20 Branch Offices
+          </Button>
+        </PermissionGuard>
+        <PermissionGuard permission="user.manage_permissions">
+          <Button
+            variant={activeTab === "rbac" ? "primary" : "outline"}
+            size="sm"
+            onClick={() => setActiveTab("rbac")}
+            className="text-xs"
+          >
+            RBAC Permissions
+          </Button>
+        </PermissionGuard>
       </div>
 
       {/* TAB 1: OPERATIONS OVERVIEW */}
@@ -390,16 +403,18 @@ export default function CompanyDashboardPage() {
                 SLA-monitored complaints with field dispatch routing and automated ETTR countdowns.
               </p>
             </div>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() =>
-                toast.info("Lodge Ticket", "Opening field complaint registration...")
-              }
-              className="gap-1.5 shadow-xs"
-            >
-              <Plus className="h-3.5 w-3.5" /> Lodge Trouble Ticket
-            </Button>
+            <PermissionGuard permission="tickets.create">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() =>
+                  toast.info("Lodge Ticket", "Opening field complaint registration...")
+                }
+                className="gap-1.5 shadow-xs"
+              >
+                <Plus className="h-3.5 w-3.5" /> Lodge Trouble Ticket
+              </Button>
+            </PermissionGuard>
           </div>
 
           <Table>

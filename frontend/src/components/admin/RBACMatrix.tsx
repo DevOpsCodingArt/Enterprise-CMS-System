@@ -28,7 +28,7 @@ export function RBACMatrix() {
       module: "Prime Desk (Live Chat)",
       actions: [
         {
-          name: "chat:read",
+          name: "chat.view",
           description: "View incoming conversation streams",
           companyOwner: true,
           branchManager: true,
@@ -37,7 +37,7 @@ export function RBACMatrix() {
           fieldEngineer: false,
         },
         {
-          name: "chat:send",
+          name: "chat.send",
           description: "Dispatch messages to subscribers",
           companyOwner: true,
           branchManager: true,
@@ -46,7 +46,7 @@ export function RBACMatrix() {
           fieldEngineer: false,
         },
         {
-          name: "chat:transfer",
+          name: "chat.transfer",
           description: "Re-assign chat session to other branches/agents",
           companyOwner: true,
           branchManager: true,
@@ -55,7 +55,7 @@ export function RBACMatrix() {
           fieldEngineer: false,
         },
         {
-          name: "chat:private_note",
+          name: "chat.add_internal_note",
           description: "Post internal staff-only notes on timeline",
           companyOwner: true,
           branchManager: true,
@@ -69,7 +69,7 @@ export function RBACMatrix() {
       module: "Trouble Tickets & Dispatch",
       actions: [
         {
-          name: "tickets:create",
+          name: "tickets.create",
           description: "Lodge new trouble complaints",
           companyOwner: true,
           branchManager: true,
@@ -78,7 +78,7 @@ export function RBACMatrix() {
           fieldEngineer: true,
         },
         {
-          name: "tickets:assign_van",
+          name: "tickets.assign_van",
           description: "Dispatch splicer vans to field locations",
           companyOwner: true,
           branchManager: true,
@@ -87,7 +87,7 @@ export function RBACMatrix() {
           fieldEngineer: false,
         },
         {
-          name: "tickets:resolve",
+          name: "tickets.resolve",
           description: "Close ticket with optical attenuation verification",
           companyOwner: true,
           branchManager: true,
@@ -101,7 +101,7 @@ export function RBACMatrix() {
       module: "NOC Telemetry & Hardware",
       actions: [
         {
-          name: "noc:read_olt",
+          name: "noc.view_olt",
           description: "View SmartOLT optical light power & temperatures",
           companyOwner: true,
           branchManager: true,
@@ -110,7 +110,7 @@ export function RBACMatrix() {
           fieldEngineer: true,
         },
         {
-          name: "noc:reboot_onu",
+          name: "noc.reboot_onu",
           description: "Send remote power-cycle command to customer modem",
           companyOwner: true,
           branchManager: true,
@@ -119,7 +119,7 @@ export function RBACMatrix() {
           fieldEngineer: true,
         },
         {
-          name: "noc:configure_vlan",
+          name: "noc.configure_vlan",
           description: "Modify core PON port and VLAN routing tables",
           companyOwner: true,
           branchManager: false,

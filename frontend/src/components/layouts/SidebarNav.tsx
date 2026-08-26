@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   MessageSquare,
   Ticket,
@@ -50,8 +50,13 @@ export function SidebarNav({
   isCollapsed: boolean;
   onToggleCollapse: () => void;
 }) {
+  const [isMounted, setIsMounted] = useState(false);
   const { user, can } = useAuthStore();
   const { conversations } = useChatStore();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const openTicketsCount = mockDb.tickets.filter((t) => t.status !== "Closed").length;
   const activeChatsCount = conversations.filter(
@@ -66,13 +71,12 @@ export function SidebarNav({
           id: "overview",
           label: "Command Overview",
           icon: Activity,
-          permission: "*",
         },
         {
           id: "desk",
           label: "Prime Desk",
           icon: MessageSquare,
-          permission: "chat:read",
+          permission: "chat.view",
           badge: activeChatsCount > 0 ? activeChatsCount : undefined,
           badgeVariant: "info",
         },
@@ -80,7 +84,7 @@ export function SidebarNav({
           id: "tickets",
           label: "Trouble Tickets",
           icon: Ticket,
-          permission: "tickets:read",
+          permission: "tickets.view",
           badge: openTicketsCount > 0 ? openTicketsCount : undefined,
           badgeVariant: "warning",
         },
@@ -88,7 +92,7 @@ export function SidebarNav({
           id: "noc",
           label: "NOC Radar",
           icon: Radio,
-          permission: "noc:read",
+          permission: "noc.view",
           badge: "LIVE",
           badgeVariant: "success",
         },
@@ -101,7 +105,7 @@ export function SidebarNav({
           id: "branches",
           label: "20 Branch Hubs",
           icon: Building2,
-          permission: "branches:read",
+          permission: "branch.view",
           badge: 20,
           badgeVariant: "secondary",
         },
@@ -111,10 +115,10 @@ export function SidebarNav({
       title: "SYSTEM",
       items: [
         {
-          id: "components",
-          label: "UI Component Lab",
-          icon: Zap,
-          permission: "*",
+          id: "rbac",
+          label: "RBAC Permissions",
+          icon: Sliders,
+          permission: "user.manage_permissions",
         },
       ],
     },
@@ -167,9 +171,10 @@ export function SidebarNav({
       {/* 2. Grouped Navigation Items */}
       <div className="flex-1 space-y-4 p-2.5 overflow-y-auto">
         {navGroups.map((group) => {
-          const filteredItems = group.items.filter(
-            (item) => !item.permission || can(item.permission)
-          );
+          const filteredItems = group.items.filter((item) => {
+            if (!isMounted) return true; // Server-client parity during initial hydration
+            return !item.permission || can(item.permission);
+          });
           if (filteredItems.length === 0) return null;
 
           return (

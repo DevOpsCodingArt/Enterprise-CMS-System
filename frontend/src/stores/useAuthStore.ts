@@ -15,6 +15,9 @@ interface AuthState {
   logout: () => void;
   switchDemoRole: (role: UserRole) => void;
   can: (permissionSlug: string) => boolean;
+  canAll: (permissionSlugs: string[]) => boolean;
+  canAny: (permissionSlugs: string[]) => boolean;
+  hasBranchAccess: (branchId?: string) => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -60,13 +63,39 @@ export const useAuthStore = create<AuthState>()(
         const { user } = get();
         if (!user) return false;
         if (user.permissions.includes("*")) return true;
+        if (permissionSlug === "*") return user.permissions.includes("*");
         if (user.permissions.includes(permissionSlug)) return true;
 
-        // Prefix wildcard checking (e.g. "chat:*" covers "chat:reply")
-        const [domain] = permissionSlug.split(":");
-        if (user.permissions.includes(`${domain}:*`)) return true;
+        // Module wildcard checking for dot notation (e.g. "chat.*" covers "chat.view")
+        const dotDomain = permissionSlug.split(".")[0];
+        if (user.permissions.includes(`${dotDomain}.*`)) return true;
+
+        // Backward compatibility for colon notation (e.g. "chat:*" covers "chat:reply")
+        const colonDomain = permissionSlug.split(":")[0];
+        if (user.permissions.includes(`${colonDomain}:*`)) return true;
 
         return false;
+      },
+
+      canAll: (permissionSlugs) => {
+        const { can } = get();
+        return permissionSlugs.every((slug) => can(slug));
+      },
+
+      canAny: (permissionSlugs) => {
+        const { can } = get();
+        return permissionSlugs.some((slug) => can(slug));
+      },
+
+      hasBranchAccess: (branchId) => {
+        const { user } = get();
+        if (!user) return false;
+        // Platform owner, Company owner, or global staff with wildcard / no branch restriction
+        if (user.role === "platform_owner" || user.role === "company_owner") return true;
+        if (user.permissions.includes("*") || user.permissions.includes("branch.*")) return true;
+        if (!branchId || branchId === "all") return true;
+        if (!user.branchId) return true; // Company-wide staff
+        return user.branchId === branchId;
       },
     }),
     {
