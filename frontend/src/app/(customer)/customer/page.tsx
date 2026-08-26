@@ -99,9 +99,9 @@ export default function CustomerDashboardPage() {
 
       {/* Active Ticket Alert (If in progress) */}
       {activeTicket && (
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="bg-warning/10 border border-warning/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-amber-500 text-white flex-shrink-0 mt-0.5">
+            <div className="p-2 rounded-lg bg-warning text-primary-foreground flex-shrink-0 mt-0.5">
               <LifeBuoy className="w-4 h-4" />
             </div>
             <div>
@@ -162,7 +162,7 @@ export default function CustomerDashboardPage() {
 
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Billing Expiry:</span>
-            <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+            <span className="font-mono text-success font-semibold">
               {customer.billingExpiryDate || '05 Sep 2026'}
             </span>
           </div>
@@ -197,7 +197,7 @@ export default function CustomerDashboardPage() {
 
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">MAC Address:</span>
-            <span className="font-mono text-muted-foreground text-[11px]">
+            <span className="font-mono text-muted-foreground text-xs">
               {customer.macAddress || 'BC:A9:93:4F:11:A2'}
             </span>
           </div>
@@ -206,10 +206,10 @@ export default function CustomerDashboardPage() {
         {/* Card 3: Monthly Usage & Bandwidth */}
         <div className="bg-card rounded-xl border border-border p-4 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
-            <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
               <HardDrive className="w-4 h-4" />
             </div>
-            <span className="text-[11px] text-muted-foreground font-mono">Aug 2026</span>
+            <span className="text-xs text-muted-foreground font-mono">Aug 2026</span>
           </div>
 
           <div>
@@ -222,16 +222,16 @@ export default function CustomerDashboardPage() {
           </div>
 
           <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
-            <div className="bg-purple-500 h-full w-[45%]" />
+            <div className="bg-primary h-full w-5/12" />
           </div>
 
           <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
             <div className="flex items-center gap-1">
-              <Download className="w-3 h-3 text-emerald-500" />
+              <Download className="w-3 h-3 text-success" />
               <span>49.8 Mbps</span>
             </div>
             <div className="flex items-center gap-1">
-              <Upload className="w-3 h-3 text-blue-500" />
+              <Upload className="w-3 h-3 text-primary" />
               <span>48.9 Mbps</span>
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function CustomerDashboardPage() {
             <span className="font-heading font-semibold text-xs uppercase text-muted-foreground tracking-wider">
               Quick Shortcuts
             </span>
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <ShieldCheck className="w-4 h-4 text-success" />
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs">
@@ -253,7 +253,7 @@ export default function CustomerDashboardPage() {
             >
               <Receipt className="w-4 h-4 text-primary mb-1" />
               <div className="font-semibold text-foreground">Pay Bill</div>
-              <div className="text-[10px] text-muted-foreground">Upload Slip</div>
+              <div className="text-xs text-muted-foreground">Upload Slip</div>
             </button>
 
             <Link
@@ -262,7 +262,7 @@ export default function CustomerDashboardPage() {
             >
               <MessageSquare className="w-4 h-4 text-primary mb-1" />
               <div className="font-semibold text-foreground">CSR Chat</div>
-              <div className="text-[10px] text-muted-foreground">2-Way Live</div>
+              <div className="text-xs text-muted-foreground">2-Way Live</div>
             </Link>
 
             <button
@@ -271,7 +271,7 @@ export default function CustomerDashboardPage() {
             >
               <LifeBuoy className="w-4 h-4 text-primary mb-1" />
               <div className="font-semibold text-foreground">Diagnose</div>
-              <div className="text-[10px] text-muted-foreground">Self-Help</div>
+              <div className="text-xs text-muted-foreground">Self-Help</div>
             </button>
 
             <Link
@@ -280,7 +280,7 @@ export default function CustomerDashboardPage() {
             >
               <UserCheck className="w-4 h-4 text-primary mb-1" />
               <div className="font-semibold text-foreground">Account</div>
-              <div className="text-[10px] text-muted-foreground">Hardware QR</div>
+              <div className="text-xs text-muted-foreground">Hardware QR</div>
             </Link>
           </div>
         </div>

@@ -79,7 +79,7 @@ export function CustomerTicketsPage() {
             </div>
 
             <div className="text-left md:text-right">
-              <div className="text-[11px] text-muted-foreground">Estimated Time to Resolve:</div>
+              <div className="text-xs text-muted-foreground">Estimated Time to Resolve:</div>
               <div className="font-mono font-bold text-xl text-primary">
                 {activeTicket.ettr}
               </div>
@@ -100,8 +100,8 @@ export function CustomerTicketsPage() {
                       {activeTicket.assignedTechnician.vanCode}
                     </Badge>
                   </div>
-                  <div className="text-[11px] text-muted-foreground flex items-center gap-2 mt-0.5">
-                    <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+                  <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+                    <span className="flex items-center gap-1 text-success font-medium">
                       <MapPin className="w-3 h-3" />
                       {activeTicket.assignedTechnician.distanceEta}
                     </span>
@@ -116,7 +116,7 @@ export function CustomerTicketsPage() {
                   variant="outline"
                   size="xs"
                   onClick={() => simulateRestoreLink()}
-                  className="text-emerald-600 hover:text-emerald-700"
+                  className="text-success hover:bg-success/10 font-semibold"
                 >
                   Simulate Field Resolution ✓
                 </Button>
@@ -126,15 +126,15 @@ export function CustomerTicketsPage() {
 
           {/* 4-Step Resolution Progress Stepper */}
           <div className="space-y-2">
-            <div className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+            <div className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">
               Field Operations Workflow Stage:
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
-              <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-success/10 border border-success/30 text-success font-medium flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
                 <span>1. SmartOLT Fault Logged</span>
               </div>
-              <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-success/10 border border-success/30 text-success font-medium flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
                 <span>2. NOC Dispatched Van 04</span>
               </div>
@@ -183,7 +183,7 @@ export function CustomerTicketsPage() {
                   >
                     {t.status.toUpperCase()}
                   </Badge>
-                  <span className="text-[11px] text-muted-foreground font-mono">
+                  <span className="text-xs text-muted-foreground font-mono">
                     {new Date(t.createdAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -192,14 +192,14 @@ export function CustomerTicketsPage() {
                 </div>
                 <p className="text-xs text-muted-foreground">{t.description}</p>
                 {t.resolutionNotes && (
-                  <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                  <div className="p-2 bg-success/10 border border-success/20 rounded-md text-xs text-success font-medium">
                     ✓ Resolution: {t.resolutionNotes}
                   </div>
                 )}
               </div>
 
               <div className="text-left sm:text-right flex-shrink-0 space-y-1">
-                <div className="text-[11px] text-muted-foreground font-mono">{t.ettr}</div>
+                <div className="text-xs text-muted-foreground font-mono">{t.ettr}</div>
                 {t.assignedTechnician && (
                   <div className="text-xs font-medium text-foreground">
                     {t.assignedTechnician.name}

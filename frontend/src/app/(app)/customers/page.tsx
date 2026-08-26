@@ -164,7 +164,7 @@ export default function CustomersPage() {
       <div className="bg-card rounded-xl border border-border shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left font-sans text-xs">
-            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
               <tr>
                 <th className="p-3.5">Subscriber Code & Name</th>
                 <th className="p-3.5">PPPoE Username</th>
@@ -185,7 +185,7 @@ export default function CustomersPage() {
                         <div className="font-heading font-semibold text-foreground text-sm">
                           {c.fullName}
                         </div>
-                        <div className="text-[11px] text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                        <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
                           <span className="font-mono">{c.customerCode}</span>
                           <span>·</span>
                           <span className="font-mono">{c.phone}</span>
@@ -209,7 +209,7 @@ export default function CustomersPage() {
 
                     <td className="p-3.5">
                       <div className="font-medium text-foreground">{c.packageName || '50 Mbps Unlimited'}</div>
-                      <div className="text-[11px] text-muted-foreground font-semibold text-primary">
+                      <div className="text-xs text-muted-foreground font-semibold text-primary">
                         {formatCurrencyPKR(c.monthlyBilling || 3500)} / mo
                       </div>
                     </td>

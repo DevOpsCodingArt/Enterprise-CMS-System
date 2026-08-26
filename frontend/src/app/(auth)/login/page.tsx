@@ -297,7 +297,7 @@ export default function LoginPage() {
 
           {/* 3 Dedicated Direct Access Portals */}
           <div className="pt-4 border-t border-border/70 space-y-2.5">
-            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider text-center">
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
               Direct Portal Access (1-Click Launch)
             </div>
 
@@ -309,14 +309,14 @@ export default function LoginPage() {
                 className="w-full p-3 rounded-xl bg-muted/30 hover:bg-primary/10 border border-border hover:border-primary/50 text-left transition-all group flex items-center justify-between"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     <Globe className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="font-heading font-semibold text-xs text-foreground group-hover:text-primary transition-colors">
                       1. SaaS Platform Owner (Super-Admin)
                     </div>
-                    <div className="text-[11px] text-muted-foreground">
+                    <div className="text-xs text-muted-foreground">
                       Global Fleet, Tenant ISPs, SaaS Plans & Telemetry
                     </div>
                   </div>
@@ -331,14 +331,14 @@ export default function LoginPage() {
                 className="w-full p-3 rounded-xl bg-muted/30 hover:bg-primary/10 border border-border hover:border-primary/50 text-left transition-all group flex items-center justify-between"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-lg bg-info/10 text-info-foreground dark:text-info group-hover:bg-info group-hover:text-white transition-colors">
+                  <div className="p-2 rounded-lg bg-info/10 text-info-foreground dark:text-info group-hover:bg-info group-hover:text-primary-foreground transition-colors">
                     <Headphones className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="font-heading font-semibold text-xs text-foreground group-hover:text-primary transition-colors">
                       2. ISP Operations & Prime Desk
                     </div>
-                    <div className="text-[11px] text-muted-foreground">
+                    <div className="text-xs text-muted-foreground">
                       3-Column Live Chat, Customer 360 & NOC HUD
                     </div>
                   </div>
@@ -353,14 +353,14 @@ export default function LoginPage() {
                 className="w-full p-3 rounded-xl bg-muted/30 hover:bg-primary/10 border border-border hover:border-primary/50 text-left transition-all group flex items-center justify-between"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                  <div className="p-2 rounded-lg bg-success/10 text-success group-hover:bg-success group-hover:text-primary-foreground transition-colors">
                     <Smartphone className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="font-heading font-semibold text-xs text-foreground group-hover:text-primary transition-colors">
                       3. Customer Web Chat Simulator
                     </div>
-                    <div className="text-[11px] text-muted-foreground">
+                    <div className="text-xs text-muted-foreground">
                       Subscriber 2-Way Chat & Optical Status (-19.2 dBm)
                     </div>
                   </div>

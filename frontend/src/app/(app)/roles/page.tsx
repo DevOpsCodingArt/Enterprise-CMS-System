@@ -98,7 +98,7 @@ export default function RBACRolesPage() {
                     </Badge>
                   )}
                 </div>
-                <div className="text-[11px] text-muted-foreground mt-1">
+                <div className="text-xs text-muted-foreground mt-1">
                   {r.usersCount} Active Staff Bound
                 </div>
               </button>
@@ -126,7 +126,7 @@ export default function RBACRolesPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
-              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
                 <tr>
                   <th className="p-3.5">Module & Description</th>
                   <th className="p-3.5 text-center">View</th>
@@ -142,7 +142,7 @@ export default function RBACRolesPage() {
                   <tr key={row.module} className="hover:bg-muted/20 transition-colors">
                     <td className="p-3.5">
                       <div className="font-medium text-foreground">{row.module}</div>
-                      <div className="text-[11px] text-muted-foreground mt-0.5">{row.description}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{row.description}</div>
                     </td>
 
                     {/* View */}

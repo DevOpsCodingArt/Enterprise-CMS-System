@@ -61,22 +61,22 @@ export default function BranchesPage() {
               {/* 4 Telemetry Metrics */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 my-4 text-xs">
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border/70">
-                  <div className="text-[11px] text-muted-foreground font-medium">Subscribers</div>
+                  <div className="text-xs text-muted-foreground font-medium">Subscribers</div>
                   <div className="font-mono font-semibold text-base mt-0.5 text-foreground">{b.subscribers}</div>
                 </div>
 
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border/70">
-                  <div className="text-[11px] text-muted-foreground font-medium">Optical Health</div>
+                  <div className="text-xs text-muted-foreground font-medium">Optical Health</div>
                   <div className="font-mono font-semibold text-base text-primary mt-0.5">{b.opticalHealth}</div>
                 </div>
 
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border/70">
-                  <div className="text-[11px] text-muted-foreground font-medium">Active Queue</div>
+                  <div className="text-xs text-muted-foreground font-medium">Active Queue</div>
                   <div className="font-mono font-semibold text-base text-warning-foreground dark:text-warning mt-0.5">{b.activeQueues} queued</div>
                 </div>
 
                 <div className="p-2.5 rounded-lg bg-muted/30 border border-border/70">
-                  <div className="text-[11px] text-muted-foreground font-medium">Van Fleet</div>
+                  <div className="text-xs text-muted-foreground font-medium">Van Fleet</div>
                   <div className="font-mono font-semibold text-base text-info-foreground dark:text-info mt-0.5">{b.vanFleet}</div>
                 </div>
               </div>

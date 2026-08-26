@@ -54,9 +54,9 @@ export function CustomerHeader() {
             </div>
             <div>
               <div className="font-heading font-bold text-sm tracking-tight text-foreground flex items-center gap-1.5">
-                Prime One <span className="text-[10px] text-muted-foreground font-normal">Broadband</span>
+                Prime One <span className="text-xs text-muted-foreground font-normal">Broadband</span>
               </div>
-              <div className="text-[10px] text-muted-foreground flex items-center gap-1">
+              <div className="text-xs text-muted-foreground flex items-center gap-1">
                 <span>{customer.branch?.name || 'Islamabad F-10'}</span>
               </div>
             </div>
@@ -67,13 +67,13 @@ export function CustomerHeader() {
             <div
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono border ${
                 isOnline
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                  : 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400 animate-pulse'
+                  ? 'bg-success/10 border-success/30 text-success'
+                  : 'bg-destructive/10 border-destructive/30 text-destructive animate-pulse'
               }`}
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'
+                  isOnline ? 'bg-success animate-pulse' : 'bg-destructive'
                 }`}
               />
               <span className="font-semibold">{isOnline ? 'Connected' : 'Link Offline'}</span>
@@ -92,7 +92,7 @@ export function CustomerHeader() {
                 variant="outline"
                 size="xs"
                 onClick={simulateOpticalCut}
-                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
+                className="text-destructive hover:bg-destructive/10"
               >
                 Simulate Fiber Cut
               </Button>
@@ -101,7 +101,7 @@ export function CustomerHeader() {
                 variant="outline"
                 size="xs"
                 onClick={simulateRestoreLink}
-                className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 font-semibold"
+                className="text-success hover:bg-success/10 font-semibold"
               >
                 Restore Fiber Link ✓
               </Button>
@@ -111,7 +111,7 @@ export function CustomerHeader() {
           {/* Return to Admin Desk Link */}
           <Link
             href="/desk"
-            className="hidden sm:inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground px-2.5 py-1 rounded-md border border-border bg-card hover:bg-muted transition-colors"
+            className="hidden sm:inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground px-2.5 py-1 rounded-md border border-border bg-card hover:bg-muted transition-colors"
           >
             <ArrowRightLeft className="w-3 h-3 text-primary" />
             <span>Agent Desk</span>
@@ -137,14 +137,14 @@ export function CustomerHeader() {
             href="/profile"
             className="flex items-center gap-2 pl-2 border-l border-border hover:opacity-80 transition-opacity"
           >
-            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs shadow-xs">
+            <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs shadow-xs">
               {customer.fullName.charAt(0)}
             </div>
             <div className="hidden xl:block text-left">
               <div className="font-heading font-semibold text-xs text-foreground leading-tight">
                 {customer.fullName}
               </div>
-              <div className="text-[10px] text-muted-foreground font-mono">
+              <div className="text-xs text-muted-foreground font-mono">
                 {customer.customerCode}
               </div>
             </div>

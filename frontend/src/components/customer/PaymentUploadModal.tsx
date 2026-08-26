@@ -117,7 +117,7 @@ export function PaymentUploadModal() {
                 >
                   <div
                     className={`p-2 rounded-md ${
-                      isSelected ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
+                      isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -126,10 +126,10 @@ export function PaymentUploadModal() {
                     <div className="font-heading font-semibold text-xs text-foreground">
                       {c.name}
                     </div>
-                    <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
+                    <div className="text-xs text-muted-foreground font-mono mt-0.5">
                       {c.accountNumber}
                     </div>
-                    <div className="text-[9px] text-muted-foreground">{c.title}</div>
+                    <div className="text-xs text-muted-foreground">{c.title}</div>
                   </div>
                 </button>
               );
@@ -148,7 +148,7 @@ export function PaymentUploadModal() {
           <div className="font-mono text-primary font-bold text-sm">
             {selectedChannelInfo.accountNumber}
           </div>
-          <div className="text-[11px] text-muted-foreground">
+          <div className="text-xs text-muted-foreground">
             Account Title: <span className="font-medium text-foreground">{selectedChannelInfo.title}</span>
           </div>
         </div>
@@ -163,7 +163,7 @@ export function PaymentUploadModal() {
               onChange={(e) => setAmount(Number(e.target.value))}
               required
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">Monthly Package: PKR 3,500</p>
+            <p className="mt-1 text-xs text-muted-foreground">Monthly Package: PKR 3,500</p>
           </div>
 
           <div>
@@ -174,7 +174,7 @@ export function PaymentUploadModal() {
               onChange={(e) => setTransactionId(e.target.value)}
               required
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">Exact transaction ID from SMS / app slip</p>
+            <p className="mt-1 text-xs text-muted-foreground">Exact transaction ID from SMS / app slip</p>
           </div>
         </div>
 
@@ -187,7 +187,7 @@ export function PaymentUploadModal() {
             <button
               type="button"
               onClick={handleSampleSlip}
-              className="text-[11px] text-primary hover:underline font-medium"
+              className="text-xs text-primary hover:underline font-medium"
             >
               + Auto-fill Demo Slip
             </button>
@@ -203,7 +203,7 @@ export function PaymentUploadModal() {
                   <div className="text-xs font-semibold text-foreground">
                     Payment_Proof_Slip.png
                   </div>
-                  <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                  <div className="text-xs text-success font-medium">
                     ✓ Attached ready for verification
                   </div>
                 </div>
@@ -223,7 +223,7 @@ export function PaymentUploadModal() {
               <div className="text-xs font-medium text-foreground">
                 Click to upload payment screenshot
               </div>
-              <div className="text-[10px] text-muted-foreground mt-1">
+              <div className="text-xs text-muted-foreground mt-1">
                 PNG, JPG, or PDF up to 10MB
               </div>
               <input

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   Activity,
@@ -66,12 +67,38 @@ export const PlatformSidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-64 h-full max-h-full bg-card border-r border-border flex flex-col justify-between flex-shrink-0 z-30 overflow-hidden">
-      {/* Navigation Groups */}
+    <aside className="w-64 h-screen max-h-screen bg-card border-r border-border flex flex-col justify-between flex-shrink-0 z-30 overflow-hidden select-none">
+      {/* 1. Dedicated Top Brand Header */}
+      <div className="h-16 flex-shrink-0 flex items-center px-4 border-b border-border bg-card">
+        <Link href="/platform" className="flex items-center gap-2.5 group">
+          <div className="relative w-8 h-8 flex-shrink-0">
+            <Image
+              src="/prime-logo.png"
+              alt="Prime Logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div>
+            <div className="font-heading font-bold text-base tracking-tight leading-none text-foreground flex items-center gap-1.5">
+              PRIME<span className="text-primary">ONE</span>
+              <span className="text-xs px-1.5 py-0.5 rounded bg-primary/10 text-primary font-mono font-bold">
+                ROOT
+              </span>
+            </div>
+            <div className="text-xs text-muted-foreground uppercase font-medium tracking-wider mt-0.5">
+              Global SaaS Fleet
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* 2. Navigation Groups */}
       <div className="flex-1 min-h-0 p-3.5 space-y-5 overflow-y-auto overflow-x-hidden custom-scrollbar">
         {platformNavItems.map((grp, gIdx) => (
           <div key={gIdx} className="space-y-1">
-            <div className="px-2.5 py-1 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+            <div className="px-2.5 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               {grp.group}
             </div>
 
@@ -88,12 +115,12 @@ export const PlatformSidebar: React.FC = () => {
                     className={cn(
                       'flex items-center justify-between px-3 py-2 text-xs font-medium rounded-lg transition-all duration-150',
                       isActive
-                        ? 'bg-primary text-white shadow-xs shadow-primary/20 font-semibold'
+                        ? 'bg-primary text-primary-foreground shadow-xs shadow-primary/20 font-semibold'
                         : 'text-foreground/85 hover:text-foreground hover:bg-muted/40'
                     )}
                   >
                     <div className="flex items-center gap-2.5">
-                      <span className={isActive ? 'text-white' : 'text-muted-foreground'}>
+                      <span className={isActive ? 'text-primary-foreground' : 'text-muted-foreground'}>
                         {item.icon}
                       </span>
                       <span className="truncate">{item.name}</span>
@@ -102,9 +129,9 @@ export const PlatformSidebar: React.FC = () => {
                     {item.badge && (
                       <span
                         className={cn(
-                          'px-1.5 py-0.2 text-[10px] rounded-full font-medium',
+                          'px-1.5 py-0.5 text-xs rounded-full font-medium',
                           isActive
-                            ? 'bg-white/20 text-white'
+                            ? 'bg-primary-foreground/20 text-primary-foreground'
                             : 'bg-primary/10 text-primary'
                         )}
                       >
@@ -121,11 +148,11 @@ export const PlatformSidebar: React.FC = () => {
 
       {/* Bottom Footer Info */}
       <div className="flex-shrink-0 p-3.5 border-t border-border bg-muted/20 text-xs">
-        <div className="flex items-center justify-between text-muted-foreground mb-1 text-[11px]">
+        <div className="flex items-center justify-between text-muted-foreground mb-1 text-xs">
           <span>PostgreSQL RLS</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-mono font-medium">100% Enforced</span>
+          <span className="text-success font-mono font-medium">100% Enforced</span>
         </div>
-        <div className="flex items-center justify-between text-muted-foreground/70 text-[10px]">
+        <div className="flex items-center justify-between text-muted-foreground/70 text-xs">
           <span>SaaS Super-Admin</span>
           <span className="font-mono">v3.4 Core</span>
         </div>

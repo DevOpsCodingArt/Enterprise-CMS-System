@@ -56,7 +56,7 @@ export const Modal: React.FC<ModalProps> = ({
       {/* Modal Box */}
       <div
         className={cn(
-          'relative w-full rounded-xl bg-card border border-border shadow-xl z-10 flex flex-col max-h-[90vh] overflow-hidden',
+          'relative w-full rounded-xl bg-card border border-border shadow-xl z-10 flex flex-col max-h-full overflow-hidden',
           sizes[size],
           className
         )}

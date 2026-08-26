@@ -76,14 +76,14 @@ export default function CustomerBillsPage() {
         <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-md bg-primary text-white">
+              <div className="p-1.5 rounded-md bg-primary text-primary-foreground">
                 <FileText className="w-4 h-4" />
               </div>
               <div>
                 <div className="font-heading font-semibold text-xs text-foreground">
                   Payment Proof Under Verification
                 </div>
-                <div className="text-[11px] text-muted-foreground font-mono">
+                <div className="text-xs text-muted-foreground font-mono">
                   TRX ID: {activePaymentProof.transactionId} · {activePaymentProof.channel}
                 </div>
               </div>
@@ -95,19 +95,19 @@ export default function CustomerBillsPage() {
 
           <div className="grid grid-cols-3 gap-2 text-center text-xs">
             <div className="p-2.5 rounded-lg bg-card border border-border">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 mx-auto mb-1" />
+              <CheckCircle2 className="w-4 h-4 text-success mx-auto mb-1" />
               <div className="font-semibold text-foreground">1. Slip Uploaded</div>
-              <div className="text-[10px] text-muted-foreground">Received by system</div>
+              <div className="text-xs text-muted-foreground">Received by system</div>
             </div>
             <div className="p-2.5 rounded-lg bg-card border border-primary/40 ring-1 ring-primary/20">
               <Clock className="w-4 h-4 text-primary mx-auto mb-1 animate-spin" />
               <div className="font-semibold text-primary">2. Verification</div>
-              <div className="text-[10px] text-muted-foreground">Accounts ledger check</div>
+              <div className="text-xs text-muted-foreground">Accounts ledger check</div>
             </div>
             <div className="p-2.5 rounded-lg bg-card border border-border opacity-60">
               <ShieldCheck className="w-4 h-4 text-muted-foreground mx-auto mb-1" />
               <div className="font-semibold text-foreground">3. Balance Cleared</div>
-              <div className="text-[10px] text-muted-foreground">Auto renewal</div>
+              <div className="text-xs text-muted-foreground">Auto renewal</div>
             </div>
           </div>
         </div>
@@ -117,11 +117,11 @@ export default function CustomerBillsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {mockDb.getPaymentGateways().map((g) => (
           <div key={g.id} className="p-3.5 bg-card rounded-xl border border-border shadow-2xs space-y-1">
-            <div className="text-[10px] text-muted-foreground font-semibold uppercase truncate">
+            <div className="text-xs text-muted-foreground font-semibold uppercase truncate">
               {g.name}
             </div>
             <div className="font-mono font-bold text-xs text-foreground truncate">{g.accountNumber}</div>
-            <div className="text-[10px] text-muted-foreground truncate">{g.title}</div>
+            <div className="text-xs text-muted-foreground truncate">{g.title}</div>
           </div>
         ))}
       </div>
@@ -139,7 +139,7 @@ export default function CustomerBillsPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left font-sans text-xs">
-            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
               <tr>
                 <th className="p-3.5">Invoice #</th>
                 <th className="p-3.5">Month</th>
@@ -178,15 +178,15 @@ export default function CustomerBillsPage() {
                         : 'UNPAID'}
                     </Badge>
                   </td>
-                  <td className="p-3.5 text-muted-foreground font-mono text-[11px]">
+                  <td className="p-3.5 text-muted-foreground font-mono text-xs">
                     <div>{inv.paymentMethod || '—'}</div>
                     {inv.transactionRef && (
-                      <div className="text-[10px] text-muted-foreground/80">
+                      <div className="text-xs text-muted-foreground/80">
                         Ref: {inv.transactionRef}
                       </div>
                     )}
                   </td>
-                  <td className="p-3.5 text-muted-foreground font-mono text-[11px]">
+                  <td className="p-3.5 text-muted-foreground font-mono text-xs">
                     {inv.issueDate} → {inv.dueDate}
                   </td>
                   <td className="p-3.5 text-right">

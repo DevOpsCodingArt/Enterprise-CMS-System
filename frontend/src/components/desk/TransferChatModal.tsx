@@ -90,7 +90,7 @@ export const TransferChatModal: React.FC<TransferChatModalProps> = ({
       <div className="space-y-4 font-mono text-xs">
         <div className="p-3 bg-card-subtle border border-border flex items-start gap-2.5">
           <ShieldAlert className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
-          <div className="text-muted-foreground text-[11px] leading-relaxed">
+          <div className="text-muted-foreground text-xs leading-relaxed">
             All transfers are recorded in the central compliance audit log with timestamp, sender, target assignee, and reason.
           </div>
         </div>

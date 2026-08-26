@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'warning' | 'info';
+  variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'warning' | 'success' | 'info';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -30,19 +30,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        'bg-primary hover:bg-primary-hover text-white shadow-xs shadow-primary/20 active:scale-[0.98]',
+        'bg-primary hover:bg-primary-hover text-primary-foreground shadow-xs shadow-primary/20 active:scale-98',
       secondary:
-        'bg-secondary hover:bg-secondary-hover text-secondary-foreground shadow-xs active:scale-[0.98]',
+        'bg-secondary hover:bg-secondary-hover text-secondary-foreground shadow-xs active:scale-98',
       destructive:
-        'bg-destructive hover:bg-destructive-hover text-white shadow-xs shadow-destructive/20 active:scale-[0.98]',
+        'bg-destructive hover:bg-destructive-hover text-destructive-foreground shadow-xs shadow-destructive/20 active:scale-98',
       warning:
-        'bg-warning hover:bg-warning-hover text-warning-foreground shadow-xs active:scale-[0.98]',
+        'bg-warning hover:bg-warning-hover text-warning-foreground shadow-xs active:scale-98',
+      success:
+        'bg-success hover:bg-success-hover text-primary-foreground shadow-xs active:scale-98',
       info:
-        'bg-info hover:bg-info-hover text-white shadow-xs active:scale-[0.98]',
+        'bg-info hover:bg-info-hover text-primary-foreground shadow-xs active:scale-98',
       outline:
-        'bg-card hover:bg-muted/60 text-foreground border border-border hover:border-border/80 shadow-xs active:scale-[0.98]',
+        'bg-card hover:bg-muted/60 text-foreground border border-border hover:border-border/80 shadow-xs active:scale-98',
       ghost:
-        'bg-transparent hover:bg-muted text-foreground/80 hover:text-foreground active:scale-[0.98]',
+        'bg-transparent hover:bg-muted text-foreground/80 hover:text-foreground active:scale-98',
     };
 
     const sizes = {

@@ -57,9 +57,9 @@ export function getOpticalHealthStatus(rxDbm: number | string | undefined | null
     return {
       status: "nominal",
       label: "HEALTHY",
-      colorClass: "text-primary",
-      bgClass: "bg-primary-light",
-      borderClass: "border-primary",
+      colorClass: "text-success",
+      bgClass: "bg-success/10",
+      borderClass: "border-success/30",
     };
   } else if (val < -23 && val >= -27) {
     return {

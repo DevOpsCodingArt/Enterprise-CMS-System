@@ -40,27 +40,27 @@ export default function SupervisorHudPage() {
       {/* Top 4 KPI Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
         <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
-          <div className="text-[11px] text-muted-foreground font-medium">Active Queued Chats</div>
+          <div className="text-xs text-muted-foreground font-medium">Active Queued Chats</div>
           <div className="font-mono font-bold text-2xl mt-1 text-primary">4 in Queue</div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">SLA Target: &lt; 2m</div>
+          <div className="text-xs text-muted-foreground mt-0.5">SLA Target: &lt; 2m</div>
         </div>
 
         <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
-          <div className="text-[11px] text-muted-foreground font-medium">Online Agents</div>
+          <div className="text-xs text-muted-foreground font-medium">Online Agents</div>
           <div className="font-mono font-bold text-2xl mt-1 text-foreground">12 / 14</div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">Occupancy: 78%</div>
+          <div className="text-xs text-muted-foreground mt-0.5">Occupancy: 78%</div>
         </div>
 
         <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
-          <div className="text-[11px] text-muted-foreground font-medium">Mean Response Time</div>
+          <div className="text-xs text-muted-foreground font-medium">Mean Response Time</div>
           <div className="font-mono font-bold text-2xl mt-1 text-info-foreground dark:text-info">38 Seconds</div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">Target: &lt; 60s</div>
+          <div className="text-xs text-muted-foreground mt-0.5">Target: &lt; 60s</div>
         </div>
 
         <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
-          <div className="text-[11px] text-muted-foreground font-medium">SLA Breaches (Today)</div>
-          <div className="font-mono font-bold text-2xl mt-1 text-emerald-600 dark:text-emerald-400">0 Breaches</div>
-          <div className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-medium">100% Compliance ✓</div>
+          <div className="text-xs text-muted-foreground font-medium">SLA Breaches (Today)</div>
+          <div className="font-mono font-bold text-2xl mt-1 text-success">0 Breaches</div>
+          <div className="text-xs text-success mt-0.5 font-medium">100% Compliance ✓</div>
         </div>
       </div>
 
@@ -77,7 +77,7 @@ export default function SupervisorHudPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left font-sans text-xs">
-            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
               <tr>
                 <th className="p-3.5">Agent / Officer</th>
                 <th className="p-3.5">Status</th>
@@ -100,7 +100,7 @@ export default function SupervisorHudPage() {
                   <td className="p-3.5 font-medium text-foreground">{a.activeChats} Conversations</td>
                   <td className="p-3.5 text-muted-foreground">{a.branch}</td>
                   <td className="p-3.5 font-mono font-medium text-info-foreground dark:text-info">{a.avgResponse}</td>
-                  <td className="p-3.5 font-mono font-semibold text-amber-600 dark:text-amber-400">{a.csat}</td>
+                  <td className="p-3.5 font-mono font-semibold text-warning">{a.csat}</td>
                   <td className="p-3.5 text-right">
                     <Button
                       variant="outline"

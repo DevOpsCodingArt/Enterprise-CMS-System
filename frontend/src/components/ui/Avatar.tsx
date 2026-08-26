@@ -24,7 +24,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   };
 
   const statusColors = {
-    online: 'bg-emerald-500',
+    online: 'bg-success',
     busy: 'bg-destructive',
     away: 'bg-warning',
     offline: 'bg-muted-foreground',

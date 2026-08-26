@@ -143,7 +143,7 @@ export default function WorkingHoursPage() {
               <div className="font-semibold flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5" /> High-Priority Tagging Active
               </div>
-              <div className="text-[11px] opacity-90">
+              <div className="text-xs opacity-90">
                 Off-hour messages are marked with urgent status and sent to the on-duty NOC supervisor.
               </div>
             </div>

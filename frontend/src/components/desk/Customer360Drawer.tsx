@@ -72,7 +72,7 @@ export const Customer360Drawer: React.FC<Customer360DrawerProps> = ({
               <div className="font-heading font-semibold text-foreground text-sm">
                 {customer?.fullName || 'Ali Hassan'}
               </div>
-              <div className="text-[11px] font-mono text-primary font-medium mt-0.5">
+              <div className="text-xs font-mono text-primary font-medium mt-0.5">
                 {customer?.customerCode || 'PK-84920'} · PPPoE: {customer?.username || 'ali_f10'}
               </div>
             </div>
@@ -81,7 +81,7 @@ export const Customer360Drawer: React.FC<Customer360DrawerProps> = ({
             </Badge>
           </div>
 
-          <div className="space-y-1 pt-2 border-t border-border/60 text-[11px] text-muted-foreground">
+          <div className="space-y-1 pt-2 border-t border-border/60 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
               <Phone className="w-3 h-3 text-muted-foreground" />
               <span>{customer?.phone || '+92 300 8594021'}</span>
@@ -101,29 +101,29 @@ export const Customer360Drawer: React.FC<Customer360DrawerProps> = ({
             </span>
             <button
               onClick={handleToggleSignal}
-              className="text-[10px] text-primary hover:underline font-medium"
+              className="text-xs text-primary hover:underline font-medium"
             >
               Simulate {opticalDbm < -25 ? 'Restore' : 'Cut'}
             </button>
           </div>
 
           <div className="p-2.5 rounded-lg bg-muted/30 border border-border/70 text-center space-y-1">
-            <div className="text-[11px] text-muted-foreground">Optical RX Signal Level</div>
+            <div className="text-xs text-muted-foreground">Optical RX Signal Level</div>
             <div
               className={`font-mono font-bold text-2xl ${
                 opticalDbm < -25
                   ? 'text-destructive animate-pulse'
-                  : 'text-emerald-600 dark:text-emerald-400'
+                  : 'text-success'
               }`}
             >
               {opticalDbm} dBm
             </div>
-            <div className="text-[10px] font-medium text-muted-foreground">
+            <div className="text-xs font-medium text-muted-foreground">
               {opticalDbm < -25 ? 'CRITICAL: Fiber Cut Detected' : 'Nominal Signal (-15 to -24 dBm)'}
             </div>
           </div>
 
-          <div className="space-y-1 text-[11px] text-muted-foreground">
+          <div className="space-y-1 text-xs text-muted-foreground">
             <div className="flex justify-between">
               <span>OLT Chassis:</span>
               <span className="font-mono font-medium text-foreground">Huawei MA5800-X7</span>
@@ -150,7 +150,7 @@ export const Customer360Drawer: React.FC<Customer360DrawerProps> = ({
             </Badge>
           </div>
 
-          <div className="space-y-1 text-[11px]">
+          <div className="space-y-1 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Subscribed Package:</span>
               <span className="font-medium text-foreground">50 Mbps Ultra Fiber</span>

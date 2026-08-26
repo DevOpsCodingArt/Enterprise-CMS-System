@@ -106,7 +106,7 @@ export const CloseChatModal: React.FC<CloseChatModalProps> = ({
                 className={`flex items-start gap-3 p-3 border-2 cursor-pointer transition-colors ${
                   outcome === o.id
                     ? 'bg-card border-primary shadow-sm'
-                    : 'bg-card-subtle border-border hover:border-primary/50'
+                    : 'bg-muted/30 border-border hover:border-primary/50'
                 }`}
               >
                 <input
@@ -118,7 +118,7 @@ export const CloseChatModal: React.FC<CloseChatModalProps> = ({
                 />
                 <div>
                   <div className="font-bold text-foreground">{o.label}</div>
-                  <div className="text-[10px] text-muted-foreground mt-0.5">{o.desc}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{o.desc}</div>
                 </div>
               </label>
             ))}

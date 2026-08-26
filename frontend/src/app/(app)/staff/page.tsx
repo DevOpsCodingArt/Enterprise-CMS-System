@@ -138,7 +138,7 @@ export default function StaffPage() {
       <div className="bg-card rounded-xl border border-border shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left font-sans text-xs">
-            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
               <tr>
                 <th className="p-3.5">Staff Member</th>
                 <th className="p-3.5">Department & Designation</th>
@@ -162,7 +162,7 @@ export default function StaffPage() {
                         <div className="font-heading font-semibold text-foreground text-sm">
                           {s.fullName}
                         </div>
-                        <div className="text-[11px] text-muted-foreground flex items-center gap-2 mt-0.5">
+                        <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
                           <span>{s.email}</span>
                           <span>·</span>
                           <span className="font-mono">{s.phone}</span>
@@ -173,7 +173,7 @@ export default function StaffPage() {
 
                   <td className="p-3.5">
                     <div className="font-medium text-foreground">{s.designation}</div>
-                    <div className="text-[11px] text-muted-foreground">{s.department}</div>
+                    <div className="text-xs text-muted-foreground">{s.department}</div>
                   </td>
 
                   <td className="p-3.5">
@@ -191,12 +191,12 @@ export default function StaffPage() {
 
                   <td className="p-3.5">
                     {s.isOnline ? (
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium text-[11px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success/10 text-success font-medium text-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                         Online ({s.activeChatsCount} active)
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-medium text-[11px]">
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-medium text-xs">
                         <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />
                         Offline
                       </span>

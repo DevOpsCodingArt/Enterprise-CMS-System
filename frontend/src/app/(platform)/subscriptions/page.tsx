@@ -140,7 +140,7 @@ export default function PlatformSubscriptionsPage() {
             onClick={() => setActiveTab('tiers')}
             className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
               activeTab === 'tiers'
-                ? 'bg-primary text-white font-semibold shadow-xs'
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -150,7 +150,7 @@ export default function PlatformSubscriptionsPage() {
             onClick={() => setActiveTab('flags')}
             className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
               activeTab === 'flags'
-                ? 'bg-primary text-white font-semibold shadow-xs'
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -160,7 +160,7 @@ export default function PlatformSubscriptionsPage() {
             onClick={() => setActiveTab('invoices')}
             className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
               activeTab === 'invoices'
-                ? 'bg-primary text-white font-semibold shadow-xs'
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -185,7 +185,7 @@ export default function PlatformSubscriptionsPage() {
                   }`}
                 >
                   {isPopular && (
-                    <span className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-primary text-white text-[10px] font-semibold tracking-wide uppercase shadow-2xs">
+                    <span className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold tracking-wide uppercase shadow-2xs">
                       Enterprise Tier
                     </span>
                   )}
@@ -231,7 +231,7 @@ export default function PlatformSubscriptionsPage() {
 
                     {/* Included Features List */}
                     <div className="mt-4 space-y-2 text-xs">
-                      <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
                         Included Entitlements:
                       </span>
                       {featureItems.map((feat, idx) => (
@@ -285,7 +285,7 @@ export default function PlatformSubscriptionsPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
-              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
                 <tr>
                   <th className="p-3.5">Feature & Module Name</th>
                   <th className="p-3.5 text-center">Starter Tier</th>
@@ -298,7 +298,7 @@ export default function PlatformSubscriptionsPage() {
                   <tr key={flag.id} className="hover:bg-muted/20 transition-colors">
                     <td className="p-3.5">
                       <div className="font-medium text-foreground">{flag.name}</div>
-                      <div className="text-[11px] text-muted-foreground mt-0.5">{flag.description}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{flag.description}</div>
                     </td>
 
                     <td className="p-3.5 text-center">
@@ -361,7 +361,7 @@ export default function PlatformSubscriptionsPage() {
             </div>
             <div className="font-mono text-xs">
               <span className="text-muted-foreground">Total Settled: </span>
-              <span className="font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="font-bold text-success">
                 {formatCurrencyPKR(totalCollectedMrr)}
               </span>
             </div>
@@ -369,7 +369,7 @@ export default function PlatformSubscriptionsPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
-              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
                 <tr>
                   <th className="p-3.5">Invoice ID</th>
                   <th className="p-3.5">Tenant Company</th>
@@ -387,7 +387,7 @@ export default function PlatformSubscriptionsPage() {
 
                     <td className="p-3.5">
                       <div className="font-medium text-foreground">{inv.tenantName}</div>
-                      <div className="text-[11px] font-mono text-muted-foreground">ID: {inv.tenantId}</div>
+                      <div className="text-xs font-mono text-muted-foreground">ID: {inv.tenantId}</div>
                     </td>
 
                     <td className="p-3.5">

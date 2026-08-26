@@ -87,7 +87,7 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
                 <span className="font-mono">{conversation.customer?.username || 'ali_f10'}</span>
               </Badge>
             </div>
-            <div className="text-[11px] text-muted-foreground mt-0.5">
+            <div className="text-xs text-muted-foreground mt-0.5">
               50M Ultra Fiber · Sector F-10/2 · PON-04
             </div>
           </div>
@@ -150,14 +150,14 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
       <div className="flex-shrink-0 border-t border-border bg-card p-3 space-y-2.5">
         {/* Quick Canned Slash Chips */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-          <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-mono font-medium">
+          <span className="text-xs text-muted-foreground flex items-center gap-1 font-mono font-medium">
             <Zap className="w-3 h-3 text-warning" /> /
           </span>
           {cannedTemplates.map((t, idx) => (
             <button
               key={idx}
               onClick={() => handleCannedInsert(t.text)}
-              className="px-2 py-0.5 rounded-md bg-muted/50 hover:bg-primary/10 hover:text-primary border border-border/80 text-[11px] font-mono text-muted-foreground transition-colors flex-shrink-0"
+              className="px-2 py-0.5 rounded-md bg-muted/50 hover:bg-primary/10 hover:text-primary border border-border/80 text-xs font-mono text-muted-foreground transition-colors flex-shrink-0"
             >
               {t.label}
             </button>
@@ -173,7 +173,7 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
             </div>
             <button
               onClick={toggleInternalNoteMode}
-              className="text-[11px] underline hover:no-underline font-semibold"
+              className="text-xs underline hover:no-underline font-semibold"
             >
               Switch to Public Reply
             </button>

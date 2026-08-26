@@ -39,7 +39,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const icons = {
-    success: <CheckCircle2 className="w-4 h-4 text-primary" />,
+    success: <CheckCircle2 className="w-4 h-4 text-success" />,
     error: <AlertCircle className="w-4 h-4 text-destructive" />,
     warning: <AlertCircle className="w-4 h-4 text-warning" />,
     info: <Info className="w-4 h-4 text-info" />,
@@ -55,7 +55,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             className={cn(
               'pointer-events-auto p-3.5 bg-card border-2 border-border shadow-lg flex items-start gap-3 transition-all animate-in slide-in-from-bottom-5',
               t.type === 'error' && 'border-destructive',
-              t.type === 'success' && 'border-primary'
+              t.type === 'success' && 'border-success',
+              t.type === 'warning' && 'border-warning'
             )}
           >
             <div className="flex-shrink-0 mt-0.5">{icons[t.type]}</div>
@@ -64,7 +65,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 {t.title}
               </div>
               {t.description && (
-                <div className="text-[11px] font-mono text-muted-foreground mt-0.5 leading-snug">
+                <div className="text-xs font-mono text-muted-foreground mt-0.5 leading-snug">
                   {t.description}
                 </div>
               )}

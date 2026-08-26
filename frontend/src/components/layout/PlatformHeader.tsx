@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useThemeStore } from '@/stores/theme-store';
 import {
   Sun,
@@ -26,54 +25,28 @@ export const PlatformHeader: React.FC = () => {
   const [profileOpen, setProfileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-card border-b border-border h-16 flex items-center justify-between px-4 sm:px-6 shadow-xs">
-      {/* Left: Super-Admin Logo & Badge */}
-      <div className="flex items-center gap-3.5">
-        <Link href="/platform" className="flex items-center gap-2.5 group">
-          <div className="relative w-8 h-8 flex-shrink-0">
-            <Image
-              src="/prime-logo.png"
-              alt="Prime Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div>
-            <div className="font-heading font-bold text-lg tracking-tight leading-none text-foreground flex items-center gap-1.5">
-              PRIME<span className="text-primary">ONE</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-primary/10 text-primary font-mono font-medium">
-                SUPER-ADMIN
-              </span>
-            </div>
-            <div className="text-[10px] text-muted-foreground uppercase font-medium tracking-wider mt-0.5">
-              Global SaaS Infrastructure
-            </div>
-          </div>
-        </Link>
-      </div>
-
-      {/* Middle: Live Global Telemetry Ticker */}
-      <div className="hidden xl:flex items-center gap-6 text-xs text-muted-foreground">
+    <header className="sticky top-0 z-40 bg-card border-b border-border h-16 flex items-center justify-between px-4 sm:px-6 shadow-xs flex-shrink-0">
+      {/* Left / Middle: Live Global Telemetry Ticker */}
+      <div className="flex items-center gap-3 sm:gap-4 text-xs text-muted-foreground overflow-x-auto py-1">
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/40 border border-border/70">
-          <span className="text-[11px]">Platform MRR:</span>
+          <span className="text-xs">Platform MRR:</span>
           <span className="font-mono font-semibold text-primary">PKR 4.85M</span>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/40 border border-border/70">
-          <span className="text-[11px]">Active Tenants:</span>
+        <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-muted/40 border border-border/70">
+          <span className="text-xs">Active Tenants:</span>
           <span className="font-mono font-semibold text-foreground">14 ISPs</span>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/40 border border-border/70">
-          <span className="text-[11px]">Global Subs:</span>
+        <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-muted/40 border border-border/70">
+          <span className="text-xs">Global Subs:</span>
           <span className="font-mono font-semibold text-foreground">48,420</span>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/40 border border-border/70">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[11px]">Gateway:</span>
-          <span className="font-mono font-medium text-emerald-600 dark:text-emerald-400">0.3ms</span>
+        <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-muted/40 border border-border/70">
+          <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+          <span className="text-xs">Gateway:</span>
+          <span className="font-mono font-medium text-success">0.3ms</span>
         </div>
       </div>
 
@@ -120,10 +93,10 @@ export const PlatformHeader: React.FC = () => {
           >
             <Avatar name="Super Admin" size="sm" status="online" />
             <div className="hidden md:block text-left">
-              <div className="leading-tight font-semibold text-foreground truncate max-w-[120px]">
+              <div className="leading-tight font-semibold text-foreground truncate max-w-32">
                 Super Admin
               </div>
-              <div className="text-[10px] font-mono text-primary">Global Root (Tier 1)</div>
+              <div className="text-xs font-mono text-primary">Global Root (Tier 1)</div>
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-muted-foreground ml-0.5" />
           </button>
@@ -132,7 +105,7 @@ export const PlatformHeader: React.FC = () => {
             <div className="absolute right-0 mt-1.5 w-60 rounded-xl bg-card border border-border shadow-lg z-50 py-1.5 text-xs">
               <div className="px-3.5 py-2.5 border-b border-border/70 bg-muted/20">
                 <div className="font-semibold text-foreground">SaaS Platform Operator</div>
-                <div className="text-[11px] text-muted-foreground truncate">superadmin@primeone.io</div>
+                <div className="text-xs text-muted-foreground truncate">superadmin@primeone.io</div>
                 <div className="mt-1.5">
                   <Badge variant="primary" size="xs">
                     Full Root Access

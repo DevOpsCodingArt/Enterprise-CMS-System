@@ -79,7 +79,7 @@ export default function CustomerProfilePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="p-3 bg-muted/30 rounded-lg border border-border">
-                <div className="text-[10px] text-muted-foreground font-semibold uppercase">
+                <div className="text-xs text-muted-foreground font-semibold uppercase">
                   Full Name
                 </div>
                 <div className="font-heading font-bold text-foreground text-sm mt-0.5">
@@ -88,7 +88,7 @@ export default function CustomerProfilePage() {
               </div>
 
               <div className="p-3 bg-muted/30 rounded-lg border border-border">
-                <div className="text-[10px] text-muted-foreground font-semibold uppercase">
+                <div className="text-xs text-muted-foreground font-semibold uppercase">
                   Customer Code
                 </div>
                 <div className="font-mono font-bold text-primary text-sm mt-0.5">
@@ -97,7 +97,7 @@ export default function CustomerProfilePage() {
               </div>
 
               <div className="p-3 bg-muted/30 rounded-lg border border-border">
-                <div className="text-[10px] text-muted-foreground font-semibold uppercase">
+                <div className="text-xs text-muted-foreground font-semibold uppercase">
                   CNIC Number
                 </div>
                 <div className="font-mono text-foreground font-medium mt-0.5">
@@ -106,7 +106,7 @@ export default function CustomerProfilePage() {
               </div>
 
               <div className="p-3 bg-muted/30 rounded-lg border border-border">
-                <div className="text-[10px] text-muted-foreground font-semibold uppercase">
+                <div className="text-xs text-muted-foreground font-semibold uppercase">
                   PPPoE Dial-up Username
                 </div>
                 <div className="font-mono text-foreground font-medium mt-0.5">
@@ -115,7 +115,7 @@ export default function CustomerProfilePage() {
               </div>
 
               <div className="p-3 bg-muted/30 rounded-lg border border-border">
-                <div className="text-[10px] text-muted-foreground font-semibold uppercase">
+                <div className="text-xs text-muted-foreground font-semibold uppercase">
                   Primary Mobile Phone
                 </div>
                 <div className="font-mono text-foreground font-medium mt-0.5">
@@ -124,7 +124,7 @@ export default function CustomerProfilePage() {
               </div>
 
               <div className="p-3 bg-muted/30 rounded-lg border border-border">
-                <div className="text-[10px] text-muted-foreground font-semibold uppercase">
+                <div className="text-xs text-muted-foreground font-semibold uppercase">
                   Email Address
                 </div>
                 <div className="font-mono text-foreground font-medium mt-0.5 truncate">
@@ -134,13 +134,13 @@ export default function CustomerProfilePage() {
             </div>
 
             <div className="p-3 bg-muted/30 rounded-lg border border-border text-xs space-y-1">
-              <div className="text-[10px] text-muted-foreground font-semibold uppercase flex items-center gap-1">
+              <div className="text-xs text-muted-foreground font-semibold uppercase flex items-center gap-1">
                 <MapPin className="w-3.5 h-3.5 text-primary" /> Installation Premises Address
               </div>
               <div className="font-medium text-foreground">
                 {customer.address} · {customer.city}
               </div>
-              <div className="text-[10px] text-muted-foreground font-mono">
+              <div className="text-xs text-muted-foreground font-mono">
                 GPS: {customer.latitude || '33.6934'}, {customer.longitude || '73.0112'}
               </div>
             </div>
@@ -167,7 +167,7 @@ export default function CustomerProfilePage() {
                     onChange={(e) => setWifiSsid(e.target.value)}
                     required
                   />
-                  <p className="mt-1 text-[11px] text-muted-foreground">Broadcasted across 2.4G & 5G dual-band</p>
+                  <p className="mt-1 text-xs text-muted-foreground">Broadcasted across 2.4G & 5G dual-band</p>
                 </div>
                 <div>
                   <Input
@@ -177,7 +177,7 @@ export default function CustomerProfilePage() {
                     onChange={(e) => setWifiPassword(e.target.value)}
                     required
                   />
-                  <p className="mt-1 text-[11px] text-muted-foreground">WPA2-PSK AES Encryption</p>
+                  <p className="mt-1 text-xs text-muted-foreground">WPA2-PSK AES Encryption</p>
                 </div>
               </div>
 
@@ -211,7 +211,7 @@ export default function CustomerProfilePage() {
 
             <div className="p-3 bg-muted/40 rounded-xl border border-border space-y-2 text-xs">
               <div>
-                <div className="text-[10px] text-muted-foreground uppercase font-semibold">
+                <div className="text-xs text-muted-foreground uppercase font-semibold">
                   ONU Optical Router Model
                 </div>
                 <div className="font-heading font-bold text-foreground mt-0.5">
@@ -220,7 +220,7 @@ export default function CustomerProfilePage() {
               </div>
 
               <div className="pt-2 border-t border-border/70">
-                <div className="text-[10px] text-muted-foreground uppercase font-semibold">
+                <div className="text-xs text-muted-foreground uppercase font-semibold">
                   Hardware Serial Number
                 </div>
                 <div className="font-mono text-primary font-bold mt-0.5">
@@ -229,7 +229,7 @@ export default function CustomerProfilePage() {
               </div>
 
               <div className="pt-2 border-t border-border/70">
-                <div className="text-[10px] text-muted-foreground uppercase font-semibold">
+                <div className="text-xs text-muted-foreground uppercase font-semibold">
                   Assigned Distribution Hub
                 </div>
                 <div className="font-medium text-foreground mt-0.5">
@@ -240,7 +240,7 @@ export default function CustomerProfilePage() {
 
             <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 flex items-center gap-3">
               <QrCode className="w-8 h-8 text-primary flex-shrink-0" />
-              <div className="text-[11px] text-muted-foreground leading-tight">
+              <div className="text-xs text-muted-foreground leading-tight">
                 Scannable equipment barcode registered with Prime Van Fleet warehouse stock.
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function CustomerProfilePage() {
               <label className="flex items-center justify-between cursor-pointer p-2 rounded-lg hover:bg-muted/30">
                 <div>
                   <div className="font-medium text-foreground">WhatsApp Invoice Alerts</div>
-                  <div className="text-[10px] text-muted-foreground">Receive bill and recharge receipts</div>
+                  <div className="text-xs text-muted-foreground">Receive bill and recharge receipts</div>
                 </div>
                 <input
                   type="checkbox"
@@ -272,7 +272,7 @@ export default function CustomerProfilePage() {
               <label className="flex items-center justify-between cursor-pointer p-2 rounded-lg hover:bg-muted/30">
                 <div>
                   <div className="font-medium text-foreground">SMS Outage Notifications</div>
-                  <div className="text-[10px] text-muted-foreground">Emergency fiber cut updates</div>
+                  <div className="text-xs text-muted-foreground">Emergency fiber cut updates</div>
                 </div>
                 <input
                   type="checkbox"
@@ -285,7 +285,7 @@ export default function CustomerProfilePage() {
               <label className="flex items-center justify-between cursor-pointer p-2 rounded-lg hover:bg-muted/30">
                 <div>
                   <div className="font-medium text-foreground">Email PDF Monthly Receipts</div>
-                  <div className="text-[10px] text-muted-foreground">Auto sent on the 1st of every month</div>
+                  <div className="text-xs text-muted-foreground">Auto sent on the 1st of every month</div>
                 </div>
                 <input
                   type="checkbox"

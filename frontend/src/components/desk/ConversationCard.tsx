@@ -42,7 +42,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
             <div className="font-heading font-semibold text-xs text-foreground truncate">
               {customer?.fullName || 'Anonymous Customer'}
             </div>
-            <div className="text-[11px] text-muted-foreground truncate">
+            <div className="text-xs text-muted-foreground truncate">
               {customer?.username ? (
                 <span>
                   PPPoE: <span className="font-mono font-medium text-foreground/80">{customer.username}</span>
@@ -54,7 +54,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
           </div>
         </div>
 
-        <div className="text-[11px] text-muted-foreground flex-shrink-0 text-right">
+        <div className="text-xs text-muted-foreground flex-shrink-0 text-right">
           {formatChatTimestamp(conversation.lastMessageAt || conversation.createdAt)}
         </div>
       </div>
@@ -65,7 +65,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
       </p>
 
       {/* Bottom tags: SLA + Status + Unread badge */}
-      <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-border/60 text-[11px]">
+      <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-border/60 text-xs">
         <div className="flex items-center gap-1.5">
           {isWaiting ? (
             <Badge variant="destructive" size="xs">
@@ -76,24 +76,24 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
               Closed
             </Badge>
           ) : conversation.isSlaBreached ? (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-destructive/10 text-destructive font-medium border border-destructive/20 text-[10px]">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-destructive/10 text-destructive font-medium border border-destructive/20 text-xs">
               <AlertTriangle className="w-3 h-3" /> SLA Breached
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-warning/15 text-warning-foreground dark:text-warning font-medium border border-warning/20 text-[10px]">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-warning/15 text-warning-foreground dark:text-warning font-medium border border-warning/20 text-xs">
               <Clock className="w-3 h-3" /> SLA: 18m
             </span>
           )}
 
           {customer?.area && (
-            <span className="text-muted-foreground hidden sm:inline truncate max-w-[90px] text-[11px]">
+            <span className="text-muted-foreground hidden sm:inline truncate max-w-24 text-xs">
               {customer.area}
             </span>
           )}
         </div>
 
         {conversation.unreadCountStaff > 0 && (
-          <span className="px-1.5 py-0.2 rounded-full bg-primary text-white font-bold text-[10px] shadow-xs">
+          <span className="px-1.5 py-0.5 rounded-full bg-primary text-primary-foreground font-bold text-xs shadow-xs">
             {conversation.unreadCountStaff} New
           </span>
         )}

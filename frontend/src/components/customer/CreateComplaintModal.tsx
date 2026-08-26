@@ -102,17 +102,17 @@ export function CreateComplaintModal() {
 
             <div className="p-3 bg-muted/30 rounded-lg border border-border flex items-center justify-between text-xs">
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-muted font-mono font-bold text-[10px] flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-muted font-mono font-bold text-xs flex items-center justify-center">
                   1
                 </span>
                 <span>Ensure yellow fiber patch cord is firmly plugged into ONU</span>
               </div>
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <CheckCircle2 className="w-4 h-4 text-success" />
             </div>
 
             <div className="p-3 bg-muted/30 rounded-lg border border-border flex items-center justify-between text-xs">
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-muted font-mono font-bold text-[10px] flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-muted font-mono font-bold text-xs flex items-center justify-center">
                   2
                 </span>
                 <span>Check if ONU Power LED is solid green and LOS is not red</span>
@@ -122,13 +122,13 @@ export function CreateComplaintModal() {
                   Red Light
                 </Badge>
               ) : (
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <CheckCircle2 className="w-4 h-4 text-success" />
               )}
             </div>
 
             <div className="p-3 bg-muted/30 rounded-lg border border-border flex items-center justify-between text-xs">
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-muted font-mono font-bold text-[10px] flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-muted font-mono font-bold text-xs flex items-center justify-center">
                   3
                 </span>
                 <span>Perform remote router power reboot sweep</span>

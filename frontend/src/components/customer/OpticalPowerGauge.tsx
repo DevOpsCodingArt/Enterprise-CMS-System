@@ -35,7 +35,7 @@ export function OpticalPowerGauge({
       <div className="flex items-center gap-2">
         <div
           className={`w-2 h-2 rounded-full ${
-            isGood ? 'bg-emerald-500 animate-pulse' : isWarning ? 'bg-amber-500' : 'bg-red-500 animate-ping'
+            isGood ? 'bg-success animate-pulse' : isWarning ? 'bg-warning' : 'bg-destructive animate-ping'
           }`}
         />
         <span className="font-mono font-bold text-xs text-foreground">
@@ -55,14 +55,14 @@ export function OpticalPowerGauge({
     <div className="bg-card rounded-xl border border-border p-4 shadow-xs space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className={`p-1.5 rounded-lg ${isGood ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : isWarning ? 'bg-amber-500/10 text-amber-600' : 'bg-red-500/10 text-red-600'}`}>
+          <div className={`p-1.5 rounded-lg ${isGood ? 'bg-success/10 text-success' : isWarning ? 'bg-warning/10 text-warning' : 'bg-destructive/10 text-destructive'}`}>
             <Activity className="w-4 h-4" />
           </div>
           <div>
             <div className="font-heading font-semibold text-xs text-foreground">
               SmartOLT Fiber Attenuation
             </div>
-            <div className="text-[11px] text-muted-foreground font-mono">
+            <div className="text-xs text-muted-foreground font-mono">
               Port: {oltPonPort || 'GPON0/1:4'}
             </div>
           </div>
@@ -86,13 +86,13 @@ export function OpticalPowerGauge({
       <div className="space-y-1 pt-1">
         <div className="relative w-full h-2.5 bg-muted rounded-full overflow-hidden flex">
           {/* Red Zone (< -28 dBm) */}
-          <div className="h-full w-[28%] bg-red-500/80" />
+          <div className="h-full w-3/12 bg-destructive/80" />
           {/* Yellow Zone (-28 to -24.5 dBm) */}
-          <div className="h-full w-[14%] bg-amber-500/80" />
+          <div className="h-full w-2/12 bg-warning/80" />
           {/* Green Zone (-24.5 to -14 dBm) */}
-          <div className="h-full w-[42%] bg-emerald-500/90" />
+          <div className="h-full w-5/12 bg-success/90" />
           {/* High Power Zone (> -14 dBm) */}
-          <div className="h-full w-[16%] bg-blue-500/80" />
+          <div className="h-full w-2/12 bg-info/80" />
         </div>
 
         {/* Needle Marker Indicator */}
@@ -101,11 +101,11 @@ export function OpticalPowerGauge({
             className="absolute top-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500"
             style={{ left: `${percentage}%` }}
           >
-            <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[5px] border-b-foreground" />
+            <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-foreground" />
           </div>
         </div>
 
-        <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
+        <div className="flex justify-between text-xs text-muted-foreground font-mono">
           <span>-35 dBm (Cut)</span>
           <span>-28 dBm (Warn)</span>
           <span>-19 dBm (Target)</span>
@@ -113,19 +113,19 @@ export function OpticalPowerGauge({
         </div>
       </div>
 
-      <p className="text-[11px] text-muted-foreground leading-relaxed pt-1 border-t border-border/60">
+      <p className="text-xs text-muted-foreground leading-relaxed pt-1 border-t border-border/60">
         {isGood && (
-          <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+          <span className="text-success font-medium">
             ✓ Optical light power is inside nominal parameters (-15 to -24 dBm). Zero packet loss.
           </span>
         )}
         {isWarning && (
-          <span className="text-amber-600 dark:text-amber-400 font-medium">
+          <span className="text-warning font-medium">
             ⚠️ Light signal is slightly weak. Ensure yellow fiber patch cord is not bent sharply.
           </span>
         )}
         {isCritical && (
-          <span className="text-red-600 dark:text-red-400 font-medium animate-pulse">
+          <span className="text-destructive font-medium animate-pulse">
             🚨 Critical optical loss detected. Fiber drop cable cut or disconnected. Splicing technician dispatch recommended.
           </span>
         )}

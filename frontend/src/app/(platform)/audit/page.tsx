@@ -118,9 +118,9 @@ export default function PlatformAuditPage() {
             <button
               key={act}
               onClick={() => setSelectedActionFilter(act)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
                 selectedActionFilter === act
-                  ? 'bg-primary text-white font-semibold'
+                  ? 'bg-primary text-primary-foreground font-semibold'
                   : 'bg-muted/40 text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -134,7 +134,7 @@ export default function PlatformAuditPage() {
       <div className="bg-card rounded-xl border border-border shadow-xs overflow-hidden">
         <div className="p-4 border-b border-border/70 bg-card flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <ShieldCheck className="w-4 h-4 text-success" />
             <h3 className="font-heading font-semibold text-sm text-foreground">
               Sealed Platform Events Stream
             </h3>
@@ -142,14 +142,14 @@ export default function PlatformAuditPage() {
               {filteredLogs.length} Events Logged
             </Badge>
           </div>
-          <span className="text-[11px] text-muted-foreground font-mono">
+          <span className="text-xs text-muted-foreground font-mono">
             SHA-256 Immutable Signature ✓
           </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left font-sans text-xs">
-            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
               <tr>
                 <th className="p-3.5">Timestamp</th>
                 <th className="p-3.5">Actor Identity</th>
@@ -163,23 +163,23 @@ export default function PlatformAuditPage() {
             <tbody className="divide-y divide-border/70">
               {filteredLogs.map((log) => (
                 <tr key={log.id} className="hover:bg-muted/20 transition-colors">
-                  <td className="p-3.5 font-mono text-muted-foreground text-[11px] whitespace-nowrap">
+                  <td className="p-3.5 font-mono text-muted-foreground text-xs whitespace-nowrap">
                     {log.timestamp}
                   </td>
 
                   <td className="p-3.5">
                     <div className="font-medium text-foreground">{log.actor}</div>
-                    <div className="text-[11px] font-mono text-primary">{log.actorRole}</div>
+                    <div className="text-xs font-mono text-primary">{log.actorRole}</div>
                   </td>
 
                   <td className="p-3.5">
                     <div className="font-medium text-foreground">{log.tenantName}</div>
-                    <div className="text-[11px] font-mono text-muted-foreground">{log.tenantSlug}</div>
+                    <div className="text-xs font-mono text-muted-foreground">{log.tenantSlug}</div>
                   </td>
 
                   <td className="p-3.5">
                     <Badge variant="outline" size="xs">
-                      <span className="font-mono text-[10px]">{log.action}</span>
+                      <span className="font-mono text-xs">{log.action}</span>
                     </Badge>
                   </td>
 
@@ -187,12 +187,12 @@ export default function PlatformAuditPage() {
                     {log.details}
                   </td>
 
-                  <td className="p-3.5 font-mono text-muted-foreground text-[11px]">
+                  <td className="p-3.5 font-mono text-muted-foreground text-xs">
                     {log.ipAddress}
                   </td>
 
                   <td className="p-3.5 text-right">
-                    <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                    <span className="inline-flex items-center gap-1 text-xs text-success font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5" /> {log.status}
                     </span>
                   </td>

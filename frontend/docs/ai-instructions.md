@@ -119,8 +119,8 @@ src/
 The visual theme for Prime One is a modern, high-density **Telecom Command Center** interface:
 
 1. **Bento-Box Grid Architecture:**
-   - Modular, structured dashboard widgets utilizing crisp 1px borders (`border border-slate-200 dark:border-slate-800`).
-   - Solid, purposeful surface colors (`bg-white dark:bg-slate-900` over `bg-slate-50 dark:bg-slate-950`).
+   - Modular, structured dashboard widgets utilizing crisp 1px borders (`border border-border`).
+   - Solid, purposeful surface colors (`bg-card text-card-foreground` over `bg-background text-foreground`).
    - **STRICTLY PROHIBITED:** Heavy, laggy trends like Glassmorphism (heavy `backdrop-blur`) and Neumorphism (heavy multi-layered shadows).
 2. **Dual Theme (Light & Dark Mode) & Dynamic Tenant Branding:**
    - Seamless switching between Light and Dark mode with high-contrast text ratios (WCAG AAA compliance for network monitoring).
@@ -128,6 +128,14 @@ The visual theme for Prime One is a modern, high-density **Telecom Command Cente
 3. **Skeleton Loaders ONLY (Zero Generic Spinners):**
    - **NEVER** use generic spinning loader icons or plain "Loading..." text in content containers.
    - **ALWAYS** render structural skeleton placeholders (`<Skeleton className="h-10 w-full" />`) matching the exact geometrical shape of incoming data.
+4. **STRICT BAN ON HARDCODED COLORS & AD-HOC UTILITIES (100% Tokenized Design System):**
+   - **STRICTLY PROHIBITED:** Never use hardcoded arbitrary hex values (e.g. `bg-[#2563eb]`, `text-[#059669]`) or default ad-hoc Tailwind color utilities (e.g. `text-emerald-500`, `bg-blue-600`, `text-red-500`, `bg-amber-400`, `border-slate-200`, `bg-white`) directly inside components.
+   - **MANDATORY:** Always use semantic tokens mapped in `globals.css` / `@theme inline`:
+     - **Canvas & Surfaces:** `bg-background`, `text-foreground`, `bg-card`, `text-card-foreground`, `bg-card-subtle`, `bg-muted`, `text-muted-foreground`.
+     - **Brand & Navigation:** `bg-primary`, `text-primary`, `bg-primary/10`, `border-primary`, `bg-sidebar`, `text-sidebar-foreground`, `text-sidebar-muted`, `border-sidebar-border`, `bg-sidebar-accent`.
+     - **Status & Telemetry:** `text-success`, `bg-success`, `bg-success/10` (healthy optical power, paid invoices, online sessions); `text-destructive`, `bg-destructive`, `bg-destructive/10` (LOS cuts, faults, errors); `text-warning`, `bg-warning`, `bg-warning/10` (marginal attenuation, audit notes); `text-info`, `bg-info`, `bg-info/10` (throughput, speed metrics).
+     - **Borders & Dividers:** `border-border`, `border-border-subtle`, `border-input`, `ring-ring`.
+   - **Rationale:** Enforces anti-glare ergonomics in Light mode, eliminates color drift, and ensures multi-tenant white-label color palettes swap instantaneously with zero code changes.
 
 ---
 

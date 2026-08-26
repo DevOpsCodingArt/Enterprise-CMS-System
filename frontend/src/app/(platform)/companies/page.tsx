@@ -195,9 +195,9 @@ export default function PlatformCompaniesPage() {
               <button
                 key={tier}
                 onClick={() => setSelectedPlanFilter(tier)}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
                   selectedPlanFilter === tier
-                    ? 'bg-primary text-white font-semibold'
+                    ? 'bg-primary text-primary-foreground font-semibold'
                     : 'bg-muted/40 text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -222,7 +222,7 @@ export default function PlatformCompaniesPage() {
               className={`p-1 rounded-md transition-colors ${
                 viewMode === 'grid' ? 'bg-card text-foreground shadow-xs' : 'text-muted-foreground'
               }`}
-              title="Grid Cards"
+              title="Grid View"
             >
               <LayoutGrid className="w-3.5 h-3.5" />
             </button>
@@ -230,12 +230,12 @@ export default function PlatformCompaniesPage() {
         </div>
       </div>
 
-      {/* Grid View or Table View */}
+      {/* Table Mode View */}
       {viewMode === 'table' ? (
         <div className="bg-card rounded-xl border border-border shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
-              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
+              <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-xs font-semibold tracking-wider">
                 <tr>
                   <th className="p-3.5">Company Legal Name</th>
                   <th className="p-3.5">Subdomain & Schema</th>
@@ -254,16 +254,16 @@ export default function PlatformCompaniesPage() {
                       <div className="font-heading font-semibold text-foreground text-sm flex items-center gap-2">
                         <span
                           className="w-3 h-3 rounded-full flex-shrink-0 shadow-2xs"
-                          style={{ backgroundColor: c.primaryColor || '#2563EB' }}
+                          style={{ backgroundColor: c.primaryColor || 'var(--primary)' }}
                         />
                         {c.name}
                       </div>
-                      <div className="text-[11px] text-muted-foreground mt-0.5">{c.ownerEmail}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{c.ownerEmail}</div>
                     </td>
 
                     <td className="p-3.5">
                       <div className="font-mono text-primary font-medium">{c.subdomain}</div>
-                      <div className="font-mono text-[10px] text-muted-foreground mt-0.5">
+                      <div className="font-mono text-xs text-muted-foreground mt-0.5">
                         Schema: <span className="text-foreground">{c.databaseSchema}</span>
                       </div>
                     </td>
@@ -325,7 +325,7 @@ export default function PlatformCompaniesPage() {
                   <div className="flex items-center gap-2">
                     <span
                       className="w-3.5 h-3.5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: c.primaryColor || '#2563EB' }}
+                      style={{ backgroundColor: c.primaryColor || 'var(--primary)' }}
                     />
                     <span className="font-heading font-semibold text-foreground text-sm truncate">
                       {c.name}
@@ -508,7 +508,7 @@ export default function PlatformCompaniesPage() {
                   <Lock className="w-3.5 h-3.5 text-primary" />
                   Automated Database & RLS Allocation Preview
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-muted-foreground text-[11px]">
+                <div className="grid grid-cols-2 gap-2 text-muted-foreground text-xs">
                   <div>
                     Subdomain URL: <span className="font-mono text-primary font-medium">{companySlug ? `${companySlug}.primeone.pk` : '...'}</span>
                   </div>
@@ -516,7 +516,7 @@ export default function PlatformCompaniesPage() {
                     Database Schema: <span className="font-mono text-foreground font-medium">tenant_{companySlug.replace(/-/g, '_') || '...'}</span>
                   </div>
                   <div>
-                    Row-Level Security: <span className="text-emerald-600 dark:text-emerald-400 font-medium">100% Isolated</span>
+                    Row-Level Security: <span className="text-success font-medium">100% Isolated</span>
                   </div>
                   <div>
                     Allowed Regional Hubs: <span className="font-medium text-foreground">{plan === 'Enterprise' ? 20 : plan === 'Growth' ? 8 : 4} Hubs</span>
@@ -561,12 +561,12 @@ export default function PlatformCompaniesPage() {
           <div className="space-y-4 text-xs">
             <div className="grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/20 border border-border">
               <div>
-                <span className="text-muted-foreground block text-[11px]">Owner Contact:</span>
+                <span className="text-muted-foreground block text-xs">Owner Contact:</span>
                 <span className="font-medium text-foreground">{selectedTenantDrawer.ownerName}</span>
-                <span className="text-muted-foreground block text-[11px]">{selectedTenantDrawer.ownerEmail}</span>
+                <span className="text-muted-foreground block text-xs">{selectedTenantDrawer.ownerEmail}</span>
               </div>
               <div>
-                <span className="text-muted-foreground block text-[11px]">SaaS Plan Tier:</span>
+                <span className="text-muted-foreground block text-xs">SaaS Plan Tier:</span>
                 <Badge variant={selectedTenantDrawer.plan === 'Enterprise' ? 'primary' : 'outline'} size="xs">
                   {selectedTenantDrawer.plan} (PKR {selectedTenantDrawer.mrr.toLocaleString()}/mo)
                 </Badge>
@@ -576,15 +576,15 @@ export default function PlatformCompaniesPage() {
             <div className="space-y-2">
               <div className="font-semibold text-foreground">Quota & Allocation Gauges</div>
               <div className="p-3 rounded-lg bg-muted/30 border border-border space-y-2">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-muted-foreground">Regional Distribution Hubs</span>
                   <span className="font-medium text-foreground">{selectedTenantDrawer.branchesCount} / 20 Active</span>
                 </div>
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-muted-foreground">Subscribers Provisioned</span>
                   <span className="font-mono font-medium text-foreground">{selectedTenantDrawer.subscribersCount.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-muted-foreground">Cloudflare R2 Storage</span>
                   <span className="font-mono text-foreground">12.4 GB Used</span>
                 </div>
@@ -595,7 +595,7 @@ export default function PlatformCompaniesPage() {
               <div className="font-semibold flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" /> 1-Click Super-Admin Impersonation
               </div>
-              <p className="text-[11px] opacity-90">
+              <p className="text-xs opacity-90">
                 You can simulate logging in as the ISP CEO to verify tenant configurations without requesting their password.
               </p>
             </div>

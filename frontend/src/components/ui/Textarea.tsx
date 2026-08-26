@@ -24,14 +24,14 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={textareaId}
           ref={ref}
           className={cn(
-            'w-full bg-card border-2 border-border p-3 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary disabled:opacity-50 min-h-[90px]',
+            'w-full bg-card border-2 border-border p-3 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary disabled:opacity-50 min-h-24',
             error && 'border-destructive focus:border-destructive',
             className
           )}
           {...props}
         />
         {error && (
-          <p className="mt-1 text-[10px] font-mono text-destructive font-bold">{error}</p>
+          <p className="mt-1 text-xs font-mono text-destructive font-bold">{error}</p>
         )}
       </div>
     );

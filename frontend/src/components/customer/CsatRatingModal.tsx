@@ -58,7 +58,7 @@ export function CsatRatingModal() {
                   <Star
                     className={`w-8 h-8 ${
                       active
-                        ? 'text-amber-400 fill-amber-400 drop-shadow-xs'
+                        ? 'text-warning fill-warning drop-shadow-xs'
                         : 'text-muted-foreground/40'
                     }`}
                   />

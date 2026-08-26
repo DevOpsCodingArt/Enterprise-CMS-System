@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthStore } from '@/stores/auth-store';
 import { useThemeStore } from '@/stores/theme-store';
@@ -55,9 +54,9 @@ export const AppHeader: React.FC = () => {
   const currentBranch = branches.find((b) => b.id === activeBranchId) || branches[0];
 
   return (
-    <header className="sticky top-0 z-40 bg-card border-b border-border h-16 flex items-center justify-between px-4 sm:px-6 shadow-xs">
-      {/* Left: Hamburger + Logo & Company */}
-      <div className="flex items-center gap-3.5">
+    <header className="sticky top-0 z-40 bg-card border-b border-border h-16 flex items-center justify-between px-4 sm:px-6 shadow-xs flex-shrink-0">
+      {/* Left: Mobile Hamburger & Regional Branch Selector */}
+      <div className="flex items-center gap-3">
         <button
           onClick={toggleSidebar}
           className="lg:hidden p-2 rounded-lg border border-border bg-card hover:bg-muted text-foreground transition-colors"
@@ -66,28 +65,8 @@ export const AppHeader: React.FC = () => {
           <Menu className="w-4 h-4" />
         </button>
 
-        <Link href="/desk" className="flex items-center gap-2.5 group">
-          <div className="relative w-8 h-8 flex-shrink-0">
-            <Image
-              src="/prime-logo.png"
-              alt="Prime Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div>
-            <div className="font-heading font-bold text-lg tracking-tight leading-none text-foreground">
-              PRIME<span className="text-primary">ONE</span>
-            </div>
-            <div className="text-[10px] text-muted-foreground uppercase font-medium tracking-wider mt-0.5">
-              {user?.company?.name || 'Prime Networks'}
-            </div>
-          </div>
-        </Link>
-
         {/* Branch Selector Dropdown */}
-        <div className="relative hidden md:block ml-2">
+        <div className="relative">
           <button
             onClick={() => setBranchOpen(!branchOpen)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/40 border border-border hover:border-primary/50 text-xs font-medium text-foreground transition-colors"
@@ -99,7 +78,7 @@ export const AppHeader: React.FC = () => {
 
           {branchOpen && (
             <div className="absolute left-0 mt-1.5 w-64 rounded-xl bg-card border border-border shadow-lg z-50 py-1.5 text-xs">
-              <div className="px-3 py-1.5 text-[11px] font-semibold text-muted-foreground border-b border-border/70 uppercase tracking-wider">
+              <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground border-b border-border/70 uppercase tracking-wider">
                 Switch Regional Hub (20)
               </div>
               {branches.map((b) => (
@@ -115,7 +94,7 @@ export const AppHeader: React.FC = () => {
                 >
                   <span>{b.name}</span>
                   <Badge variant="outline" size="xs">
-                    <span className="font-mono text-[10px]">{b.code}</span>
+                    <span className="font-mono text-xs">{b.code}</span>
                   </Badge>
                 </button>
               ))}
@@ -130,10 +109,10 @@ export const AppHeader: React.FC = () => {
         <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-muted/40 border border-border/80 text-xs">
           <span
             className={`w-2 h-2 rounded-full ${
-              wsConnected ? 'bg-emerald-500 animate-pulse' : 'bg-destructive animate-ping'
+              wsConnected ? 'bg-success animate-pulse' : 'bg-destructive animate-ping'
             }`}
           />
-          <span className="text-muted-foreground text-[11px]">
+          <span className="text-muted-foreground text-xs">
             {wsConnected ? (
               <span>WS: <span className="font-mono font-medium text-foreground">Synced (0.3ms)</span></span>
             ) : (
@@ -173,10 +152,10 @@ export const AppHeader: React.FC = () => {
           >
             <Avatar name={user?.fullName || 'Moiz'} size="sm" status="online" />
             <div className="hidden md:block text-left">
-              <div className="leading-tight font-medium text-foreground truncate max-w-[120px]">
+              <div className="leading-tight font-medium text-foreground truncate max-w-32">
                 {user?.displayName || user?.fullName}
               </div>
-              <div className="text-[10px] text-muted-foreground">{user?.designation}</div>
+              <div className="text-xs text-muted-foreground">{user?.designation}</div>
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-muted-foreground ml-0.5" />
           </button>
@@ -185,7 +164,7 @@ export const AppHeader: React.FC = () => {
             <div className="absolute right-0 mt-1.5 w-60 rounded-xl bg-card border border-border shadow-lg z-50 py-1.5 text-xs">
               <div className="px-3.5 py-2.5 border-b border-border/70 bg-muted/20">
                 <div className="font-semibold text-foreground">{user?.fullName}</div>
-                <div className="text-[11px] text-muted-foreground truncate">{user?.email}</div>
+                <div className="text-xs text-muted-foreground truncate">{user?.email}</div>
                 <div className="mt-1.5">
                   <Badge variant="primary" size="xs">
                     {user?.department} · {user?.userType}
