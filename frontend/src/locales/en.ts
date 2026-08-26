@@ -1,0 +1,100 @@
+/**
+ * English Language Dictionary (Default / Source of Truth)
+ * 
+ * To add any new language in the future (e.g., Urdu, Arabic, Spanish),
+ * create a new file (e.g., `ur.ts`) matching this exact schema.
+ */
+
+export const en = {
+  common: {
+    appName: "Prime One",
+    tagline: "Telecom Operating System",
+    search: "Search...",
+    filter: "Filter",
+    save: "Save",
+    cancel: "Cancel",
+    confirm: "Confirm",
+    send: "Send",
+    close: "Close",
+    transfer: "Transfer",
+    online: "Online",
+    offline: "Offline",
+    allBranches: "All Branches",
+    status: "Status",
+    actions: "Actions",
+    loading: "Loading...",
+  },
+  statusRibbon: {
+    wsLive: "🟢 WEBSOCKET LIVE",
+    wsDegraded: "🟡 DEGRADED (REST FALLBACK)",
+    tenant: "Tenant",
+    activePppoe: "Active PPPoE",
+    branchesOnline: "ALL ONLINE",
+    opticalLossNone: "0 CRITICAL",
+  },
+  roles: {
+    platformOwner: "👑 Platform Super-Admin",
+    companyOwner: "🏢 Company Owner (CEO)",
+    branchManager: "📍 Branch Manager",
+    nocEngineer: "📡 NOC Engineer Lead",
+    helpdeskAgent: "💬 Helpdesk CSR Agent",
+    fieldEngineer: "👷 Field Fiber Splicer",
+  },
+  desk: {
+    activeChats: "Active Conversations",
+    searchPlaceholder: "Search subscriber, phone, PPPoE...",
+    typeMessagePlaceholder: "Type a message or press '/' for quick replies...",
+    whatsappChannel: "WhatsApp Channel",
+    dispatchedSplicer: "Dispatched Splicer",
+    ticketCreatedToast: "Ticket created and assigned to Van #04.",
+  },
+  customer360: {
+    title: "Customer 360° Profile",
+    packagePlan: "Package Plan",
+    smartOltOpticalPower: "SmartOLT Optical Power",
+    mikrotikPppoeSession: "MikroTik PPPoE Session",
+    assignedBranchHub: "Assigned Branch Hub",
+    dispatchSplicerBtn: "🚀 Dispatch Splicer",
+    rebootOnuBtn: "🔄 Reboot ONU",
+  },
+  tabs: {
+    primeDesk: "💬 Prime Desk (Live Helpdesk)",
+    components: "🧩 Atomic UI Library",
+    branches: "🏢 20-Branch Matrix",
+    noc: "📡 NOC Telemetry",
+    tickets: "🎫 Trouble Tickets",
+  },
+  branches: {
+    title: "20-Branch Operational Matrix",
+    description: "Branch offices, field staff headcount, and localized subnet allocations from mockDb.",
+    addBranchBtn: "Add Branch",
+    thCodeName: "Code / Branch Name",
+    thCity: "City",
+    thManager: "Manager",
+    thStaffEngineers: "Staff / Engineers",
+    thSlaCompliance: "SLA Compliance",
+    thSubnets: "Subnets",
+    thStatus: "Status",
+  },
+  tickets: {
+    title: "Trouble Tickets & Dispatch Queue",
+    description: "Consolidated complaints from mockDb with ETTR countdowns and assigned engineers.",
+    lodgeTicketBtn: "Lodge Ticket",
+    thTicketNo: "Ticket #",
+    thSubscriber: "Subscriber",
+    thCategory: "Category",
+    thPriority: "Priority",
+    thAssignedEngineers: "Assigned Engineers",
+    thEttrTimer: "ETTR Timer",
+    thStatus: "Status",
+  },
+  modals: {
+    transferTitle: "Transfer Active Chat Session",
+    transferDesc: "Please provide a mandatory transfer reason before re-routing Subscriber",
+    transferReasonLabel: "Mandatory Transfer Reason",
+    transferReasonPlaceholder: "e.g. Requires physical fiber splicing on Street 4...",
+    confirmTransfer: "Confirm Transfer",
+  },
+} as const;
+
+export type TranslationDictionary = typeof en;
