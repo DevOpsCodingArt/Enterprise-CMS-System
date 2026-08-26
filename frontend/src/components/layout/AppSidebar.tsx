@@ -113,12 +113,12 @@ export const AppSidebar: React.FC = () => {
   return (
     <aside
       className={cn(
-        'w-64 bg-card border-r border-border flex flex-col justify-between flex-shrink-0 z-30',
+        'w-64 h-full max-h-full bg-card border-r border-border flex flex-col justify-between flex-shrink-0 z-30 overflow-hidden',
         sidebarCollapsed ? 'hidden lg:flex' : 'flex'
       )}
     >
       {/* Top Menu Links */}
-      <div className="p-3.5 space-y-5 overflow-y-auto">
+      <div className="flex-1 min-h-0 p-3.5 space-y-5 overflow-y-auto overflow-x-hidden custom-scrollbar">
         {navigationGroups.map((grp, gIdx) => {
           // Filter items by permission
           const visibleItems = grp.items.filter(
@@ -176,7 +176,7 @@ export const AppSidebar: React.FC = () => {
       </div>
 
       {/* Bottom Footer Info */}
-      <div className="p-3.5 border-t border-border bg-muted/20 text-xs">
+      <div className="flex-shrink-0 p-3.5 border-t border-border bg-muted/20 text-xs">
         <div className="flex items-center justify-between text-muted-foreground mb-1 text-[11px]">
           <span>Core Gateway</span>
           <span className="text-emerald-600 dark:text-emerald-400 font-mono font-medium">Online (0.3ms)</span>

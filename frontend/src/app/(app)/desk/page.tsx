@@ -104,7 +104,7 @@ export default function PrimeDeskPage() {
   };
 
   return (
-    <div className="flex-1 flex h-[calc(100vh-64px)] overflow-hidden">
+    <div className="flex-1 min-h-0 flex h-full w-full overflow-hidden">
       {/* Column 1: Active Inboxes & Queues */}
       <InboxList conversations={conversations} />
 

@@ -4,14 +4,14 @@ import { AppSidebar } from '@/components/layout/AppSidebar';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="h-screen max-h-screen flex flex-col overflow-hidden bg-background text-foreground">
       {/* Universal App Header */}
       <AppHeader />
 
       {/* Main Workspace Layout (Sidebar + Center Content) */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 min-h-0 flex overflow-hidden">
         <AppSidebar />
-        <main className="flex-1 flex flex-col overflow-y-auto min-w-0 bg-background">
+        <main className="flex-1 min-h-0 flex flex-col overflow-y-auto overflow-x-hidden bg-background custom-scrollbar">
           {children}
         </main>
       </div>

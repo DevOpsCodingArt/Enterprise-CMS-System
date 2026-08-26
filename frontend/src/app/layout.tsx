@@ -37,10 +37,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full overflow-hidden antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-body bg-background text-foreground selection:bg-primary/20 selection:text-primary">
+      <body className="h-full overflow-hidden flex flex-col font-body bg-background text-foreground selection:bg-primary/20 selection:text-primary">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

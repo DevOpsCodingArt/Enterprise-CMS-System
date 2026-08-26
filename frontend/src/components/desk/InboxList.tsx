@@ -63,22 +63,22 @@ export const InboxList: React.FC<InboxListProps> = ({ conversations, isLoading }
   });
 
   return (
-    <div className="w-full lg:w-80 xl:w-96 border-r-2 border-border bg-card flex flex-col h-full flex-shrink-0">
+    <div className="w-full lg:w-80 xl:w-96 border-r border-border bg-card flex flex-col h-full max-h-full flex-shrink-0 overflow-hidden">
       {/* Top Header: Title & Stats */}
-      <div className="p-3.5 border-b-2 border-border flex items-center justify-between bg-card">
+      <div className="flex-shrink-0 p-3.5 border-b border-border flex items-center justify-between bg-card">
         <div className="flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-primary" />
-          <span className="font-heading font-black text-sm tracking-tight uppercase">
-            ACTIVE INBOX
+          <span className="font-heading font-bold text-sm tracking-tight text-foreground">
+            Active Inbox
           </span>
         </div>
         <Badge variant="primary" size="xs">
-          {conversations.filter((c) => c.status === 'waiting').length} WAITING
+          {conversations.filter((c) => c.status === 'waiting').length} Waiting
         </Badge>
       </div>
 
       {/* Search Input */}
-      <div className="p-3 border-b-2 border-border bg-card-subtle">
+      <div className="flex-shrink-0 p-3 border-b border-border/70 bg-muted/20">
         <div className="relative">
           <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-muted-foreground" />
           <input
@@ -86,13 +86,13 @@ export const InboxList: React.FC<InboxListProps> = ({ conversations, isLoading }
             placeholder="Search subscriber, PPPoE, phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-card border-2 border-border pl-8 pr-3 py-1.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+            className="w-full bg-card rounded-lg border border-border pl-8 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="border-b-2 border-border">
+      <div className="flex-shrink-0 border-b border-border/70 p-1">
         <Tabs
           tabs={tabs}
           activeTab={activeFilter}
@@ -102,21 +102,21 @@ export const InboxList: React.FC<InboxListProps> = ({ conversations, isLoading }
       </div>
 
       {/* Conversation Cards List */}
-      <div className="flex-1 overflow-y-auto p-2.5 space-y-2">
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-2.5 space-y-2 custom-scrollbar">
         {isLoading ? (
           <div className="space-y-2">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="p-4 border-2 border-border animate-pulse bg-card-subtle space-y-2">
-                <div className="h-4 bg-muted w-2/3" />
-                <div className="h-3 bg-muted w-full" />
-                <div className="h-3 bg-muted w-1/3" />
+              <div key={n} className="p-4 rounded-xl border border-border animate-pulse bg-muted/20 space-y-2">
+                <div className="h-4 bg-muted w-2/3 rounded" />
+                <div className="h-3 bg-muted w-full rounded" />
+                <div className="h-3 bg-muted w-1/3 rounded" />
               </div>
             ))}
           </div>
         ) : filteredConversations.length === 0 ? (
-          <div className="py-12 text-center text-xs font-mono text-muted-foreground">
+          <div className="py-12 text-center text-xs text-muted-foreground">
             <Filter className="w-6 h-6 mx-auto mb-2 opacity-40" />
-            <div>NO CONVERSATIONS FOUND</div>
+            <div>No conversations found</div>
           </div>
         ) : (
           filteredConversations.map((conv) => (

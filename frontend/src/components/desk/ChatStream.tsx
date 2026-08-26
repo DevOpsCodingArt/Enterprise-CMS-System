@@ -74,20 +74,20 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
   ];
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-card-subtle min-w-0">
+    <div className="flex-1 flex flex-col h-full max-h-full bg-muted/20 min-w-0 overflow-hidden">
       {/* 1. Conversation Topbar Header */}
-      <div className="p-3.5 border-b-2 border-border bg-card flex items-center justify-between shadow-sm">
+      <div className="flex-shrink-0 p-3.5 border-b border-border bg-card flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-3 min-w-0">
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-heading font-black text-sm text-foreground truncate">
+              <span className="font-heading font-semibold text-sm text-foreground truncate">
                 {conversation.customer?.fullName || 'Ali Hassan'}
               </span>
               <Badge variant="primary" size="xs">
-                {conversation.customer?.username || 'ali_f10'}
+                <span className="font-mono">{conversation.customer?.username || 'ali_f10'}</span>
               </Badge>
             </div>
-            <div className="font-mono text-[10px] text-muted-foreground mt-0.5">
+            <div className="text-[11px] text-muted-foreground mt-0.5">
               50M Ultra Fiber · Sector F-10/2 · PON-04
             </div>
           </div>
@@ -101,7 +101,7 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
             onClick={() => setTransferModalOpen(true)}
             leftIcon={<ArrowRightLeft className="w-3 h-3" />}
           >
-            <span className="hidden sm:inline">TRANSFER</span>
+            <span className="hidden sm:inline">Transfer</span>
           </Button>
 
           <Button
@@ -110,7 +110,7 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
             onClick={() => alert(`Escalated to Trouble Ticket for ${conversation.customer?.fullName}`)}
             leftIcon={<Ticket className="w-3 h-3 text-destructive" />}
           >
-            <span className="hidden sm:inline">CREATE TICKET</span>
+            <span className="hidden sm:inline">Create Ticket</span>
           </Button>
 
           <Button
@@ -119,12 +119,12 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
             onClick={() => setCloseModalOpen(true)}
             leftIcon={<CheckCircle2 className="w-3 h-3" />}
           >
-            <span>CLOSE</span>
+            <span>Close</span>
           </Button>
 
           <button
             onClick={toggleCustomer360}
-            className="p-1.5 border border-border bg-card hover:bg-card-subtle text-foreground ml-1"
+            className="p-1.5 rounded-lg border border-border bg-card hover:bg-muted text-foreground ml-1 transition-colors"
             title="Toggle Customer 360 Telemetry"
           >
             {isCustomer360Open ? <SidebarClose className="w-4 h-4" /> : <SidebarOpen className="w-4 h-4" />}
@@ -133,7 +133,7 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
       </div>
 
       {/* 2. Message Thread Stream */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4 space-y-2.5 custom-scrollbar">
         {messages.map((m) => (
           <MessageBubble
             key={m.id || m.tempId}
@@ -147,48 +147,50 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
       </div>
 
       {/* 3. Canned Replies Bar + Private Note Mode Indicator */}
-      <div className="border-t-2 border-border bg-card p-3 space-y-2">
-        {/* Canned replies chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10px] font-mono">
-          <span className="text-muted-foreground flex items-center gap-1 flex-shrink-0 font-bold">
-            <Zap className="w-3 h-3 text-warning" /> CANNED:
+      <div className="flex-shrink-0 border-t border-border bg-card p-3 space-y-2.5">
+        {/* Quick Canned Slash Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+          <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-mono font-medium">
+            <Zap className="w-3 h-3 text-warning" /> /
           </span>
-          {cannedTemplates.map((c, i) => (
+          {cannedTemplates.map((t, idx) => (
             <button
-              key={i}
-              onClick={() => handleCannedInsert(c.text)}
-              className="px-2 py-1 bg-card-subtle border border-border hover:border-primary text-muted-foreground hover:text-foreground whitespace-nowrap"
+              key={idx}
+              onClick={() => handleCannedInsert(t.text)}
+              className="px-2 py-0.5 rounded-md bg-muted/50 hover:bg-primary/10 hover:text-primary border border-border/80 text-[11px] font-mono text-muted-foreground transition-colors flex-shrink-0"
             >
-              {c.label}
+              {t.label}
             </button>
           ))}
         </div>
 
-        {/* Private note mode alert banner */}
+        {/* Private Note Mode Banner */}
         {isInternalNoteMode && (
-          <div className="p-2 bg-warning-light border-2 border-dashed border-warning flex items-center justify-between text-[11px] font-mono text-warning font-bold">
+          <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-warning/15 border border-warning/30 text-xs text-warning-foreground dark:text-warning font-medium">
             <div className="flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5" />
-              <span>LOGGING PRIVATE STAFF AUDIT NOTE (HIDDEN FROM CUSTOMER)</span>
+              <span>Internal Staff Note Mode (Visible only to NOC & Helpdesk, NOT Customer)</span>
             </div>
             <button
               onClick={toggleInternalNoteMode}
-              className="underline text-[10px] hover:opacity-80"
+              className="text-[11px] underline hover:no-underline font-semibold"
             >
-              Exit Private Mode
+              Switch to Public Reply
             </button>
           </div>
         )}
 
-        {/* 4. Action Composer */}
+        {/* Text Input & Actions Bar */}
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={toggleInternalNoteMode}
-            className={`p-2.5 border-2 text-xs font-mono font-bold ${isInternalNoteMode
-                ? 'bg-warning text-warning-foreground border-border shadow-sm'
-                : 'bg-card border-border hover:border-warning text-muted-foreground'
-              }`}
-            title="Toggle Private Staff Note"
+            className={`p-2 rounded-lg border transition-colors ${
+              isInternalNoteMode
+                ? 'bg-warning/20 border-warning text-warning-foreground dark:text-warning'
+                : 'bg-muted/40 border-border text-muted-foreground hover:text-foreground'
+            }`}
+            title={isInternalNoteMode ? 'Switch to Customer Chat' : 'Write Private Staff Note'}
           >
             <Lock className="w-4 h-4" />
           </button>
@@ -197,23 +199,31 @@ export const ChatStream: React.FC<ChatStreamProps> = ({
             type="text"
             placeholder={
               isInternalNoteMode
-                ? 'Write confidential staff audit note...'
-                : "Type message or press '/' for canned replies..."
+                ? 'Type confidential internal note (saved to subscriber audit trail)...'
+                : 'Type message or use / for quick replies...'
             }
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            className={`flex-1 bg-card border-2 px-3.5 py-2.5 text-xs font-mono text-foreground focus:outline-none ${isInternalNoteMode ? 'border-warning focus:border-warning' : 'border-border focus:border-primary'
-              }`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            className={`flex-1 rounded-lg border px-3.5 py-2 text-xs text-foreground focus:outline-none transition-all ${
+              isInternalNoteMode
+                ? 'bg-warning/5 border-warning/40 focus:ring-1 focus:ring-warning'
+                : 'bg-card border-border focus:ring-1 focus:ring-primary'
+            }`}
           />
 
           <Button
             variant={isInternalNoteMode ? 'warning' : 'primary'}
-            size="md"
+            size="sm"
             onClick={handleSend}
-            leftIcon={<Send className="w-3.5 h-3.5" />}
+            rightIcon={<Send className="w-3.5 h-3.5" />}
           >
-            <span>{isInternalNoteMode ? 'LOG NOTE' : 'SEND'}</span>
+            <span>{isInternalNoteMode ? 'Add Note' : 'Send'}</span>
           </Button>
         </div>
       </div>

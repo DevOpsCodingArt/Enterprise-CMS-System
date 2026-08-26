@@ -2,15 +2,19 @@
 
 import React, { useState } from 'react';
 import {
-  ShieldCheck,
+  Shield,
   Search,
   Filter,
-  Download,
-  CheckCircle2,
+  FileDown,
   Lock,
+  AlertTriangle,
+  CheckCircle2,
   Calendar,
   Building2,
-  FileCode,
+  User,
+  Clock,
+  ShieldCheck,
+  ShieldAlert,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -23,14 +27,23 @@ export default function PlatformAuditPage() {
   const [search, setSearch] = useState('');
   const [selectedActionFilter, setSelectedActionFilter] = useState('ALL');
 
-  const handleExport = (format: 'CSV' | 'JSON') => {
-    showToast('Audit Export', `Exporting platform audit records as ${format}`, 'success');
-  };
+  const actionTypes = [
+    'ALL',
+    'TENANT_PROVISIONED',
+    'PLAN_UPGRADED',
+    'IMPERSONATION_STARTED',
+    'RLS_SCHEMA_MIGRATED',
+    'BRANCH_CREATED',
+    'SUPER_ADMIN_LOGIN',
+  ];
 
   const filteredLogs = logs.filter((log) => {
     const matchesSearch =
-      log.tenantName.toLowerCase().includes(search.toLowerCase()) ||
       log.actor.toLowerCase().includes(search.toLowerCase()) ||
+      log.actorRole.toLowerCase().includes(search.toLowerCase()) ||
+      log.tenantName.toLowerCase().includes(search.toLowerCase()) ||
+      log.tenantSlug.toLowerCase().includes(search.toLowerCase()) ||
+      log.action.toLowerCase().includes(search.toLowerCase()) ||
       log.details.toLowerCase().includes(search.toLowerCase()) ||
       log.ipAddress.includes(search);
 
@@ -40,127 +53,147 @@ export default function PlatformAuditPage() {
     return matchesSearch && matchesAction;
   });
 
+  const handleExport = (format: 'json' | 'csv') => {
+    showToast(
+      'Audit Report Exported',
+      `Full immutable platform compliance audit report exported as ${format.toUpperCase()}`,
+      'success'
+    );
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-primary" />
-            <h1 className="font-heading font-black text-2xl tracking-tight uppercase">
-              PLATFORM-WIDE IMMUTABLE SECURITY & AUDIT LOGS
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <Shield className="w-5 h-5" />
+            </div>
+            <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
+              Platform-Wide Security & Immutable Audit Trail
             </h1>
           </div>
-          <p className="text-xs font-mono text-muted-foreground mt-1">
-            Cryptographically signed multi-tenant security events, schema provisioning, and impersonation logs.
+          <p className="text-xs text-muted-foreground mt-1">
+            Cryptographically sealed cross-tenant audit log capturing administrative actions, schema allocations, and super-admin sessions.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleExport('CSV')}
-            leftIcon={<Download className="w-3.5 h-3.5" />}
+            onClick={() => handleExport('csv')}
+            leftIcon={<FileDown className="w-3.5 h-3.5" />}
           >
-            EXPORT CSV
+            Export CSV
           </Button>
           <Button
-            variant="outline"
+            variant="primary"
             size="sm"
-            onClick={() => handleExport('JSON')}
-            leftIcon={<FileCode className="w-3.5 h-3.5" />}
+            onClick={() => handleExport('json')}
+            leftIcon={<FileDown className="w-3.5 h-3.5" />}
           >
-            EXPORT JSON
+            Export JSON
           </Button>
         </div>
       </div>
 
-      {/* Filter Bar */}
-      <div className="bg-card border-2 border-border p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm font-mono text-xs">
-        <div className="w-full sm:w-80 relative">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+      {/* Filter and Search Bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-card border border-border text-xs">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search audit events, actors, or IP..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-card-subtle border border-border text-foreground font-mono text-xs focus:outline-none focus:border-primary"
+            placeholder="Search by actor, tenant, IP, or details..."
+            className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-muted/40 border border-border focus:outline-none focus:ring-1 focus:ring-primary text-xs"
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-end overflow-x-auto pb-1 sm:pb-0">
-          <span className="text-muted-foreground text-[10px] uppercase font-bold">EVENT:</span>
-          {[
-            'ALL',
-            'TENANT_PROVISIONED',
-            'PLAN_UPGRADED',
-            'IMPERSONATION_STARTED',
-            'RLS_SCHEMA_MIGRATED',
-          ].map((act) => (
+        {/* Action Type Filter */}
+        <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
+          {actionTypes.map((act) => (
             <button
               key={act}
               onClick={() => setSelectedActionFilter(act)}
-              className={`px-2.5 py-1 text-[10px] font-bold uppercase border whitespace-nowrap cursor-pointer ${
+              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
                 selectedActionFilter === act
-                  ? 'bg-primary text-primary-foreground border-border'
-                  : 'bg-card border-border hover:bg-card-subtle text-foreground'
+                  ? 'bg-primary text-white font-semibold'
+                  : 'bg-muted/40 text-muted-foreground hover:text-foreground'
               }`}
             >
-              {act.replace('_', ' ')}
+              {act === 'ALL' ? 'All Actions' : act.replace(/_/g, ' ')}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Logs Table */}
-      <div className="bg-card border-2 border-border shadow-md overflow-hidden font-mono text-xs">
+      {/* Immutable Audit Log Table */}
+      <div className="bg-card rounded-xl border border-border shadow-xs overflow-hidden">
+        <div className="p-4 border-b border-border/70 bg-card flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <h3 className="font-heading font-semibold text-sm text-foreground">
+              Sealed Platform Events Stream
+            </h3>
+            <Badge variant="primary" size="xs">
+              {filteredLogs.length} Events Logged
+            </Badge>
+          </div>
+          <span className="text-[11px] text-muted-foreground font-mono">
+            SHA-256 Immutable Signature ✓
+          </span>
+        </div>
+
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-card-subtle border-b-2 border-border text-muted-foreground uppercase text-[10px]">
+          <table className="w-full text-left font-sans text-xs">
+            <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase text-[11px] font-semibold tracking-wider">
               <tr>
-                <th className="p-3.5">TIMESTAMP</th>
-                <th className="p-3.5">TENANT ORG</th>
-                <th className="p-3.5">ACTION EVENT</th>
-                <th className="p-3.5">ACTOR & IP</th>
-                <th className="p-3.5">DETAILS</th>
-                <th className="p-3.5 text-right">SHA-256 SIGNATURE</th>
+                <th className="p-3.5">Timestamp</th>
+                <th className="p-3.5">Actor Identity</th>
+                <th className="p-3.5">Tenant Organization</th>
+                <th className="p-3.5">Action Executed</th>
+                <th className="p-3.5">Details & Target Resource</th>
+                <th className="p-3.5">IP Address</th>
+                <th className="p-3.5 text-right">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y-2 divide-border">
+            <tbody className="divide-y divide-border/70">
               {filteredLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-card-subtle/50 transition-colors">
-                  <td className="p-3.5 text-muted-foreground whitespace-nowrap">
+                <tr key={log.id} className="hover:bg-muted/20 transition-colors">
+                  <td className="p-3.5 font-mono text-muted-foreground text-[11px] whitespace-nowrap">
                     {log.timestamp}
                   </td>
 
-                  <td className="p-3.5 font-bold">
-                    <div className="text-foreground">{log.tenantName}</div>
-                    <div className="text-[10px] text-primary">{log.tenantSlug}</div>
+                  <td className="p-3.5">
+                    <div className="font-medium text-foreground">{log.actor}</div>
+                    <div className="text-[11px] font-mono text-primary">{log.actorRole}</div>
                   </td>
 
                   <td className="p-3.5">
-                    <Badge variant="primary" size="xs">
-                      {log.action}
+                    <div className="font-medium text-foreground">{log.tenantName}</div>
+                    <div className="text-[11px] font-mono text-muted-foreground">{log.tenantSlug}</div>
+                  </td>
+
+                  <td className="p-3.5">
+                    <Badge variant="outline" size="xs">
+                      <span className="font-mono text-[10px]">{log.action}</span>
                     </Badge>
                   </td>
 
-                  <td className="p-3.5">
-                    <div className="font-bold">{log.actor}</div>
-                    <div className="text-[10px] text-muted-foreground font-mono">
-                      IP: {log.ipAddress}
-                    </div>
+                  <td className="p-3.5 text-foreground leading-relaxed">
+                    {log.details}
                   </td>
 
-                  <td className="p-3.5 text-foreground max-w-xs">{log.details}</td>
+                  <td className="p-3.5 font-mono text-muted-foreground text-[11px]">
+                    {log.ipAddress}
+                  </td>
 
                   <td className="p-3.5 text-right">
-                    <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-card-subtle border border-border text-[9px] font-mono text-info font-bold"
-                      title={log.sha256Hash}
-                    >
-                      <Lock className="w-2.5 h-2.5" />
-                      <span>{log.sha256Hash.substring(0, 10)}...</span>
+                    <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> {log.status}
                     </span>
                   </td>
                 </tr>

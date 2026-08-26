@@ -49,165 +49,144 @@ export const Customer360Drawer: React.FC<Customer360DrawerProps> = ({
   };
 
   return (
-    <div className="w-full lg:w-80 xl:w-96 border-l-2 border-border bg-card flex flex-col h-full flex-shrink-0 font-mono text-xs overflow-y-auto">
+    <div className="w-full lg:w-80 xl:w-96 border-l border-border bg-card flex flex-col h-full max-h-full flex-shrink-0 text-xs overflow-hidden">
       {/* Drawer Header */}
-      <div className="p-3.5 border-b-2 border-border flex items-center justify-between bg-card">
+      <div className="flex-shrink-0 p-3.5 border-b border-border flex items-center justify-between bg-card">
         <div className="flex items-center gap-2">
           <Activity className="w-4 h-4 text-primary" />
-          <span className="font-heading font-black text-sm tracking-tight uppercase">
-            CUSTOMER 360°
+          <span className="font-heading font-bold text-sm tracking-tight text-foreground">
+            Customer 360°
           </span>
         </div>
-        <Badge
-          variant={opticalDbm >= -25 ? 'primary' : 'destructive'}
-          size="xs"
-        >
-          {opticalDbm >= -25 ? 'ONLINE 🟢' : 'LOS CUT 🔴'}
+        <Badge variant={opticalDbm < -25 ? 'destructive' : 'primary'} size="xs">
+          <span className="font-mono">{opticalDbm} dBm</span>
         </Badge>
       </div>
 
-      <div className="p-4 space-y-4">
+      {/* Drawer Content */}
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4 space-y-4 custom-scrollbar">
         {/* 1. Subscriber Identity Box */}
-        <div className="p-3.5 bg-card-subtle border-2 border-border space-y-2">
-          <div className="flex items-center justify-between pb-2 border-b border-border">
-            <span className="font-heading font-bold text-foreground">
-              {customer?.fullName || 'Ali Hassan'}
-            </span>
-            <Badge variant="outline" size="xs">
-              {customer?.customerCode || 'CUS-F10-9102'}
+        <div className="p-3 rounded-xl bg-muted/30 border border-border/70 space-y-2">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="font-heading font-semibold text-foreground text-sm">
+                {customer?.fullName || 'Ali Hassan'}
+              </div>
+              <div className="text-[11px] font-mono text-primary font-medium mt-0.5">
+                {customer?.customerCode || 'PK-84920'} · PPPoE: {customer?.username || 'ali_f10'}
+              </div>
+            </div>
+            <Badge variant="primary" size="xs">
+              Active
             </Badge>
           </div>
 
-          <div className="space-y-1.5 text-[11px]">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Phone className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>{customer?.phone || '+92 300 5551234'}</span>
+          <div className="space-y-1 pt-2 border-t border-border/60 text-[11px] text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Phone className="w-3 h-3 text-muted-foreground" />
+              <span>{customer?.phone || '+92 300 8594021'}</span>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="truncate">{customer?.address || 'House 142, Street 18, Sector F-10/2, ISB'}</span>
-            </div>
-            <div className="flex items-center gap-2 text-primary font-bold">
-              <Wifi className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>PPPoE: {customer?.username || 'ali_f10'}</span>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-3 h-3 text-muted-foreground" />
+              <span>{customer?.address || 'House 24, St 12, Sector F-10/2, Islamabad'}</span>
             </div>
           </div>
         </div>
 
-        {/* 2. Real-Time SmartOLT Optical Power Gauge */}
-        <div className="p-3.5 bg-card-subtle border-2 border-border space-y-2.5">
+        {/* 2. SmartOLT Live Optical Signal Gauge */}
+        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-[10px] text-muted-foreground uppercase">
-              SMARTOLT OPTICAL POWER (RX)
+            <span className="font-heading font-semibold text-xs text-foreground flex items-center gap-1.5">
+              <Activity className="w-3.5 h-3.5 text-primary" /> SmartOLT Optical Power
             </span>
-            <span
-              className={`px-1.5 py-0.5 font-bold text-[10px] border ${opticalHealth.bgClass} ${opticalHealth.colorClass} ${opticalHealth.borderClass}`}
+            <button
+              onClick={handleToggleSignal}
+              className="text-[10px] text-primary hover:underline font-medium"
             >
-              {opticalDbm} dBm ({opticalHealth.label})
-            </span>
+              Simulate {opticalDbm < -25 ? 'Restore' : 'Cut'}
+            </button>
           </div>
 
-          {/* Hard Visual Gauge Bar */}
-          <div className="w-full bg-card border-2 border-border h-3.5 overflow-hidden">
+          <div className="p-2.5 rounded-lg bg-muted/30 border border-border/70 text-center space-y-1">
+            <div className="text-[11px] text-muted-foreground">Optical RX Signal Level</div>
             <div
-              className={`h-full transition-all duration-300 ${opticalDbm >= -25 ? 'w-[78%] bg-primary' : 'w-[22%] bg-destructive'
-                }`}
-            />
-          </div>
-          <div className="flex justify-between text-[9px] text-muted-foreground">
-            <span>-40 dBm (DEAD)</span>
-            <span>-27 dBm (WARN)</span>
-            <span>-19 dBm (NOMINAL)</span>
-            <span>-10 dBm</span>
-          </div>
-
-          <div className="pt-2 border-t border-border flex items-center justify-between text-[10px]">
-            <span className="text-muted-foreground">OLT_PORT:</span>
-            <span className="font-bold">Huawei-MA5608T // PON-4</span>
+              className={`font-mono font-bold text-2xl ${
+                opticalDbm < -25
+                  ? 'text-destructive animate-pulse'
+                  : 'text-emerald-600 dark:text-emerald-400'
+              }`}
+            >
+              {opticalDbm} dBm
+            </div>
+            <div className="text-[10px] font-medium text-muted-foreground">
+              {opticalDbm < -25 ? 'CRITICAL: Fiber Cut Detected' : 'Nominal Signal (-15 to -24 dBm)'}
+            </div>
           </div>
 
-          <Button
-            variant="outline"
-            size="xs"
-            onClick={handleToggleSignal}
-            className="w-full mt-1"
-            leftIcon={<RefreshCw className="w-3 h-3 text-warning" />}
-          >
-            {opticalDbm < -25 ? 'REPAIR FIBER CUT (-19 dBm)' : 'SIMULATE FIBER CUT (-32 dBm)'}
-          </Button>
+          <div className="space-y-1 text-[11px] text-muted-foreground">
+            <div className="flex justify-between">
+              <span>OLT Chassis:</span>
+              <span className="font-mono font-medium text-foreground">Huawei MA5800-X7</span>
+            </div>
+            <div className="flex justify-between">
+              <span>PON Board & Port:</span>
+              <span className="font-mono font-medium text-foreground">Slot 0/2 · PON-04</span>
+            </div>
+            <div className="flex justify-between">
+              <span>ONU Serial:</span>
+              <span className="font-mono font-medium text-foreground">HWTC-98B2-F104</span>
+            </div>
+          </div>
         </div>
 
-        {/* 3. ZL Ultra Billing Ledger */}
-        <div className="p-3.5 bg-card-subtle border-2 border-border space-y-2">
-          <div className="flex items-center justify-between pb-1.5 border-b border-border">
-            <div className="flex items-center gap-1.5">
-              <CreditCard className="w-3.5 h-3.5 text-primary" />
-              <span className="font-bold text-[10px] uppercase">ZL ULTRA BILLING</span>
-            </div>
+        {/* 3. ZL Ultra Billing Ledger & Package */}
+        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="font-heading font-semibold text-xs text-foreground flex items-center gap-1.5">
+              <CreditCard className="w-3.5 h-3.5 text-info-foreground dark:text-info" /> ZL Ultra Billing Ledger
+            </span>
             <Badge variant="primary" size="xs">
-              PAID ✓
+              Paid
             </Badge>
           </div>
 
           <div className="space-y-1 text-[11px]">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Active Package:</span>
-              <span className="font-bold text-foreground">50M Ultra Unlimited</span>
+              <span className="text-muted-foreground">Subscribed Package:</span>
+              <span className="font-medium text-foreground">50 Mbps Ultra Fiber</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Monthly Fee:</span>
-              <span className="font-bold text-primary">{formatCurrencyPKR(3500)}</span>
+              <span className="font-mono font-semibold text-foreground">{formatCurrencyPKR(3850)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Billing Expiry:</span>
-              <span className="font-bold">15-Sep-2026</span>
+              <span className="text-muted-foreground">Billing Cycle Expiry:</span>
+              <span className="font-mono font-medium text-foreground">2026-09-01</span>
             </div>
           </div>
         </div>
 
-        {/* 4. Hardware Asset QR Verification */}
-        <div className="p-3.5 bg-card-subtle border-2 border-border space-y-1.5">
-          <div className="flex items-center gap-1.5 text-info font-bold text-[10px] uppercase mb-1">
-            <QrCode className="w-3.5 h-3.5" />
-            <span>DEPLOYED ASSET SERIALS</span>
-          </div>
-          <div className="flex justify-between text-[10px]">
-            <span className="text-muted-foreground">ONU Serial:</span>
-            <span className="font-bold">HWTC-98B2-F104</span>
-          </div>
-          <div className="flex justify-between text-[10px]">
-            <span className="text-muted-foreground">Router Model:</span>
-            <span className="font-bold">TP-Link Archer C6</span>
-          </div>
-        </div>
+        {/* 4. Quick Operational Escalation Triggers */}
+        <div className="space-y-2 pt-1">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-start text-xs"
+            leftIcon={<Ticket className="w-3.5 h-3.5 text-primary" />}
+            onClick={() => alert(`Creating linked NOC ticket for ${customer?.fullName}`)}
+          >
+            Escalate to NOC Dispatch
+          </Button>
 
-        {/* 5. Interaction & Ticket History */}
-        <div className="p-3.5 bg-card-subtle border-2 border-border space-y-2">
-          <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[10px] uppercase">
-            <History className="w-3.5 h-3.5" />
-            <span>RECENT TICKETS & CHATS</span>
-          </div>
-
-          <div className="space-y-1.5 text-[10px]">
-            <div className="p-2 bg-card border border-border flex justify-between items-center">
-              <div>
-                <div className="font-bold">TKT-8419 // Fiber Cut</div>
-                <div className="text-muted-foreground">Resolved in 22m</div>
-              </div>
-              <Badge variant="default" size="xs">
-                RESOLVED
-              </Badge>
-            </div>
-            <div className="p-2 bg-card border border-border flex justify-between items-center">
-              <div>
-                <div className="font-bold">TX-9102 // Recharge Slip</div>
-                <div className="text-muted-foreground">Verified by Accounts</div>
-              </div>
-              <Badge variant="primary" size="xs">
-                SYNCED
-              </Badge>
-            </div>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-start text-xs"
+            leftIcon={<RefreshCw className="w-3.5 h-3.5 text-warning" />}
+            onClick={() => alert(`TR-069 router reboot sent to ONU HWTC-98B2-F104`)}
+          >
+            Send TR-069 Soft Reboot
+          </Button>
         </div>
       </div>
     </div>

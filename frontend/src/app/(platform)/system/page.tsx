@@ -13,6 +13,10 @@ import {
   Cpu,
   Layers,
   Zap,
+  Globe,
+  Lock,
+  Clock,
+  ShieldAlert,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -24,6 +28,9 @@ export default function PlatformSystemPage() {
   const [metrics, setMetrics] = useState(mockDb.getSystemMetrics());
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenanceMessage, setMaintenanceMessage] = useState(
+    'Scheduled core database optimization in progress. Expected return at 06:00 PKT.'
+  );
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -39,24 +46,40 @@ export default function PlatformSystemPage() {
     showToast(
       next ? 'Maintenance Mode Enabled' : 'System Live',
       next
-        ? 'Global platform maintenance banner active'
+        ? 'Global platform maintenance banner active across all 14 tenant subdomains'
         : 'All 14 tenant portals operating normally',
       next ? 'warning' : 'success'
     );
   };
 
+  const regionalNodes = [
+    { city: 'Islamabad Core', ping: '0.2ms', status: 'Optimal', load: '14%' },
+    { city: 'Rawalpindi Saddar Hub', ping: '0.4ms', status: 'Optimal', load: '22%' },
+    { city: 'Lahore DHA Station', ping: '1.2ms', status: 'Optimal', load: '31%' },
+    { city: 'Karachi Central DC', ping: '4.8ms', status: 'Optimal', load: '48%' },
+  ];
+
+  const workerQueues = [
+    { name: 'smartolt-poller', description: 'Periodic optical power dBm poller', status: 'Healthy', jobsPerMin: '4,800/min' },
+    { name: 'email-dispatcher', description: 'Staff invitation & OTP token sender', status: 'Active', jobsPerMin: '120/min' },
+    { name: 'billing-reconciliation', description: 'ZL Ultra ledger invoice sync', status: 'Idle', jobsPerMin: '0/min' },
+    { name: 'audit-archiver', description: 'Immutable log compression & R2 upload', status: 'Running', jobsPerMin: '850/min' },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="flex items-center gap-2">
-            <Server className="w-5 h-5 text-primary" />
-            <h1 className="font-heading font-black text-2xl tracking-tight uppercase">
-              GLOBAL SYSTEM INFRASTRUCTURE & GATEWAY TELEMETRY
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <Server className="w-5 h-5" />
+            </div>
+            <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
+              Global System Infrastructure & Gateway Telemetry
             </h1>
           </div>
-          <p className="text-xs font-mono text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Real-time multi-tenant Redis cluster health, PostgreSQL RLS query latency, and Cloudflare R2 storage telemetry.
           </p>
         </div>
@@ -69,165 +92,159 @@ export default function PlatformSystemPage() {
             isLoading={isRefreshing}
             leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
           >
-            REFRESH METRICS
+            Refresh Telemetry
           </Button>
 
           <Button
-            variant={maintenanceMode ? 'destructive' : 'secondary'}
+            variant={maintenanceMode ? 'destructive' : 'primary'}
             size="sm"
             onClick={handleToggleMaintenance}
-            leftIcon={<AlertTriangle className="w-3.5 h-3.5" />}
+            leftIcon={
+              maintenanceMode ? (
+                <AlertTriangle className="w-3.5 h-3.5" />
+              ) : (
+                <ShieldAlert className="w-3.5 h-3.5" />
+              )
+            }
           >
-            {maintenanceMode ? 'DISABLE MAINTENANCE' : 'ENABLE MAINTENANCE'}
+            {maintenanceMode ? 'Disable Maintenance' : 'Emergency Maintenance'}
           </Button>
         </div>
       </div>
 
-      {/* Global Status Banner */}
+      {/* Maintenance Mode Alert Banner if active */}
       {maintenanceMode && (
-        <div className="p-3.5 bg-destructive-light border-2 border-destructive text-destructive-foreground font-mono text-xs flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold">
-            <AlertTriangle className="w-4 h-4 text-destructive" />
-            <span className="text-destructive font-black">
-              GLOBAL MAINTENANCE MODE ACTIVE: Read-only access enabled across all tenant portals.
-            </span>
+        <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/30 flex items-center justify-between gap-4 text-xs text-destructive animate-pulse">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+            <div>
+              <div className="font-bold text-sm">GLOBAL MAINTENANCE BROADCAST ACTIVE</div>
+              <div className="text-[11px] opacity-90">{maintenanceMessage}</div>
+            </div>
           </div>
-          <Badge variant="destructive" size="xs">
-            LIVE BROADCAST
-          </Badge>
+          <Button variant="destructive" size="xs" onClick={handleToggleMaintenance}>
+            Take System Live
+          </Button>
         </div>
       )}
 
-      {/* 4 Infrastructure Health Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 font-mono text-xs">
-        {/* API Gateway */}
-        <div className="bg-card border-2 border-border p-4 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-muted-foreground text-[10px] uppercase font-bold">
-            <span>API GATEWAY LATENCY</span>
-            <Zap className="w-3.5 h-3.5 text-primary" />
+      {/* 4 Core Cluster Health Gauges */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+        <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
+          <div className="text-[11px] text-muted-foreground font-medium flex items-center justify-between">
+            <span>API Gateway Latency</span>
+            <Activity className="w-3.5 h-3.5 text-emerald-500" />
           </div>
-          <div className="font-heading font-black text-3xl text-primary">
+          <div className="font-mono font-bold text-2xl mt-1 text-emerald-600 dark:text-emerald-400">
             {metrics.apiGatewayLatencyMs} ms
           </div>
-          <div className="text-[10px] text-primary font-bold flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3" />
-            <span>SUB-MILLISECOND RESPONSE</span>
-          </div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Ultra-Low Overhead</div>
         </div>
 
-        {/* Redis Cluster */}
-        <div className="bg-card border-2 border-border p-4 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-muted-foreground text-[10px] uppercase font-bold">
-            <span>REDIS PUB/SUB MEMORY</span>
-            <Cpu className="w-3.5 h-3.5 text-info" />
+        <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
+          <div className="text-[11px] text-muted-foreground font-medium flex items-center justify-between">
+            <span>Redis Pub/Sub Stream</span>
+            <Radio className="w-3.5 h-3.5 text-primary" />
           </div>
-          <div className="font-heading font-black text-3xl text-info">
-            {metrics.redis.memoryUsedMb} MB
-          </div>
-          <div className="text-[10px] text-muted-foreground">
-            {metrics.redis.activeChannels} Channels across {metrics.redis.clusterNodes} Nodes
-          </div>
+          <div className="font-mono font-bold text-2xl mt-1 text-primary">12,400 /s</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">{metrics.redis.clusterNodes} Cluster Nodes</div>
         </div>
 
-        {/* PostgreSQL RLS */}
-        <div className="bg-card border-2 border-border p-4 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-muted-foreground text-[10px] uppercase font-bold">
-            <span>POSTGRESQL RLS SCHEMAS</span>
-            <Database className="w-3.5 h-3.5 text-warning" />
+        <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
+          <div className="text-[11px] text-muted-foreground font-medium flex items-center justify-between">
+            <span>PostgreSQL Read/Write Pool</span>
+            <Database className="w-3.5 h-3.5 text-info-foreground dark:text-info" />
           </div>
-          <div className="font-heading font-black text-3xl text-warning">
-            {metrics.postgres.totalSchemasCount} SCHEMAS
+          <div className="font-mono font-bold text-2xl mt-1 text-info-foreground dark:text-info">
+            {metrics.postgres.activeConnections} / {metrics.postgres.maxConnections}
           </div>
-          <div className="text-[10px] text-warning font-bold">
-            AVG QUERY: {metrics.postgres.rlsQueryAverageMs} ms
-          </div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">RLS Latency: {metrics.postgres.rlsQueryAverageMs}ms</div>
         </div>
 
-        {/* Active WebSockets */}
-        <div className="bg-card border-2 border-border p-4 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-muted-foreground text-[10px] uppercase font-bold">
-            <span>ACTIVE WEBSOCKET POOL</span>
-            <Radio className="w-3.5 h-3.5 text-foreground animate-pulse" />
+        <div className="bg-card rounded-xl border border-border p-4 shadow-xs">
+          <div className="text-[11px] text-muted-foreground font-medium flex items-center justify-between">
+            <span>Global Uptime</span>
+            <Zap className="w-3.5 h-3.5 text-warning" />
           </div>
-          <div className="font-heading font-black text-3xl text-foreground">
-            {metrics.activeWebsocketsCount.toLocaleString()}
+          <div className="font-mono font-bold text-2xl mt-1 text-warning-foreground dark:text-warning">
+            {metrics.uptimePercentage}%
           </div>
-          <div className="text-[10px] text-muted-foreground">
-            Staff & Customer Live Rooms
-          </div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Zero Major Outages</div>
         </div>
       </div>
 
-      {/* Deep Dive 2-Column Telemetry */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 font-mono text-xs">
-        {/* Left: PostgreSQL Pool & WAL Replication */}
-        <div className="bg-card border-2 border-border p-5 shadow-md space-y-4">
-          <div className="font-heading font-black text-sm uppercase flex items-center justify-between border-b-2 border-border pb-3">
-            <span>POSTGRESQL MULTI-TENANT ENGINE</span>
+      {/* 2-Column Grid: Regional Edge Latency & Background Workers */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left: Regional Network Latency Map */}
+        <div className="bg-card rounded-xl border border-border p-5 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-border/70">
+            <h3 className="font-heading font-semibold text-sm text-foreground flex items-center gap-2">
+              <Globe className="w-4 h-4 text-primary" />
+              Regional Edge Network Latency Sweeper
+            </h3>
             <Badge variant="primary" size="xs">
-              HEALTHY
+              4 Edge Hubs
             </Badge>
           </div>
 
-          <div className="space-y-3">
-            <div>
-              <div className="flex items-center justify-between text-[11px] mb-1">
-                <span>CONNECTION POOL UTILIZATION</span>
-                <span className="font-bold">
-                  {metrics.postgres.activeConnections} / {metrics.postgres.maxConnections} (28%)
-                </span>
-              </div>
-              <div className="w-full bg-card-subtle h-2.5 border border-border">
-                <div className="bg-primary h-full w-[28%]" />
-              </div>
-            </div>
+          <div className="space-y-2.5 text-xs">
+            {regionalNodes.map((node) => (
+              <div
+                key={node.city}
+                className="p-3 rounded-lg bg-muted/30 border border-border/70 flex items-center justify-between"
+              >
+                <div>
+                  <div className="font-semibold text-foreground">{node.city}</div>
+                  <div className="text-[11px] text-muted-foreground">Node Load: {node.load}</div>
+                </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="p-3 bg-card-subtle border border-border">
-                <div className="text-[10px] text-muted-foreground">WAL REPLICATION LAG</div>
-                <div className="font-bold text-foreground text-sm mt-0.5">
-                  {metrics.postgres.walReplicationLagMs} ms
+                <div className="flex items-center gap-3">
+                  <Badge variant="primary" size="xs">
+                    {node.status}
+                  </Badge>
+                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                    {node.ping}
+                  </span>
                 </div>
               </div>
-
-              <div className="p-3 bg-card-subtle border border-border">
-                <div className="text-[10px] text-muted-foreground">TENANT SCHEMAS ISOLATION</div>
-                <div className="font-bold text-primary text-sm mt-0.5">100% ENFORCED</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Right: Cloudflare R2 Object Storage */}
-        <div className="bg-card border-2 border-border p-5 shadow-md space-y-4">
-          <div className="font-heading font-black text-sm uppercase flex items-center justify-between border-b-2 border-border pb-3">
-            <span>CLOUDFLARE R2 OBJECT STORAGE</span>
-            <HardDrive className="w-4 h-4 text-info" />
+        {/* Right: Background Worker Queues */}
+        <div className="bg-card rounded-xl border border-border p-5 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-border/70">
+            <h3 className="font-heading font-semibold text-sm text-foreground flex items-center gap-2">
+              <Cpu className="w-4 h-4 text-warning" />
+              Background Worker Queues & Dispatchers
+            </h3>
+            <Badge variant="outline" size="xs">
+              4 Queues
+            </Badge>
           </div>
 
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-card-subtle border border-border">
-                <div className="text-[10px] text-muted-foreground">TOTAL STORAGE CONSUMED</div>
-                <div className="font-bold text-info text-sm mt-0.5">
-                  {metrics.storage.usedGb} GB
+          <div className="space-y-2.5 text-xs">
+            {workerQueues.map((worker) => (
+              <div
+                key={worker.name}
+                className="p-3 rounded-lg bg-muted/30 border border-border/70 flex items-center justify-between"
+              >
+                <div>
+                  <div className="font-mono font-semibold text-foreground">{worker.name}</div>
+                  <div className="text-[11px] text-muted-foreground">{worker.description}</div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[11px] text-muted-foreground">{worker.jobsPerMin}</span>
+                  <Badge
+                    variant={worker.status === 'Healthy' || worker.status === 'Active' ? 'primary' : 'outline'}
+                    size="xs"
+                  >
+                    {worker.status}
+                  </Badge>
                 </div>
               </div>
-
-              <div className="p-3 bg-card-subtle border border-border">
-                <div className="text-[10px] text-muted-foreground">PAYMENT & TICKET ATTACHMENTS</div>
-                <div className="font-bold text-foreground text-sm mt-0.5">
-                  {metrics.storage.filesCount.toLocaleString()} files
-                </div>
-              </div>
-            </div>
-
-            <div className="p-3 bg-card-subtle border border-border">
-              <div className="text-[10px] text-muted-foreground">MONTHLY EGRESS BANDWIDTH</div>
-              <div className="font-bold text-foreground text-sm mt-0.5">
-                {metrics.storage.monthlyBandwidthGb} GB / month (Unlimited free egress)
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
