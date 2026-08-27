@@ -143,7 +143,7 @@ export function StaffDirectoryTab() {
 
       {/* PROVISION STAFF USER MODAL */}
       {isProvisionStaffOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-card rounded-2xl border border-border shadow-2xl p-6 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-border">
               <h3 className="font-heading font-bold text-base text-foreground">

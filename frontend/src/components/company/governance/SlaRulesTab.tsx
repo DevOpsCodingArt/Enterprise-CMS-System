@@ -30,7 +30,7 @@ export function SlaRulesTab() {
           {slaRules.map((sla) => (
             <div
               key={sla.id}
-              className="p-4 rounded-2xl bg-card border border-border shadow-xs space-y-3"
+              className="p-4 rounded-lg bg-card border border-border shadow-xs space-y-3"
             >
               <div className="flex items-center justify-between pb-2 border-b border-border">
                 <span className="font-heading font-bold text-sm text-foreground">

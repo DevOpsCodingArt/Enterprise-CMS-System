@@ -160,7 +160,7 @@ export function LiveChatWorkspace() {
             onClick={() => setActiveFilter("all")}
             className={cn(
               "py-1 rounded-md transition-colors",
-              activeFilter === "all" ? "bg-primary text-white font-bold" : "text-muted-foreground hover:bg-muted"
+              activeFilter === "all" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
             )}
           >
             All (3)
@@ -169,7 +169,7 @@ export function LiveChatWorkspace() {
             onClick={() => setActiveFilter("my_chats")}
             className={cn(
               "py-1 rounded-md transition-colors",
-              activeFilter === "my_chats" ? "bg-primary text-white font-bold" : "text-muted-foreground hover:bg-muted"
+              activeFilter === "my_chats" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
             )}
           >
             Mine (1)
@@ -178,7 +178,7 @@ export function LiveChatWorkspace() {
             onClick={() => setActiveFilter("waiting")}
             className={cn(
               "py-1 rounded-md transition-colors",
-              activeFilter === "waiting" ? "bg-primary text-white font-bold" : "text-muted-foreground hover:bg-muted"
+              activeFilter === "waiting" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
             )}
           >
             Waiting (1)
@@ -187,7 +187,7 @@ export function LiveChatWorkspace() {
             onClick={() => setActiveFilter("closed")}
             className={cn(
               "py-1 rounded-md transition-colors",
-              activeFilter === "closed" ? "bg-primary text-white font-bold" : "text-muted-foreground hover:bg-muted"
+              activeFilter === "closed" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
             )}
           >
             Closed (1)
@@ -253,7 +253,7 @@ export function LiveChatWorkspace() {
                   {selectedCustomer.customerCode}
                 </Badge>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-medium flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Session
+                  <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" /> Live Session
                 </span>
               </div>
               <div className="text-[11px] text-muted-foreground mt-0.5">
@@ -304,7 +304,7 @@ export function LiveChatWorkspace() {
                   m.isInternalNote
                     ? "bg-warning/20 border border-warning/40 text-warning-foreground dark:text-warning rounded-tr-none font-medium shadow-2xs"
                     : m.sender === "staff"
-                      ? "bg-primary text-white rounded-tr-none shadow-xs"
+                      ? "bg-primary text-primary-foreground rounded-tr-none shadow-xs"
                       : m.sender === "system"
                         ? "bg-card border border-border text-foreground font-mono text-[11px] text-center"
                         : "bg-card border border-border text-foreground rounded-tl-none shadow-2xs"

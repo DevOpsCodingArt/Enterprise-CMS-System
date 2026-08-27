@@ -55,7 +55,7 @@ export function TariffPackagesView() {
             .map((pkg) => (
               <div
                 key={pkg.id}
-                className="p-5 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all shadow-xs space-y-4 relative flex flex-col justify-between"
+                className="p-5 rounded-lg bg-card border border-border hover:border-primary/50 transition-all shadow-xs space-y-4 relative flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
@@ -131,7 +131,7 @@ export function TariffPackagesView() {
 
       {/* CREATE PACKAGE MODAL */}
       {isCreatePackageOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-card rounded-2xl border border-border shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <h3 className="font-heading font-bold text-base text-foreground">Create New Tariff Plan</h3>

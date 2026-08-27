@@ -35,14 +35,14 @@ export function CompanyProfileTab() {
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar space-y-4">
         {savedSuccess && (
-          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold flex items-center gap-2">
+          <div className="p-3 rounded-lg bg-success/10 border border-success/30 text-success text-xs font-bold flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4" /> Company profile and API settings updated successfully!
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           {/* Legal Info */}
-          <div className="p-4 rounded-2xl bg-card border border-border space-y-3 shadow-xs">
+          <div className="p-4 rounded-lg bg-card border border-border space-y-3 shadow-xs">
             <h3 className="font-heading font-bold text-sm text-foreground border-b border-border pb-2">
               Legal & Regulatory Information
             </h3>

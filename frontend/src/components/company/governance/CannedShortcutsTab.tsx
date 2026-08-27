@@ -54,7 +54,7 @@ export function CannedShortcutsTab() {
           {cannedList.map((c) => (
             <div
               key={c.id}
-              className="p-4 rounded-2xl bg-card border border-border shadow-xs space-y-3"
+              className="p-4 rounded-lg bg-card border border-border shadow-xs space-y-3"
             >
               <div className="flex items-center justify-between">
                 <span className="font-mono font-bold text-sm text-primary">{c.shortcut}</span>
@@ -73,7 +73,7 @@ export function CannedShortcutsTab() {
 
       {/* CREATE CANNED MODAL */}
       {isCreateCannedOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-card rounded-2xl border border-border shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <h3 className="font-heading font-bold text-base text-foreground">Create Canned Slash Shortcut</h3>

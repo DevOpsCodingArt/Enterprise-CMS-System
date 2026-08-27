@@ -53,7 +53,7 @@ export function AttendanceTrackerTab() {
                   {att.isLate ? (
                     <span className="text-destructive font-bold">Late (12 mins)</span>
                   ) : (
-                    <span className="text-emerald-600">On Time</span>
+                    <span className="text-success">On Time</span>
                   )}
                 </td>
                 <td className="p-3 font-mono">

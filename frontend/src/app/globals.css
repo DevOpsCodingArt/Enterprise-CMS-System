@@ -68,7 +68,7 @@
    LIGHT MODE (DEFAULT) — Crisp Slate Canvas & Electric Indigo
    ================================================================ */
 :root {
-  --radius: 0.5rem;
+  --radius: 0.375rem;
 
   /* Canvas & Surfaces */
   --background: #F8FAFC;        /* Clean Slate 50 */

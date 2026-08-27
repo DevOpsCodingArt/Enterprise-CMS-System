@@ -32,7 +32,7 @@ export function TaskAllocationTab() {
           {tasksList.map((task) => (
             <div
               key={task.id}
-              className="p-4 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all shadow-xs space-y-3"
+              className="p-4 rounded-lg bg-card border border-border hover:border-primary/40 transition-all shadow-xs space-y-3"
             >
               <div className="flex items-center justify-between">
                 <span className="font-mono font-bold text-xs text-primary">{task.taskNo}</span>
