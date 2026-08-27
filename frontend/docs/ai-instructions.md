@@ -193,3 +193,15 @@ The helpdesk live chat interface follows a high-efficiency 3-column layout:
 - **MANDATORY CONVENTION:** Always use `src/proxy.ts` exporting `export function proxy(request: NextRequest)` for all Edge routing interception, JWT verification, and route permission enforcement.
 - **Single Source of Truth:** All route guards in `src/proxy.ts` must reference `src/config/route-permissions.ts`.
 
+---
+
+## 8. ANTI-MONOLITH & CODE MODULARITY RULES (CRITICAL)
+
+- **No Mega-Files & No Messy Code:** NEVER dump all view logic, state, and modals into a single giant, messy file. When a module (e.g. Subscribers CRM, Operations Desk, Live Helpdesk, Ticketing, or Field Dispatch) grows complex, you MUST divide it into dedicated, well-structured sub-components and domain files (e.g. `TicketsList.tsx`, `TicketDetailPane.tsx`, `SubscribersTable.tsx`, `Customer360Drawer.tsx`, `ConnectionBottomPane.tsx`).
+- **Domain-Driven Component Extraction:** Always extract repetitive UI primitives, table rows, filter toolbars, status metric ribbons, and inspection cards into small, reusable components inside `src/components/{domain}/` or `src/components/ui/`. Do not build monolithic 1,000+ line view or page files.
+- **Decoupled Zustand State Stores:** Never maintain a single monolithic global state. Keep Zustand stores strictly decoupled by domain under `src/stores/` (`useAuthStore.ts`, `useTenantStore.ts`, `useChatStore.ts`, `useTicketStore.ts`, `useSocketStore.ts`, `useLanguageStore.ts`).
+- **Custom Hook & Service Separation:** Extract complex business logic, real-time socket events, debounce handlers, and telemetry fetching into custom hooks under `src/hooks/` (`useSocketEvents.ts`, `useCustomer360.ts`, `useDebounce.ts`) and API/data services under `src/lib/` or `src/mock/`.
+- **Strict Route Composition (Page Purity):** Page routes (`src/app/**/page.tsx`) must only serve as lightweight composition containers that orchestrate layout, routing params, and permission guards, delegating all UI rendering and interactive logic to modular feature components.
+
+
+
