@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useSyncExternalStore } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
+
+const emptySubscribe = () => () => {};
 
 export interface PermissionGuardProps {
   /**
@@ -52,12 +54,12 @@ export function PermissionGuard({
   children,
   fallback = null,
 }: PermissionGuardProps) {
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
   const { can, canAll, canAny, hasBranchAccess } = useAuthStore();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   // During SSR or initial hydration, render children or fallback safely
   if (!isMounted) {

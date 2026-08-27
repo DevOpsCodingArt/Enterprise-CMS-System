@@ -14,20 +14,20 @@ export default function CompanyOperationsLayout({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground font-body">
+    <div className="flex h-screen max-h-screen overflow-hidden bg-background text-foreground font-body">
       {/* 1. Collapsible Operations Sidebar */}
       <SidebarNav
-        activeTab={activeCompanyTab}
+        activeTab={activeCompanyTab || "desk"}
         onTabChange={setActiveCompanyTab}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
 
       {/* 2. Main Workspace Body */}
-      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
+      <div className="flex flex-1 flex-col overflow-hidden min-w-0 h-full">
         <Topbar onOpenNotificationCenter={() => setActiveCompanyTab("audit")} />
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+        <main className="flex-1 min-h-0 overflow-hidden flex flex-col">
           {children}
         </main>
       </div>

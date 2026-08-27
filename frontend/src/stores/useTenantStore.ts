@@ -17,7 +17,7 @@ export const useTenantStore = create<TenantState>((set) => ({
   activeCompany: mockDb.tenantCompany,
   branches: mockDb.branches,
   selectedBranchId: null, // null means "All Branches"
-  activeCompanyTab: "overview",
+  activeCompanyTab: "desk",
 
   setActiveCompany: (activeCompany) => set({ activeCompany }),
   setBranches: (branches) => set({ branches }),

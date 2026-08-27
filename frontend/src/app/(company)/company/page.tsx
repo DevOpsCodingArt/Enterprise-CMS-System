@@ -1,39 +1,46 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTenantStore } from "@/stores/useTenantStore";
-import { ExecutiveDashboardView } from "@/components/company/ExecutiveDashboardView";
-import { BranchGovernanceView } from "@/components/company/BranchGovernanceView";
-import { StaffWorkforceView } from "@/components/company/StaffWorkforceView";
-import { RBACBuilderView } from "@/components/company/RBACBuilderView";
-import { FinancialLedgerView } from "@/components/company/FinancialLedgerView";
-import { NetworkFleetView } from "@/components/company/NetworkFleetView";
-import { AuditStreamView } from "@/components/company/AuditStreamView";
+import { OperationsDeskView } from "@/components/company/OperationsDeskView";
+import { SubscribersCrmView } from "@/components/company/SubscribersCrmView";
+import { WorkforceHrView } from "@/components/company/WorkforceHrView";
+import { GovernanceSettingsView } from "@/components/company/GovernanceSettingsView";
 
 export default function CompanyDashboardPage() {
-  const {
-    activeCompanyTab: activeTab,
-    setActiveCompanyTab: setActiveTab,
-  } = useTenantStore();
+  const { activeCompanyTab } = useTenantStore();
 
-  return (
-    <div className="space-y-6">
-      {/* 1. Dynamic Tab Router */}
-      {(!activeTab || activeTab === "overview") && (
-        <ExecutiveDashboardView onNavigateTab={setActiveTab} />
-      )}
+  // 1. OPERATIONS DESK
+  if (activeCompanyTab === "desk" || activeCompanyTab === "tickets" || activeCompanyTab === "connections") {
+    return <OperationsDeskView initialSubTab={activeCompanyTab} />;
+  }
 
-      {activeTab === "branches" && <BranchGovernanceView />}
+  // 2. SUBSCRIBERS (CRM)
+  if (activeCompanyTab === "customers" || activeCompanyTab === "packages") {
+    return <SubscribersCrmView initialSubTab={activeCompanyTab} />;
+  }
 
-      {activeTab === "staff" && <StaffWorkforceView />}
+  // 3. WORKFORCE, HR & SHIFTS
+  if (
+    activeCompanyTab === "departments" ||
+    activeCompanyTab === "staff" ||
+    activeCompanyTab === "shifts" ||
+    activeCompanyTab === "attendance" ||
+    activeCompanyTab === "tasks"
+  ) {
+    return <WorkforceHrView initialSubTab={activeCompanyTab} />;
+  }
 
-      {activeTab === "rbac" && <RBACBuilderView />}
+  // 4. GOVERNANCE & SETTINGS
+  if (
+    activeCompanyTab === "roles" ||
+    activeCompanyTab === "canned" ||
+    activeCompanyTab === "sla" ||
+    activeCompanyTab === "profile"
+  ) {
+    return <GovernanceSettingsView initialSubTab={activeCompanyTab} />;
+  }
 
-      {activeTab === "finance" && <FinancialLedgerView />}
-
-      {activeTab === "network" && <NetworkFleetView />}
-
-      {activeTab === "audit" && <AuditStreamView />}
-    </div>
-  );
+  // 5. FALLBACK
+  return <OperationsDeskView initialSubTab="desk" />;
 }

@@ -19,17 +19,19 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toast";
 
 export function PlatformTopbar() {
-  const toast = useToast();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    setIsDarkMode(document.documentElement.classList.contains("dark"));
-  }, []);
+  const isDarkMode = React.useSyncExternalStore(
+    (callback) => {
+      window.addEventListener("theme-change", callback);
+      return () => window.removeEventListener("theme-change", callback);
+    },
+    () => typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
+    () => false
+  );
 
   const toggleTheme = () => {
     const isDark = document.documentElement.classList.toggle("dark");
-    setIsDarkMode(isDark);
     localStorage.setItem("theme", isDark ? "dark" : "light");
+    window.dispatchEvent(new Event("theme-change"));
   };
 
   return (

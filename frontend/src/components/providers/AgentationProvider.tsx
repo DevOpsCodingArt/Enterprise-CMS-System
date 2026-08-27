@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import { Agentation } from "agentation";
+
+const emptySubscribe = () => () => {};
 
 /**
  * Agentation visual feedback toolbar for AI coding agents.
  * Renders in the bottom-right corner during development/review sessions.
  */
 export function AgentationProvider() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   if (!mounted) return null;
 
