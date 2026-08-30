@@ -45,26 +45,30 @@ export function PortalDashboardView() {
   return (
     <div className="space-y-5">
       {/* 1. Subscriber Profile & Live Connection Status Hero */}
-      <Card className="bg-card border-border shadow-xs overflow-hidden">
-        <div className="p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+      <Card className="bg-card border-border shadow-xs overflow-hidden relative">
+        <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
           {/* Subscriber Identity */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <div className="relative">
               <Avatar name="Ahmed Malik" size="lg" />
-              <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-success ring-2 ring-card" />
+              <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full bg-success ring-2 ring-card" />
             </div>
 
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <h1 className="font-heading font-extrabold text-lg text-foreground tracking-tight">
-                  Ahmed Malik
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2.5">
+                <h1 className="font-heading font-extrabold text-xl text-foreground tracking-tight">
+                  Welcome back, Ahmed Malik
                 </h1>
                 <Badge variant="success" className="font-mono text-[9px]">
                   FIBER ONLINE
                 </Badge>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground font-mono">
+              <p className="text-xs text-muted-foreground">
+                Your Fiber Pro 50 Mbps network is operating at peak efficiency. 99.98% uptime.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground font-mono pt-1">
                 <span>Account: <strong className="text-foreground">CUS-99482</strong></span>
                 <span>•</span>
                 <span>PPPoE: <strong className="text-foreground">ahmed_malik_isb</strong></span>
@@ -74,18 +78,25 @@ export function PortalDashboardView() {
             </div>
           </div>
 
-          {/* Active Package & Bill Badge */}
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            <div className="rounded-xl border border-border bg-card-subtle p-3 flex-1 lg:flex-initial">
-              <span className="text-[10px] font-mono uppercase text-muted-foreground block">
-                Subscribed Plan
-              </span>
-              <span className="font-heading font-bold text-sm text-foreground">
-                Fiber Pro 50 Mbps
-              </span>
+          {/* 3D Modem / Router Visual Animation */}
+          <div className="relative w-36 h-36 perspective-1000 hidden lg:flex items-center justify-center shrink-0">
+            <div className="relative w-28 h-28 flex items-center justify-center">
+              {/* Outer pulsing ring */}
+              <div className="absolute inset-0 rounded-full border border-success/30 animate-ping" style={{ animationDuration: "3s" }} />
+              {/* Inner pulsing ring */}
+              <div className="absolute inset-2 rounded-full border border-primary/40 animate-ping" style={{ animationDuration: "2s" }} />
+              {/* Core Router Orb */}
+              <div className="relative w-16 h-16 rounded-2xl bg-card border border-border shadow-lg flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-success/10 border border-success/30 flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-success animate-pulse" />
+                </div>
+              </div>
             </div>
+          </div>
 
-            <div className="rounded-xl border border-border bg-card-subtle p-3 flex-1 lg:flex-initial">
+          {/* Active Package & Bill Badge */}
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto shrink-0">
+            <div className="rounded-xl border border-border bg-card-subtle p-3 flex-1 md:flex-initial">
               <span className="text-[10px] font-mono uppercase text-muted-foreground block">
                 Billing Due
               </span>

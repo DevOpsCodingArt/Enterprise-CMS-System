@@ -18,19 +18,13 @@ import {
   GripVertical,
 } from "lucide-react";
 import { mockDb, SubscriberRecord } from "@/mock/db";
-import { SubscribersMetricsRibbon } from "./SubscribersMetricsRibbon";
 import { Customer360ProfileView } from "./profile/Customer360ProfileView";
 import { AddSubscriberModal } from "./AddSubscriberModal";
 import { SubscribersMapView } from "./SubscribersMapView";
 import { SubscribersGridView } from "./SubscribersGridView";
+import { SubscribersTable, ColumnItem } from "./SubscribersTable";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toast";
-
-export interface ColumnItem {
-  id: string;
-  label: string;
-  visible: boolean;
-}
 
 export function SubscribersDirectoryView() {
   const toast = useToast();
@@ -183,22 +177,18 @@ export function SubscribersDirectoryView() {
 
   const activeColumns = columns.filter((c) => c.visible);
 
+  if (selectedSubscriber) {
+    return (
+      <Customer360ProfileView
+        subscriber={selectedSubscriber}
+        onClose={() => setSelectedSubscriber(null)}
+      />
+    );
+  }
+
   return (
     <div className="h-full w-full overflow-y-auto p-4 md:p-6 space-y-4 custom-scrollbar flex flex-col min-h-0">
-      {/* 1. Metrics Summary Ribbon */}
-      <SubscribersMetricsRibbon
-        metrics={{
-          uptime: "28d 14h",
-          totalGB: 12500,
-          usedGB: 4180,
-          remainingGB: 8320,
-          balance: "45,200",
-          due: "12,500",
-          tickets: 4,
-        }}
-      />
-
-      {/* 2. Top Title & Action Bar */}
+      {/* 1. Top Title & Action Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
@@ -499,156 +489,16 @@ export function SubscribersDirectoryView() {
       {/* 4. Active View Rendering */}
       <div className="flex-1 min-h-0 flex flex-col">
         {viewMode === "Standard" && (
-          <div className="flex-1 border border-border rounded-xl bg-card shadow-xs overflow-hidden flex flex-col min-h-0">
-            <div className="overflow-auto custom-scrollbar flex-1">
-              <table className="w-full text-left text-xs whitespace-nowrap">
-                <thead className="bg-muted/60 border-b border-border sticky top-0 z-10 backdrop-blur-sm uppercase font-mono text-[10.5px] font-bold text-muted-foreground tracking-wider">
-                  <tr>
-                    <th className="p-3 w-8">
-                      <input
-                        type="checkbox"
-                        checked={
-                          filteredSubscribers.length > 0 &&
-                          selectedIds.length === filteredSubscribers.length
-                        }
-                        onChange={handleToggleSelectAll}
-                        className="rounded border-border accent-primary cursor-pointer"
-                      />
-                    </th>
-                    <th className="px-3 py-2.5">ID</th>
-                    <th className="px-3 py-2.5">Actions</th>
-                    <th className="px-3 py-2.5">Subscriber</th>
-                    {columns.find((c) => c.id === "profileStatus")?.visible && (
-                      <th className="px-3 py-2.5 text-center">Profile Status</th>
-                    )}
-                    {columns.find((c) => c.id === "connectionStatus")?.visible && (
-                      <th className="px-3 py-2.5 text-center">Session</th>
-                    )}
-                    {columns.find((c) => c.id === "ipAddress")?.visible && (
-                      <th className="px-3 py-2.5">IP Address</th>
-                    )}
-                    {columns.find((c) => c.id === "package")?.visible && (
-                      <th className="px-3 py-2.5">Package</th>
-                    )}
-                    {columns.find((c) => c.id === "balance")?.visible && (
-                      <th className="px-3 py-2.5 text-right">Balance</th>
-                    )}
-                    {columns.find((c) => c.id === "expirationDate")?.visible && (
-                      <th className="px-3 py-2.5">Optical Rx</th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/60">
-                  {filteredSubscribers.length === 0 ? (
-                    <tr>
-                      <td colSpan={10} className="px-4 py-8 text-center text-muted-foreground font-mono">
-                        No subscribers found matching your criteria.
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredSubscribers.map((sub) => {
-                      const isSelected = selectedIds.includes(sub.id);
-                      return (
-                        <tr
-                          key={sub.id}
-                          onClick={() => setSelectedSubscriber(sub)}
-                          className={`hover:bg-muted/40 transition-colors cursor-pointer ${
-                            isSelected ? "bg-primary/10 font-medium" : ""
-                          }`}
-                        >
-                          <td className="p-3 w-8" onClick={(e) => e.stopPropagation()}>
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              onChange={() => handleToggleSelectRow(sub.id)}
-                              className="rounded border-border accent-primary cursor-pointer"
-                            />
-                          </td>
-                          <td className="px-3 py-2 font-mono font-bold text-primary">{sub.customerCode}</td>
-                          <td className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
-                            <div className="flex items-center gap-1.5">
-                              <Tooltip content="Disconnect Session" position="top">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDisconnect(sub)}
-                                  className="p-1 text-destructive hover:bg-destructive/10 rounded transition-colors cursor-pointer"
-                                >
-                                  <Unplug size={14} />
-                                </button>
-                              </Tooltip>
-                              <Tooltip content="Restart ONT" position="top">
-                                <button
-                                  type="button"
-                                  onClick={() => handleRestart(sub)}
-                                  className="p-1 text-success hover:bg-success/10 rounded transition-colors cursor-pointer"
-                                >
-                                  <RotateCcw size={14} />
-                                </button>
-                              </Tooltip>
-                            </div>
-                          </td>
-                          <td className="px-3 py-2">
-                            <div className="flex flex-col">
-                              <span className="font-bold text-foreground hover:text-primary transition-colors">
-                                {sub.fullName}
-                              </span>
-                              <span className="text-[11px] text-muted-foreground font-mono">
-                                {sub.pppoeUsername}
-                              </span>
-                            </div>
-                          </td>
-                          {columns.find((c) => c.id === "profileStatus")?.visible && (
-                            <td className="px-3 py-2 text-center">
-                              <span
-                                className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
-                                  sub.status === "active"
-                                    ? "bg-success/10 text-success border border-success/20"
-                                    : "bg-destructive/10 text-destructive border border-destructive/20"
-                                }`}
-                              >
-                                {sub.status === "active" ? "ACTIVE" : "SUSPENDED"}
-                              </span>
-                            </td>
-                          )}
-                          {columns.find((c) => c.id === "connectionStatus")?.visible && (
-                            <td className="px-3 py-2 text-center">
-                              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-success/10 text-success border border-success/20">
-                                ONLINE
-                              </span>
-                            </td>
-                          )}
-                          {columns.find((c) => c.id === "ipAddress")?.visible && (
-                            <td className="px-3 py-2 font-mono text-muted-foreground">
-                              {sub.staticIp || "103.14.22.84"}
-                            </td>
-                          )}
-                          {columns.find((c) => c.id === "package")?.visible && (
-                            <td className="px-3 py-2 font-medium text-foreground">
-                              <span className="text-primary font-bold">{sub.packageName}</span>
-                            </td>
-                          )}
-                          {columns.find((c) => c.id === "balance")?.visible && (
-                            <td className="px-3 py-2 text-right font-mono font-bold text-foreground">
-                              Rs. {(sub.ledgerBalancePkr || 0).toLocaleString()}
-                            </td>
-                          )}
-                          {columns.find((c) => c.id === "expirationDate")?.visible && (
-                            <td className="px-3 py-2 font-mono font-bold text-success">
-                              {sub.opticalRxDbm || -18.4} dBm
-                            </td>
-                          )}
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <div className="px-4 py-2 border-t border-border bg-muted/20 flex justify-between items-center text-xs font-mono text-muted-foreground">
-              <span>Showing {filteredSubscribers.length} total subscribers</span>
-              <span className="text-[10px]">Click any row to open full Customer 360° Profile</span>
-            </div>
-          </div>
+          <SubscribersTable
+            subscribers={filteredSubscribers}
+            selectedIds={selectedIds}
+            onToggleSelectAll={handleToggleSelectAll}
+            onToggleSelectRow={handleToggleSelectRow}
+            onSelectSubscriber={(sub) => setSelectedSubscriber(sub)}
+            onDisconnect={handleDisconnect}
+            onRestart={handleRestart}
+            columns={columns}
+          />
         )}
 
         {viewMode === "Grid" && (
@@ -669,13 +519,6 @@ export function SubscribersDirectoryView() {
       </div>
 
       {/* 5. Modals */}
-      {selectedSubscriber && (
-        <Customer360ProfileView
-          subscriber={selectedSubscriber}
-          onClose={() => setSelectedSubscriber(null)}
-        />
-      )}
-
       <AddSubscriberModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
