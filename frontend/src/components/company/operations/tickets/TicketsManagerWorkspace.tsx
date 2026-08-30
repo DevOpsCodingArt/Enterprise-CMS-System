@@ -44,10 +44,12 @@ export function TicketsManagerWorkspace() {
         { lat: 33.6890, lng: 73.0410 },
       ];
 
+      const BASE_TIME = 1788090000000;
+
       const notesList: TicketNote[] = [
         {
           id: `note-${idx}-1`,
-          timestamp: new Date(Date.now() - (idx + 1) * 1800 * 1000).toISOString(),
+          timestamp: new Date(BASE_TIME - (idx + 1) * 1800 * 1000).toISOString(),
           author: "System Telemetry (SmartOLT)",
           content: t.opticalRxDbm && t.opticalRxDbm < -30
             ? `OLT GPON port alarm: Optical LOS red fault on ${t.customerName}'s drop.`
@@ -55,7 +57,7 @@ export function TicketsManagerWorkspace() {
         },
         {
           id: `note-${idx}-2`,
-          timestamp: new Date(Date.now() - (idx + 1) * 900 * 1000).toISOString(),
+          timestamp: new Date(BASE_TIME - (idx + 1) * 900 * 1000).toISOString(),
           author: "NOC Dispatcher",
           content: isClosed
             ? "Subscriber confirmed link restored and online with full speed."
@@ -65,7 +67,7 @@ export function TicketsManagerWorkspace() {
 
       const ettrHistoryList: EttrHistoryItem[] = [
         {
-          timestamp: new Date(Date.now() - (idx + 2) * 1800 * 1000).toISOString(),
+          timestamp: new Date(BASE_TIME - (idx + 2) * 1800 * 1000).toISOString(),
           changedBy: "NOC Dispatcher",
           change: `Target resolution calibrated to ${t.ettrHours || 2} Hours`,
           reason: "Standard SLA schedule for FTTH operations.",
@@ -74,7 +76,7 @@ export function TicketsManagerWorkspace() {
 
       const transferHistoryList: TransferHistoryItem[] = idx % 3 === 1 ? [
         {
-          timestamp: new Date(Date.now() - 3600 * 1000).toISOString(),
+          timestamp: new Date(BASE_TIME - 3600 * 1000).toISOString(),
           transferredBy: "Farhan NOC (Remote Desk)",
           transfer: `Transferred to ${t.assignedEngineers[0] || "Usman Ali"}`,
           reason: "Physical OTDR test confirms cable fault requiring field splicer.",
@@ -110,14 +112,14 @@ export function TicketsManagerWorkspace() {
           : "In Progress") as FullTroubleTicket["status"],
         assignedTo: t.assignedEngineers[0] || (idx % 2 === 0 ? "Usman Ali (Lead Splicer)" : "Bilal Hassan (Technician)"),
         createdBy: "Admin (NOC Command)",
-        createdAt: t.createdAt || new Date(Date.now() - (idx + 1) * 3600000).toISOString(),
+        createdAt: t.createdAt || new Date(BASE_TIME - (idx + 1) * 3600000).toISOString(),
         creationRemarks: t.description || "Field work order dispatched for optical investigation.",
         staffDetails: {
           closedBy: isClosed ? (t.assignedEngineers[0] || "Usman Ali (Lead Splicer)") : undefined,
-          closingDate: isClosed ? new Date(Date.now() - 1800000).toISOString() : undefined,
+          closingDate: isClosed ? new Date(BASE_TIME - 1800000).toISOString() : undefined,
           closingRemarks: isClosed ? "Issue resolved. Optical drop re-spliced, RX power normalized." : undefined,
         },
-        ettr: t.slaExpiresAt || new Date(Date.now() + (idx + 1) * 3600000).toISOString(),
+        ettr: t.slaExpiresAt || new Date(BASE_TIME + (idx + 1) * 3600000).toISOString(),
         ettrHistory: ettrHistoryList,
         transferHistory: transferHistoryList,
         transferredFrom: idx % 3 === 1 ? "Helpdesk Desk 01" : undefined,

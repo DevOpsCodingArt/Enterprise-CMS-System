@@ -206,7 +206,7 @@ export function TicketDetailPane({
           <div className="p-4 bg-muted/30 rounded border border-border flex justify-between items-center text-xs">
             <div>
               <p className="text-[10px] text-muted-foreground font-mono uppercase mb-1 font-bold">Current Target</p>
-              <p className="font-bold text-base text-foreground font-mono">{formatDate(ticket.ettr)}</p>
+              <p suppressHydrationWarning className="font-bold text-base text-foreground font-mono">{formatDate(ticket.ettr)}</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] text-muted-foreground font-mono uppercase mb-1 font-bold">Total Extensions</p>
@@ -652,7 +652,7 @@ export function TicketDetailPane({
               <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-wider mb-4 border-b border-border pb-2 font-bold">
                 SLA Target (ETTR)
               </h3>
-              <p className="font-mono text-sm font-bold text-foreground mb-4">{formatDate(ticket.ettr)}</p>
+              <p suppressHydrationWarning className="font-mono text-sm font-bold text-foreground mb-4">{formatDate(ticket.ettr)}</p>
             </div>
             <div>
               <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">

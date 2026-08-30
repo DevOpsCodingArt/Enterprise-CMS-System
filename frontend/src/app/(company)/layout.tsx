@@ -28,12 +28,14 @@ export default function CompanyOperationsLayout({
   return (
     <div className="flex h-screen max-h-screen overflow-hidden bg-background text-foreground font-body">
       {/* 1. Collapsible Operations Sidebar */}
-      <SidebarNav
-        activeTab={activeCompanyTab || "desk"}
-        onTabChange={setActiveCompanyTab}
-        isCollapsed={isSidebarCollapsed}
-        onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-      />
+      <React.Suspense fallback={<div className="w-68 h-full bg-sidebar border-r border-sidebar-border" />}>
+        <SidebarNav
+          activeTab={activeCompanyTab || "desk"}
+          onTabChange={setActiveCompanyTab}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        />
+      </React.Suspense>
 
       {/* 2. Main Workspace Body */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0 h-full">

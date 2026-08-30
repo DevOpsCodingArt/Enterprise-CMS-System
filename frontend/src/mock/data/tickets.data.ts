@@ -45,6 +45,8 @@ export interface SlaRule {
   notifyChannels: string[];
 }
 
+const BASE_TIMESTAMP = 1788090000000; // Deterministic anchor for SSR hydration stability
+
 export const MOCK_TICKETS: TroubleTicket[] = [
   {
     id: "tkt-01",
@@ -61,11 +63,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Field Operations", "NOC"],
     assignedEngineers: ["Usman Ali (Lead Splicer)"],
     ettrHours: 2,
-    slaExpiresAt: new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP + 2 * 3600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -32.4,
     description: "Optical loss of signal (LOS) detected on Splitter #4 drop cable.",
-    createdAt: new Date(Date.now() - 3600 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 3600 * 1000).toISOString(),
   },
   {
     id: "tkt-02",
@@ -82,11 +84,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Field Operations"],
     assignedEngineers: ["Bilal Hassan (Technician)"],
     ettrHours: 1,
-    slaExpiresAt: new Date(Date.now() + 1 * 3600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP + 1 * 3600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -29.8,
     description: "Frequent disconnections. Optical power degraded to -29.8 dBm on FAT-F7-02.",
-    createdAt: new Date(Date.now() - 1800 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 1800 * 1000).toISOString(),
   },
   {
     id: "tkt-03",
@@ -103,11 +105,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Customer Support"],
     assignedEngineers: ["Imran Splicer (Drop Team)"],
     ettrHours: 4,
-    slaExpiresAt: new Date(Date.now() + 4 * 3600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP + 4 * 3600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -18.2,
     description: "5GHz WiFi SSID disabled on Huawei Dual-band ONT. Remote TR-069 config required.",
-    createdAt: new Date(Date.now() - 7200 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 7200 * 1000).toISOString(),
   },
   {
     id: "tkt-04",
@@ -124,11 +126,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["NOC Core"],
     assignedEngineers: ["Farhan NOC (Remote Desk)"],
     ettrHours: 3,
-    slaExpiresAt: new Date(Date.now() - 3600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP - 3600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -17.5,
     description: "Subscriber reported bufferbloat on 50 Mbps profile. Bandwidth shaper recalibrated.",
-    createdAt: new Date(Date.now() - 14400 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 14400 * 1000).toISOString(),
   },
   {
     id: "tkt-05",
@@ -145,11 +147,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Field Operations"],
     assignedEngineers: ["Usman Ali (Lead Splicer)"],
     ettrHours: 1,
-    slaExpiresAt: new Date(Date.now() - 7200 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP - 7200 * 1000).toISOString(),
     isSlaBreached: true,
     opticalRxDbm: -34.0,
     description: "Road excavation severed 4-core feeder fiber. Emergency joint enclosure required.",
-    createdAt: new Date(Date.now() - 28800 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 28800 * 1000).toISOString(),
   },
   {
     id: "tkt-06",
@@ -166,11 +168,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Billing & Recovery"],
     assignedEngineers: ["Farhan NOC (Remote Desk)"],
     ettrHours: 24,
-    slaExpiresAt: new Date(Date.now() - 18000 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP - 18000 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -19.0,
     description: "Bank transfer verification completed. Radius service reactivated.",
-    createdAt: new Date(Date.now() - 43200 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 43200 * 1000).toISOString(),
   },
   {
     id: "tkt-07",
@@ -187,11 +189,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["NOC Core", "Field Operations"],
     assignedEngineers: ["Bilal Hassan (Technician)"],
     ettrHours: 2,
-    slaExpiresAt: new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP + 2 * 3600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -24.5,
     description: "Gaming latency spikes to international gateway. Routing optimized to TW1 route.",
-    createdAt: new Date(Date.now() - 5400 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 5400 * 1000).toISOString(),
   },
   {
     id: "tkt-08",
@@ -208,11 +210,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Field Operations"],
     assignedEngineers: ["Imran Splicer (Drop Team)"],
     ettrHours: 1,
-    slaExpiresAt: new Date(Date.now() + 1 * 3600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP + 1 * 3600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -31.2,
     description: "FAT adapter loose connection. Technician dispatched for field re-patching.",
-    createdAt: new Date(Date.now() - 900 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 900 * 1000).toISOString(),
   },
   {
     id: "tkt-09",
@@ -229,11 +231,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Customer Support"],
     assignedEngineers: ["Farhan NOC (Remote Desk)"],
     ettrHours: 6,
-    slaExpiresAt: new Date(Date.now() - 21600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP - 21600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -18.8,
     description: "Static IP configuration pushed to client ONT via TR-069 ACS server.",
-    createdAt: new Date(Date.now() - 86400 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 86400 * 1000).toISOString(),
   },
   {
     id: "tkt-10",
@@ -250,11 +252,11 @@ export const MOCK_TICKETS: TroubleTicket[] = [
     assignedDepartments: ["Field Operations"],
     assignedEngineers: ["Usman Ali (Lead Splicer)"],
     ettrHours: 1,
-    slaExpiresAt: new Date(Date.now() + 1 * 3600 * 1000).toISOString(),
+    slaExpiresAt: new Date(BASE_TIMESTAMP + 1 * 3600 * 1000).toISOString(),
     isSlaBreached: false,
     opticalRxDbm: -35.0,
     description: "Subscriber drop cable cut during tree pruning. Splicer dispatched with 100m drop wire.",
-    createdAt: new Date(Date.now() - 1200 * 1000).toISOString(),
+    createdAt: new Date(BASE_TIMESTAMP - 1200 * 1000).toISOString(),
   },
 ];
 

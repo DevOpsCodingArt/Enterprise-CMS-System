@@ -26,7 +26,10 @@ export const ROUTE_PERMISSIONS: Record<string, string[]> = {
   // 3. Helpdesk & Customer Support (CSRs)
   "/company/desk": ["chat.view"],
   "/company/tickets": ["tickets.view"],
+  "/company/connections": ["tickets.view", "field.view_jobs"],
+  "/company/subscribers": ["customers.view"],
   "/company/customers": ["customers.view"],
+  "/company/packages": ["billing.view_ledger", "company.executive_view"],
 
   // 4. Field Engineering & Splicing (40 Technicians & Van Teams)
   "/company/field": ["field.view_jobs", "field.calibrate_line"],
