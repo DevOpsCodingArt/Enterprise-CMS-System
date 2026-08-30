@@ -88,7 +88,7 @@ export function ReportsTab({ subscriber }: { subscriber: SubscriberRecord }) {
                   axisLine={false}
                   tickLine={false}
                   tick={{ fontSize: 10, fill: "var(--muted-foreground)", fontWeight: 600 }}
-                  tickFormatter={(value) => `${value / 1000}k`}
+                  tickFormatter={(value: number) => `${value / 1000}k`}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Line
@@ -122,7 +122,7 @@ export function ReportsTab({ subscriber }: { subscriber: SubscriberRecord }) {
                   axisLine={false}
                   tickLine={false}
                   tick={{ fontSize: 10, fill: "var(--muted-foreground)", fontWeight: 600 }}
-                  tickFormatter={(value) => `${value / 1000}k`}
+                  tickFormatter={(value: number) => `${value / 1000}k`}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Line

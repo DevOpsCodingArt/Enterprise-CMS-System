@@ -223,7 +223,7 @@ export function SessionLogTab({ subscriber }: { subscriber: SubscriberRecord }) 
                   axisLine={false}
                   tickLine={false}
                   tick={{ fontSize: 10, fill: "var(--muted-foreground)", fontWeight: 600 }}
-                  tickFormatter={(val) => val.toFixed(1)}
+                  tickFormatter={(val: number) => val.toFixed(1)}
                   dx={-10}
                 />
                 <Area
@@ -276,7 +276,7 @@ export function SessionLogTab({ subscriber }: { subscriber: SubscriberRecord }) 
                   axisLine={false}
                   tickLine={false}
                   tick={{ fontSize: 10, fill: "var(--muted-foreground)", fontWeight: 600 }}
-                  tickFormatter={(val) => val.toFixed(1)}
+                  tickFormatter={(val: number) => val.toFixed(1)}
                   dx={-10}
                 />
                 <Area
