@@ -8,11 +8,14 @@ import {
   Moon,
   Shield,
   Command,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Tooltip } from "@/components/ui/tooltip";
+import { SmartSearchInput } from "@/components/ui/shared/SmartSearchInput";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { NotificationDrawer } from "@/components/notifications/NotificationDrawer";
 
@@ -20,6 +23,8 @@ export function Topbar({
   onOpenNotificationCenter,
 }: {
   onOpenNotificationCenter?: () => void;
+  isSidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
 }) {
   const { user, company } = useAuthStore();
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
@@ -56,24 +61,18 @@ export function Topbar({
 
         {/* 2. Center: Global Search Bar */}
         <div className="hidden md:flex items-center max-w-sm w-full mx-4">
-          <div className="relative flex items-center w-full group">
-            <Search className="absolute left-3 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search subscribers, OLT, tickets... (Ctrl+K)"
-              className="h-9 w-full rounded-lg border border-input bg-card-subtle pl-9 pr-12 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all"
-            />
-            <div className="absolute right-2.5 flex items-center gap-0.5 rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
-              <Command className="h-2.5 w-2.5" />
-              <span>K</span>
-            </div>
-          </div>
+          <SmartSearchInput
+            value=""
+            onChange={() => {}}
+            placeholder="Search subscribers, OLT, tickets... (Ctrl+K)"
+            size="sm"
+          />
         </div>
 
         {/* 3. Right: Incident Notification Drawer Trigger, Theme Toggle & Owner Profile */}
         <div className="flex items-center gap-3 shrink-0">
           {/* Notifications Drawer Trigger */}
-          <Tooltip content="Incident & Alert Stream">
+          <Tooltip content="Incident & Alert Stream" position="bottom">
             <button
               onClick={() => setIsNotificationDrawerOpen(true)}
               className="relative rounded-lg p-2 text-muted-foreground hover:bg-card-subtle hover:text-foreground transition-colors cursor-pointer border border-transparent hover:border-border"
@@ -84,7 +83,7 @@ export function Topbar({
           </Tooltip>
 
           {/* Theme Switcher (Light / Dark) */}
-          <Tooltip content={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}>
+          <Tooltip content={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"} position="bottom">
             <Button
               variant="outline"
               size="sm"

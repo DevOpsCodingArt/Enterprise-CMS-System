@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { mockDb, SlaRule } from "@/mock/db";
+import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function SlaRulesTab() {
   const [slaRules] = useState<SlaRule[]>(mockDb.slaRules);
@@ -19,20 +21,26 @@ export function SlaRulesTab() {
             Configure shift schedules, out-of-hours bot auto-replies, and breach escalation chains.
           </p>
         </div>
-        <Badge variant="success" className="text-xs font-mono">
+        <Badge variant="success" hasPulse className="text-xs font-mono">
           SLA Engine: Active
         </Badge>
       </div>
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        >
           {slaRules.map((sla) => (
-            <div
+            <motion.div
               key={sla.id}
-              className="p-4 rounded-lg bg-card border border-border shadow-xs space-y-3"
+              variants={staggerItem}
+              className="p-5 rounded-2xl bg-card border border-border hover:border-primary/40 hover:bg-card-hover transition-all shadow-ambient space-y-3"
             >
-              <div className="flex items-center justify-between pb-2 border-b border-border">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
                 <span className="font-heading font-bold text-sm text-foreground">
                   {sla.priority} Priority SLA
                 </span>
@@ -44,6 +52,7 @@ export function SlaRulesTab() {
                         ? "warning"
                         : "secondary"
                   }
+                  className="font-mono text-[10px]"
                 >
                   P{sla.priority === "Critical" ? "1" : sla.priority === "High" ? "2" : "3"}
                 </Badge>
@@ -68,12 +77,12 @@ export function SlaRulesTab() {
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-muted/30 border border-border text-[10.5px] text-muted-foreground font-mono">
+              <div className="p-2.5 rounded-xl bg-card-subtle/50 border border-border/80 text-[10.5px] text-muted-foreground font-mono">
                 Channels: {sla.notifyChannels.join(" · ")}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

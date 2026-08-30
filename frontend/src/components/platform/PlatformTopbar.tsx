@@ -11,14 +11,23 @@ import {
   Server,
   ShieldCheck,
   Zap,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Tooltip } from "@/components/ui/tooltip";
+import { SmartSearchInput } from "@/components/ui/shared/SmartSearchInput";
 import { useToast } from "@/components/ui/toast";
 
-export function PlatformTopbar() {
+export function PlatformTopbar({
+  isSidebarCollapsed,
+  onToggleSidebar,
+}: {
+  isSidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
+} = {}) {
   const isDarkMode = React.useSyncExternalStore(
     (callback) => {
       window.addEventListener("theme-change", callback);
@@ -35,9 +44,25 @@ export function PlatformTopbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card/90 backdrop-blur-md px-4 md:px-6 transition-colors">
-      {/* 1. Left: Environment & Back to Gateway */}
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card/90 backdrop-blur-md px-3 md:px-6 transition-colors">
+      {/* 1. Left: Sidebar Toggle + Environment & Back to Gateway */}
+      <div className="flex items-center gap-2.5">
+        {onToggleSidebar && (
+          <Tooltip content={isSidebarCollapsed ? "Expand Sidebar (Ctrl+B)" : "Collapse Sidebar (Ctrl+B)"} position="bottom">
+            <button
+              onClick={onToggleSidebar}
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground hover:bg-card-subtle hover:text-foreground transition-all cursor-pointer border border-transparent hover:border-border"
+              aria-label="Toggle Sidebar"
+            >
+              {isSidebarCollapsed ? (
+                <PanelLeftOpen className="h-4.5 w-4.5 text-primary" />
+              ) : (
+                <PanelLeftClose className="h-4.5 w-4.5" />
+              )}
+            </button>
+          </Tooltip>
+        )}
+
         <Link
           href="/"
           className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mr-1"
@@ -59,40 +84,36 @@ export function PlatformTopbar() {
 
       {/* 2. Center: Global Search Bar */}
       <div className="hidden md:flex items-center max-w-sm w-full mx-4">
-        <div className="relative flex items-center w-full group">
-          <Search className="absolute left-3 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search tenants, databases, server nodes... (Ctrl+K)"
-            className="h-9 w-full rounded-lg border border-input bg-card-subtle pl-9 pr-12 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all"
-          />
-          <div className="absolute right-2.5 flex items-center gap-0.5 rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
-            <Command className="h-2.5 w-2.5" />
-            <span>K</span>
-          </div>
-        </div>
+        <SmartSearchInput
+          value=""
+          onChange={() => {}}
+          placeholder="Search tenants, databases, server nodes... (Ctrl+K)"
+          size="sm"
+        />
       </div>
 
       {/* 3. Right: Cluster SLA Pill, Theme Toggle, Profile */}
       <div className="flex items-center gap-3 shrink-0">
-        <Tooltip content="Global Platform Uptime SLA across all ISP Tenant Shards">
+        <Tooltip content="Global Platform Uptime SLA across all ISP Tenant Shards" position="bottom">
           <Badge variant="success" hasPulse className="text-[10px] font-mono cursor-help">
             🟢 99.99% SLA
           </Badge>
         </Tooltip>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={toggleTheme}
-          className="h-8 px-2.5 font-mono text-xs shadow-xs"
-        >
-          {isDarkMode ? (
-            <Sun className="h-3.5 w-3.5 text-warning" />
-          ) : (
-            <Moon className="h-3.5 w-3.5 text-primary" />
-          )}
-        </Button>
+        <Tooltip content={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"} position="bottom">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleTheme}
+            className="h-8 px-2.5 font-mono text-xs shadow-xs"
+          >
+            {isDarkMode ? (
+              <Sun className="h-3.5 w-3.5 text-warning" />
+            ) : (
+              <Moon className="h-3.5 w-3.5 text-primary" />
+            )}
+          </Button>
+        </Tooltip>
 
         <div className="flex items-center gap-2 border-l border-border pl-3">
           <Avatar name="Platform Super Admin" presence="online" size="sm" />

@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { mockDb, AttendanceRecord } from "@/mock/db";
+import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function AttendanceTrackerTab() {
   const [attendanceList] = useState<AttendanceRecord[]>(mockDb.attendance);
@@ -19,7 +21,7 @@ export function AttendanceTrackerTab() {
             Daily clock-in logs, late arrivals, and emergency night fiber restoration overtime (1.5x / 2.0x rates).
           </p>
         </div>
-        <Badge variant="success" className="text-xs font-mono">
+        <Badge variant="success" hasPulse className="text-xs font-mono">
           Today: 98% Present
         </Badge>
       </div>
@@ -27,7 +29,7 @@ export function AttendanceTrackerTab() {
       {/* Table Area */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         <table className="w-full text-left text-xs">
-          <thead className="sticky top-0 bg-muted/70 backdrop-blur-xs border-b border-border text-[11px] font-mono uppercase text-muted-foreground z-10">
+          <thead className="sticky top-0 bg-card-subtle/80 backdrop-blur-xs border-b border-border text-[11px] font-mono uppercase text-muted-foreground z-10">
             <tr>
               <th className="p-3">Staff Member</th>
               <th className="p-3">Department</th>
@@ -40,7 +42,7 @@ export function AttendanceTrackerTab() {
           </thead>
           <tbody className="divide-y divide-border">
             {attendanceList.map((att) => (
-              <tr key={att.id} className="hover:bg-muted/20 transition-colors">
+              <tr key={att.id} className="hover:bg-card-hover transition-colors">
                 <td className="p-3 font-bold text-foreground">{att.staffName}</td>
                 <td className="p-3 text-muted-foreground">{att.department}</td>
                 <td className="p-3 font-mono font-bold text-primary">{att.clockIn}</td>

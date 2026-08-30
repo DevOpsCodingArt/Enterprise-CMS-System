@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 import {
   Building2,
   Users,
@@ -18,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { initialTenants } from "./TenantProvisioningTable";
 import { ClusterHealthRadar } from "./ClusterHealthRadar";
+import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function PlatformOverviewView({
   onNavigateTab,
@@ -25,100 +27,113 @@ export function PlatformOverviewView({
   onNavigateTab: (tab: "tenants" | "billing" | "infrastructure") => void;
 }) {
   return (
-    <div className="space-y-6">
+    <motion.div
+      variants={staggerContainer}
+      initial="initial"
+      animate="animate"
+      className="space-y-6"
+    >
       {/* 1. SaaS Executive KPI Ribbon */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 bg-card border-border shadow-xs hover:border-primary/40 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              Active ISP Tenants
+        <motion.div variants={staggerItem}>
+          <Card className="p-4 bg-card border-border shadow-ambient hover:border-primary/40 hover:bg-card-hover transition-all">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10.5px] uppercase tracking-wider text-muted-foreground">
+                Active ISP Tenants
+              </span>
+              <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
+            </div>
+            <div className="mt-2 flex items-baseline justify-between">
+              <span className="font-heading font-extrabold text-2xl text-foreground">
+                8 Companies
+              </span>
+              <Badge variant="success" className="font-mono text-[9.5px]">
+                +2 ONBOARDING
+              </Badge>
+            </div>
+            <span className="text-[11px] text-muted-foreground mt-1 block">
+              51 Active Branch Hubs Total
             </span>
-            <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
-          </div>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-heading font-extrabold text-2xl text-foreground">
-              8 Companies
-            </span>
-            <Badge variant="success" className="font-mono text-[10px]">
-              +2 ONBOARDING
-            </Badge>
-          </div>
-          <span className="text-[11px] text-muted-foreground mt-1 block">
-            51 Active Branch Hubs Total
-          </span>
-        </Card>
+          </Card>
+        </motion.div>
 
-        <Card className="p-4 bg-card border-border shadow-xs hover:border-primary/40 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              Global Subscribers Fleet
+        <motion.div variants={staggerItem}>
+          <Card className="p-4 bg-card border-border shadow-ambient hover:border-primary/40 hover:bg-card-hover transition-all">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10.5px] uppercase tracking-wider text-muted-foreground">
+                Global Subscribers Fleet
+              </span>
+              <Badge variant="info" className="text-[9px] py-0 px-1.5 font-mono">
+                ALL TENANTS
+              </Badge>
+            </div>
+            <div className="mt-2 flex items-baseline justify-between">
+              <span className="font-heading font-extrabold text-2xl text-foreground">
+                480,200
+              </span>
+              <span className="text-[11px] font-mono text-success font-bold">
+                +14.2% MoM
+              </span>
+            </div>
+            <span className="text-[11px] text-muted-foreground mt-1 block">
+              Across 5 Core DB Shards
             </span>
-            <Badge variant="info" className="text-[9px] py-0 px-1.5 font-mono">
-              ALL TENANTS
-            </Badge>
-          </div>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-heading font-extrabold text-2xl text-foreground">
-              480,200
-            </span>
-            <span className="text-[11px] font-mono text-success font-bold">
-              +14.2% MoM
-            </span>
-          </div>
-          <span className="text-[11px] text-muted-foreground mt-1 block">
-            Across 5 Core DB Shards
-          </span>
-        </Card>
+          </Card>
+        </motion.div>
 
-        <Card className="p-4 bg-card border-border shadow-xs hover:border-primary/40 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              Monthly SaaS MRR
+        <motion.div variants={staggerItem}>
+          <Card className="p-4 bg-card border-border shadow-ambient hover:border-primary/40 hover:bg-card-hover transition-all">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10.5px] uppercase tracking-wider text-muted-foreground">
+                Monthly SaaS MRR
+              </span>
+              <Badge variant="success" className="text-[9px] py-0 px-1.5 font-mono">
+                $1.71M ARR
+              </Badge>
+            </div>
+            <div className="mt-2 flex items-baseline justify-between">
+              <span className="font-heading font-extrabold text-2xl text-foreground">
+                $142,500
+              </span>
+              <span className="text-[11px] font-mono text-muted-foreground">
+                +12.4% vs last qtr
+              </span>
+            </div>
+            <span className="text-[11px] text-muted-foreground mt-1 block">
+              SaaS Licensing & Telemetry Tier
             </span>
-            <Badge variant="success" className="text-[9px] py-0 px-1.5 font-mono">
-              $1.71M ARR
-            </Badge>
-          </div>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-heading font-extrabold text-2xl text-foreground">
-              $142,500
-            </span>
-            <span className="text-[11px] font-mono text-muted-foreground">
-              +12.4% vs last qtr
-            </span>
-          </div>
-          <span className="text-[11px] text-muted-foreground mt-1 block">
-            SaaS Licensing & Telemetry Tier
-          </span>
-        </Card>
+          </Card>
+        </motion.div>
 
-        <Card className="p-4 bg-card border-border shadow-xs hover:border-primary/40 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              Global API Latency
+        <motion.div variants={staggerItem}>
+          <Card className="p-4 bg-card border-border shadow-ambient hover:border-primary/40 hover:bg-card-hover transition-all">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10.5px] uppercase tracking-wider text-muted-foreground">
+                Global API Latency
+              </span>
+              <Badge variant="success" className="text-[9px] py-0 px-1.5 font-mono">
+                0 BREACH
+              </Badge>
+            </div>
+            <div className="mt-2 flex items-baseline justify-between">
+              <span className="font-heading font-extrabold text-2xl text-success">
+                14.2 ms
+              </span>
+              <span className="text-[11px] font-mono text-muted-foreground">
+                p99: 38ms
+              </span>
+            </div>
+            <span className="text-[11px] text-muted-foreground mt-1 block">
+              Cloudflare Edge + Redis Cluster
             </span>
-            <Badge variant="success" className="text-[9px] py-0 px-1.5 font-mono">
-              0 BREACH
-            </Badge>
-          </div>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-heading font-extrabold text-2xl text-success">
-              14.2 ms
-            </span>
-            <span className="text-[11px] font-mono text-muted-foreground">
-              p99: 38ms
-            </span>
-          </div>
-          <span className="text-[11px] text-muted-foreground mt-1 block">
-            Cloudflare Edge + Redis Cluster
-          </span>
-        </Card>
+          </Card>
+        </motion.div>
       </div>
 
       {/* 2. 2-Column Bento Grid: Tenant Capacity + Real-Time Platform Events */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <motion.div variants={staggerItem} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Top ISP Tenant Quotas & Utilization */}
-        <Card className="lg:col-span-7 flex flex-col shadow-xs">
+        <Card className="lg:col-span-7 flex flex-col shadow-ambient border-border">
           <CardHeader className="p-4 border-b border-border bg-card-subtle/50 flex flex-row items-center justify-between">
             <div>
               <CardTitle className="text-sm font-heading font-bold">
@@ -132,7 +147,7 @@ export function PlatformOverviewView({
               variant="outline"
               size="sm"
               onClick={() => onNavigateTab("tenants")}
-              className="text-xs gap-1"
+              className="text-xs gap-1 font-mono font-medium"
             >
               <span>View All</span>
               <ArrowUpRight className="h-3 w-3" />
@@ -143,7 +158,7 @@ export function PlatformOverviewView({
             {initialTenants.slice(0, 4).map((t) => {
               const usagePercent = Math.round((t.subscribersCount / t.subscribersQuota) * 100);
               return (
-                <div key={t.id} className="space-y-1.5 p-3 rounded-lg border border-border bg-card-subtle/30">
+                <div key={t.id} className="space-y-1.5 p-3 rounded-xl border border-border bg-card-subtle/40">
                   <div className="flex justify-between items-center text-xs">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-foreground">{t.name}</span>
@@ -159,7 +174,7 @@ export function PlatformOverviewView({
                   <div className="w-full bg-card rounded-full h-2 overflow-hidden border border-border">
                     <div
                       className={`h-full ${
-                        usagePercent > 90 ? "bg-amber-500" : "bg-primary"
+                        usagePercent > 90 ? "bg-warning" : "bg-primary"
                       }`}
                       style={{ width: `${usagePercent}%` }}
                     />
@@ -176,7 +191,7 @@ export function PlatformOverviewView({
         </Card>
 
         {/* Right: Platform Events & Cluster Health */}
-        <Card className="lg:col-span-5 flex flex-col shadow-xs">
+        <Card className="lg:col-span-5 flex flex-col shadow-ambient border-border">
           <CardHeader className="p-4 border-b border-border bg-card-subtle/50 flex flex-row items-center justify-between">
             <div>
               <CardTitle className="text-sm font-heading font-bold">
@@ -192,7 +207,7 @@ export function PlatformOverviewView({
           </CardHeader>
 
           <CardContent className="p-4 space-y-3">
-            <div className="p-2.5 rounded-lg border border-border bg-card-subtle/40 space-y-1">
+            <div className="p-2.5 rounded-xl border border-border bg-card-subtle/40 space-y-1">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-foreground">
                   Tenant Provisioned: FiberLink
@@ -206,7 +221,7 @@ export function PlatformOverviewView({
               </p>
             </div>
 
-            <div className="p-2.5 rounded-lg border border-border bg-card-subtle/40 space-y-1">
+            <div className="p-2.5 rounded-xl border border-border bg-card-subtle/40 space-y-1">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-foreground">
                   Redis Cluster Auto-Rebalanced
@@ -220,7 +235,7 @@ export function PlatformOverviewView({
               </p>
             </div>
 
-            <div className="p-2.5 rounded-lg border border-border bg-card-subtle/40 space-y-1">
+            <div className="p-2.5 rounded-xl border border-border bg-card-subtle/40 space-y-1">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-foreground">
                   SaaS Invoice Settled: Prime Networks
@@ -235,10 +250,12 @@ export function PlatformOverviewView({
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
       {/* 3. Server Cluster Health Radar */}
-      <ClusterHealthRadar />
-    </div>
+      <motion.div variants={staggerItem}>
+        <ClusterHealthRadar />
+      </motion.div>
+    </motion.div>
   );
 }

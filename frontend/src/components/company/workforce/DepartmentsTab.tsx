@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { mockDb, DepartmentRecord } from "@/mock/db";
+import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function DepartmentsTab() {
   const [departmentList] = useState<DepartmentRecord[]>(mockDb.departments);
@@ -28,11 +30,17 @@ export function DepartmentsTab() {
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        >
           {departmentList.map((dept) => (
-            <div
+            <motion.div
               key={dept.id}
-              className="p-4 rounded-lg bg-card border border-border hover:border-primary/40 transition-all shadow-xs space-y-3"
+              variants={staggerItem}
+              className="p-4 rounded-2xl bg-card border border-border hover:border-primary/40 hover:bg-card-hover transition-all shadow-ambient space-y-3"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -55,18 +63,18 @@ export function DepartmentsTab() {
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border text-[11px] font-mono">
-                <div className="p-2 rounded-lg bg-muted/30">
+                <div className="p-2 rounded-xl bg-card-subtle/40 border border-border/40">
                   <div className="text-muted-foreground text-[10px]">Active Jobs</div>
                   <div className="font-bold text-foreground mt-0.5">{dept.activeTickets} Tickets</div>
                 </div>
-                <div className="p-2 rounded-lg bg-muted/30">
+                <div className="p-2 rounded-xl bg-card-subtle/40 border border-border/40">
                   <div className="text-muted-foreground text-[10px]">SLA Target</div>
-                  <div className="font-bold text-emerald-600 mt-0.5">{dept.slaTargetHours}h Turnaround</div>
+                  <div className="font-bold text-success mt-0.5">{dept.slaTargetHours}h Turnaround</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -35,14 +35,14 @@ export function CompanyProfileTab() {
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar space-y-4">
         {savedSuccess && (
-          <div className="p-3 rounded-lg bg-success/10 border border-success/30 text-success text-xs font-bold flex items-center gap-2">
+          <div className="p-3 rounded-xl bg-success/10 border border-success/30 text-success text-xs font-bold flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4" /> Company profile and API settings updated successfully!
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           {/* Legal Info */}
-          <div className="p-4 rounded-lg bg-card border border-border space-y-3 shadow-xs">
+          <div className="p-5 rounded-2xl bg-card border border-border space-y-3 shadow-ambient">
             <h3 className="font-heading font-bold text-sm text-foreground border-b border-border pb-2">
               Legal & Regulatory Information
             </h3>
@@ -51,7 +51,7 @@ export function CompanyProfileTab() {
               <input
                 type="text"
                 defaultValue={companyProfile.legalName}
-                className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground font-bold"
+                className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground font-bold"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -60,7 +60,7 @@ export function CompanyProfileTab() {
                 <input
                   type="text"
                   defaultValue={companyProfile.ntnNumber}
-                  className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground font-mono"
+                  className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground font-mono"
                 />
               </div>
               <div>
@@ -68,7 +68,7 @@ export function CompanyProfileTab() {
                 <input
                   type="text"
                   defaultValue={companyProfile.strnNumber}
-                  className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground font-mono"
+                  className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground font-mono"
                 />
               </div>
             </div>
@@ -77,7 +77,7 @@ export function CompanyProfileTab() {
               <input
                 type="text"
                 defaultValue={companyProfile.ptaLicenseNumber}
-                className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground font-mono"
+                className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground font-mono"
               />
             </div>
             <div>
@@ -85,47 +85,47 @@ export function CompanyProfileTab() {
               <input
                 type="text"
                 defaultValue={companyProfile.headOfficeAddress}
-                className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground"
+                className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground"
               />
             </div>
           </div>
 
           {/* API Integrations */}
-          <div className="p-4 rounded-2xl bg-card border border-border space-y-3 shadow-xs font-mono">
+          <div className="p-5 rounded-2xl bg-card border border-border space-y-3 shadow-ambient font-mono">
             <h3 className="font-heading font-bold text-sm text-foreground border-b border-border pb-2 font-sans">
               Core OSS/BSS API Integrations
             </h3>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px]">
                 <span className="text-muted-foreground">SmartOLT GPON API:</span>
-                <span className="text-emerald-600 font-bold">✓ {companyProfile.apiIntegrations.smartOltStatus}</span>
+                <span className="text-success font-bold">✓ {companyProfile.apiIntegrations.smartOltStatus}</span>
               </div>
               <input
                 type="text"
                 defaultValue={companyProfile.apiIntegrations.smartOltUrl}
-                className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground text-[11px]"
+                className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground text-[11px]"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px]">
                 <span className="text-muted-foreground">MikroTik Radius Server:</span>
-                <span className="text-emerald-600 font-bold">✓ {companyProfile.apiIntegrations.mikrotikStatus}</span>
+                <span className="text-success font-bold">✓ {companyProfile.apiIntegrations.mikrotikStatus}</span>
               </div>
               <input
                 type="text"
                 defaultValue={companyProfile.apiIntegrations.mikrotikRadiusIp}
-                className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground text-[11px]"
+                className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground text-[11px]"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px]">
                 <span className="text-muted-foreground">WhatsApp Cloud API:</span>
-                <span className="text-emerald-600 font-bold">✓ Connected</span>
+                <span className="text-success font-bold">✓ Connected</span>
               </div>
               <input
                 type="text"
                 defaultValue={companyProfile.apiIntegrations.whatsAppCloudApi}
-                className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground text-[11px]"
+                className="w-full bg-card-subtle/40 rounded-xl p-2 border border-border text-foreground text-[11px]"
               />
             </div>
           </div>

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Plus, CheckCircle2, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { mockDb, RbacRole } from "@/mock/db";
 import { cn } from "@/lib/utils";
 
@@ -65,9 +66,11 @@ export function RbacRolesTab() {
     },
   ];
 
+  const toast = useToast();
+
   const handleTogglePermission = (permKey: string) => {
     if (selectedRole.isSystem && selectedRole.id === "role-owner") {
-      alert("Company Owner (Super-Admin) role retains permanent unrestricted root permissions.");
+      toast.warning("Root Protection", "Company Owner role retains permanent unrestricted root permissions.");
       return;
     }
 

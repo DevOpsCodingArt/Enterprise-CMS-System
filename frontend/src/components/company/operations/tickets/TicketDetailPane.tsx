@@ -309,7 +309,7 @@ export function TicketDetailPane({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Created By Card */}
             <div className="relative overflow-hidden p-5 border border-border rounded-lg bg-card shadow-sm group">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-cyan-400"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-info"></div>
               <h4 className="text-[10px] text-muted-foreground font-mono uppercase mb-4 tracking-widest flex items-center gap-1.5 font-bold">
                 <User className="w-3.5 h-3.5" /> Created By
               </h4>
@@ -372,7 +372,7 @@ export function TicketDetailPane({
               </p>
               <p className="font-black text-xl text-foreground tracking-tight">{ticket.assignedTo}</p>
             </div>
-            <div className="w-12 h-12 rounded-full bg-card flex items-center justify-center shrink-0 border-2 border-primary shadow-sm relative z-10">
+            <div className="w-12 h-12 rounded-xl bg-card flex items-center justify-center shrink-0 border-2 border-primary shadow-sm relative z-10">
               <span className="text-base font-black text-primary">
                 {ticket.assignedTo.substring(0, 2).toUpperCase()}
               </span>

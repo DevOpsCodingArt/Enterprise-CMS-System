@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Plus, X, CheckCircle2 } from "lucide-react";
+import { Search, Plus, X, CheckCircle2, UserCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SmartSearchInput } from "@/components/ui/shared/SmartSearchInput";
+import { RichEmptyState } from "@/components/ui/shared/RichEmptyState";
 import { mockDb, StaffUserRecord } from "@/mock/db";
 
 export function StaffDirectoryTab() {
@@ -63,39 +65,52 @@ export function StaffDirectoryTab() {
       {/* Top Filter Bar */}
       <div className="p-3.5 border-b border-border bg-card flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-2 flex-1 max-w-md">
-          <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-          <input
-            type="text"
-            placeholder="Search staff by name, email, department, designation..."
+          <SmartSearchInput
             value={searchStaff}
-            onChange={(e) => setSearchStaff(e.target.value)}
-            className="w-full text-xs bg-muted/30 rounded-lg px-3 py-1.5 border border-border focus:outline-none focus:ring-1 focus:ring-primary"
+            onChange={setSearchStaff}
+            placeholder="Search staff by name, email, department, designation..."
+            size="sm"
           />
         </div>
 
-        <Button size="sm" onClick={() => setIsProvisionStaffOpen(true)}>
+        <Button size="sm" onClick={() => setIsProvisionStaffOpen(true)} className="shadow-xs font-bold text-xs">
           <Plus className="h-3.5 w-3.5 mr-1" /> Provision Staff User
         </Button>
       </div>
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {filteredStaff.map((staff) => (
-            <div
-              key={staff.id}
-              className="p-4 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all shadow-xs space-y-3"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-heading font-bold text-sm border border-primary/20">
-                    {staff.name.charAt(0)}
+        {filteredStaff.length === 0 ? (
+          <div className="py-12">
+            <RichEmptyState
+              icon={UserCheck}
+              title="No Staff Members Found"
+              description="No personnel match your search criteria. Try searching by name, designation, or department."
+              tips={[
+                "Reset your search query to view the full 52-member workforce directory",
+                "Provision new CSR helpdesk agents or field engineers",
+              ]}
+              actionLabel="Provision Staff Member"
+              onAction={() => setIsProvisionStaffOpen(true)}
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {filteredStaff.map((staff) => (
+              <div
+                key={staff.id}
+                className="p-4 rounded-2xl bg-card border border-border hover:border-primary/40 hover:bg-card-hover transition-all shadow-ambient space-y-3"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-heading font-bold text-sm border border-primary/20">
+                      {staff.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="font-heading font-bold text-sm text-foreground">{staff.name}</h3>
+                      <div className="text-[11px] text-muted-foreground">{staff.designation}</div>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-heading font-bold text-sm text-foreground">{staff.name}</h3>
-                    <div className="text-[11px] text-muted-foreground">{staff.designation}</div>
-                  </div>
-                </div>
 
                 <Badge
                   variant={
@@ -133,12 +148,13 @@ export function StaffDirectoryTab() {
               </div>
 
               <div className="flex items-center justify-between pt-2 border-t border-border text-[11px] font-mono">
-                <span className="text-emerald-600 font-bold">★ {staff.csatRating} CSAT</span>
+                <span className="text-success font-bold">★ {staff.csatRating} CSAT</span>
                 <span className="text-muted-foreground">{staff.tasksCompletedToday} Tasks Completed</span>
               </div>
             </div>
           ))}
         </div>
+      )}
       </div>
 
       {/* PROVISION STAFF USER MODAL */}

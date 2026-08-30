@@ -78,7 +78,7 @@ export function TariffPackagesView() {
                   <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-muted/30 border border-border text-center font-mono">
                     <div className="space-y-0.5">
                       <div className="text-[10px] text-muted-foreground flex items-center justify-center gap-1">
-                        <Download className="h-3 w-3 text-emerald-600" /> Down
+                        <Download className="h-3 w-3 text-success" /> Down
                       </div>
                       <div className="font-extrabold text-lg text-foreground">
                         {pkg.speedDownMbps} <span className="text-xs font-normal text-muted-foreground">Mbps</span>

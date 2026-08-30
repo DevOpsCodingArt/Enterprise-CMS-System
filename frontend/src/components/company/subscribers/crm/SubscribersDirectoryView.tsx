@@ -16,13 +16,14 @@ import {
   Unplug,
   Check,
   GripVertical,
+  Users,
 } from "lucide-react";
 import { mockDb, SubscriberRecord } from "@/mock/db";
 import { Customer360ProfileView } from "./profile/Customer360ProfileView";
 import { AddSubscriberModal } from "./AddSubscriberModal";
 import { SubscribersMapView } from "./SubscribersMapView";
-import { SubscribersGridView } from "./SubscribersGridView";
 import { SubscribersTable, ColumnItem } from "./SubscribersTable";
+import { RichEmptyState } from "@/components/ui/shared/RichEmptyState";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toast";
 

@@ -54,8 +54,8 @@ export function OpticalSignalTester() {
             <div
               className={`flex h-10 w-10 items-center justify-center rounded-xl font-heading font-bold text-sm ${
                 isHealthy
-                  ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-                  : "bg-rose-500/15 text-rose-600 dark:text-rose-400"
+                  ? "bg-success/15 text-success border border-success/30"
+                  : "bg-destructive/15 text-destructive border border-destructive/30"
               }`}
             >
               <Radio className="h-5 w-5" />
@@ -93,7 +93,7 @@ export function OpticalSignalTester() {
           <div className="w-full bg-card-subtle rounded-full h-2.5 overflow-hidden border border-border">
             <div
               className={`h-full transition-all duration-700 ${
-                isHealthy ? "bg-emerald-500 w-[78%]" : "bg-rose-500 w-[94%]"
+                isHealthy ? "bg-success w-[78%]" : "bg-destructive w-[94%]"
               }`}
             />
           </div>

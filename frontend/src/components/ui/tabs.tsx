@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { tabContentVariants } from "@/lib/motion";
 
 interface TabsContextValue {
   activeTab: string;
@@ -51,7 +53,7 @@ export function TabsList({
   return (
     <div
       className={cn(
-        "inline-flex h-11 items-center justify-start rounded-lg border border-border bg-card-subtle p-1 text-muted-foreground",
+        "inline-flex h-11 items-center justify-start rounded-xl border border-border bg-card-subtle p-1 text-muted-foreground shadow-ambient",
         className
       )}
     >
@@ -79,15 +81,20 @@ export function TabsTrigger({
       type="button"
       onClick={() => context.setActiveTab(value)}
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer select-none",
+        "relative inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer select-none",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        isActive
-          ? "bg-card text-foreground shadow-xs font-bold border border-border/40"
-          : "hover:text-foreground hover:bg-card/40",
+        isActive ? "text-foreground font-bold" : "text-muted-foreground hover:text-foreground",
         className
       )}
     >
-      {children}
+      {isActive && (
+        <motion.div
+          layoutId="tabActivePill"
+          className="absolute inset-0 rounded-lg bg-card border border-border shadow-xs z-0"
+          transition={{ type: "spring", stiffness: 450, damping: 35 }}
+        />
+      )}
+      <span className="relative z-10">{children}</span>
     </button>
   );
 }
@@ -102,14 +109,20 @@ export function TabsContent({
   children: React.ReactNode;
 }) {
   const context = React.useContext(TabsContext);
-  if (!context || context.activeTab !== value) return null;
+  if (!context) return null;
+
+  if (context.activeTab !== value) return null;
 
   return (
-    <div
-      tabIndex={0}
-      className={cn("focus-visible:outline-none animate-in fade-in-50", className)}
+    <motion.div
+      key={value}
+      variants={tabContentVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className={cn("w-full focus-visible:outline-none", className)}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Plus, MapPin, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { mockDb, WorkOrderTask } from "@/mock/db";
+import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function TaskAllocationTab() {
   const [tasksList] = useState<WorkOrderTask[]>(mockDb.workOrders);
@@ -28,11 +30,17 @@ export function TaskAllocationTab() {
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        >
           {tasksList.map((task) => (
-            <div
+            <motion.div
               key={task.id}
-              className="p-4 rounded-lg bg-card border border-border hover:border-primary/40 transition-all shadow-xs space-y-3"
+              variants={staggerItem}
+              className="p-5 rounded-2xl bg-card border border-border hover:border-primary/40 hover:bg-card-hover transition-all shadow-ambient space-y-3"
             >
               <div className="flex items-center justify-between">
                 <span className="font-mono font-bold text-xs text-primary">{task.taskNo}</span>
@@ -54,7 +62,7 @@ export function TaskAllocationTab() {
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-muted/30 border border-border/80 flex items-center justify-between text-xs font-mono">
+              <div className="p-3 rounded-xl bg-card-subtle/40 border border-border/80 flex items-center justify-between text-xs font-mono">
                 <div className="flex items-center gap-1.5 text-warning font-bold">
                   <Truck className="h-3.5 w-3.5" />
                   <span>{task.assignedTo} ({task.vanNo})</span>
@@ -63,9 +71,9 @@ export function TaskAllocationTab() {
                   {task.status === "in_progress" ? "In Progress" : task.status === "assigned" ? "Assigned" : "To Do"}
                 </Badge>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

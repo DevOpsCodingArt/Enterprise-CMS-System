@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Edit3, Trash2 } from "lucide-react";
+import { Edit3, Trash2, PlusCircle } from "lucide-react";
 import { Tooltip } from "@/components/ui/tooltip";
+import { RichEmptyState } from "@/components/ui/shared/RichEmptyState";
 
 export interface ConnectionRecordItem {
   id: string; // SR No (e.g. PN-2026-0401)
@@ -148,8 +149,16 @@ export function ConnectionsTable({
             <tbody className="divide-y divide-border">
               {connections.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="px-4 py-8 text-center text-muted-foreground font-mono text-xs">
-                    No connections found.
+                  <td colSpan={10} className="p-8 text-center">
+                    <RichEmptyState
+                      icon={PlusCircle}
+                      title="No Connection Leads Found"
+                      description="No active or pending connection requests match the current search filters."
+                      tips={[
+                        "Broaden your active search or area filters",
+                        "Register new fiber broadband subscriber applications",
+                      ]}
+                    />
                   </td>
                 </tr>
               ) : (

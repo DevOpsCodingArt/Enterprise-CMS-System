@@ -3,6 +3,7 @@
 /* ================================================================
    PRIME ONE TELECOM OS — DESIGN SYSTEM TOKENS
    Calibrated Enterprise Theme (Light Mode Default & Dark Mode #091540)
+   100% Tokenized CSS Variables (Zero Hardcoded Arbitrary Styles)
    ================================================================ */
 
 @theme inline {
@@ -12,6 +13,7 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-card-subtle: var(--card-subtle);
+  --color-card-hover: var(--card-hover);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-muted: var(--muted);
@@ -62,13 +64,20 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-full: 9999px;
+
+  /* Ambient Tinted Shadows */
+  --shadow-ambient: var(--shadow-ambient);
+  --shadow-elevated: var(--shadow-elevated);
+  --shadow-glow-primary: var(--shadow-glow-primary);
+  --shadow-glow-success: var(--shadow-glow-success);
+  --shadow-glow-destructive: var(--shadow-glow-destructive);
 }
 
 /* ================================================================
-   LIGHT MODE (DEFAULT) — Crisp Slate Canvas & Electric Indigo
+   LIGHT MODE (DEFAULT) — Crisp Slate Canvas & Royal Electric Blue
    ================================================================ */
 :root {
-  --radius: 0.375rem;
+  --radius: 0.5rem;
 
   /* Canvas & Surfaces */
   --background: #F8FAFC;        /* Clean Slate 50 */
@@ -76,6 +85,7 @@
   --card: #FFFFFF;              /* Crisp white cards */
   --card-foreground: #0F172A;
   --card-subtle: #F1F5F9;       /* Slate 100 subtle surface */
+  --card-hover: #F8FAFC;        /* Gentle hover surface */
   --popover: #FFFFFF;
   --popover-foreground: #0F172A;
   --muted: #F1F5F9;
@@ -105,7 +115,7 @@
   --input: #E2E8F0;
   --ring: #2563EB;
 
-  /* Sidebar (Exact same background color for flawless consistency) */
+  /* Sidebar */
   --sidebar: #F8FAFC;
   --sidebar-foreground: #0F172A;
   --sidebar-muted: #64748B;
@@ -113,6 +123,13 @@
   --sidebar-accent: #F1F5F9;
   --sidebar-accent-foreground: #0F172A;
   --sidebar-ring: #2563EB;
+
+  /* Ambient Tinted Shadows */
+  --shadow-ambient: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-elevated: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --shadow-glow-primary: 0 0 20px rgba(37, 99, 235, 0.18);
+  --shadow-glow-success: 0 0 20px rgba(16, 185, 129, 0.18);
+  --shadow-glow-destructive: 0 0 20px rgba(239, 68, 68, 0.18);
 }
 
 /* ================================================================
@@ -121,11 +138,12 @@
    ================================================================ */
 .dark {
   /* Canvas & Elevated Surfaces */
-  --background: #091540;        /* Midnight Navy base canvas requested */
+  --background: #091540;        /* Midnight Navy base canvas */
   --foreground: #FFFFFF;        /* Pure white primary text */
   --card: #0D1C4E;              /* Harmonious elevated surface */
   --card-foreground: #FFFFFF;
   --card-subtle: #081335;       /* Sunken surface for inputs / inner containers */
+  --card-hover: #11225A;        /* Elevated hover surface */
   --popover: #0D1C4E;
   --popover-foreground: #FFFFFF;
   --muted: #081335;
@@ -149,13 +167,13 @@
   --info: #38BDF8;              /* Sky 400 */
   --info-foreground: #091540;
 
-  /* Crisp 1px Subtle Borders (Not glowing blue) */
+  /* Crisp 1px Subtle Borders (Harmonious alpha borders) */
   --border: rgba(255, 255, 255, 0.1);
   --border-subtle: rgba(255, 255, 255, 0.05);
   --input: rgba(255, 255, 255, 0.12);
   --ring: #3B82F6;
 
-  /* Sidebar (Exact same #091540 background color) */
+  /* Sidebar */
   --sidebar: #091540;
   --sidebar-foreground: #FFFFFF;
   --sidebar-muted: #94A3B8;
@@ -163,6 +181,13 @@
   --sidebar-accent: rgba(255, 255, 255, 0.06);
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-ring: #3B82F6;
+
+  /* Ambient Tinted Shadows */
+  --shadow-ambient: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-elevated: 0 14px 28px rgba(0, 0, 0, 0.45), 0 10px 10px rgba(0, 0, 0, 0.35);
+  --shadow-glow-primary: 0 0 25px rgba(59, 130, 246, 0.25);
+  --shadow-glow-success: 0 0 25px rgba(52, 211, 153, 0.25);
+  --shadow-glow-destructive: 0 0 25px rgba(248, 113, 113, 0.25);
 }
 
 /* Base resets & typography */
@@ -176,18 +201,36 @@ body {
   font-family: var(--font-body);
 }
 
+/* Typography Line Height Utilities */
+.leading-heading {
+  line-height: 1.18;
+}
+
+.leading-body {
+  line-height: 1.5;
+}
+
+.leading-caption {
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+}
+
 /* Custom scrollbars */
+.custom-scrollbar::-webkit-scrollbar,
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+.custom-scrollbar::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+.custom-scrollbar::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 9999px;
 }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }

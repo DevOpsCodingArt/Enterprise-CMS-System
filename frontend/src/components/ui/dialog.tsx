@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { modalVariants } from "@/lib/motion";
 
 interface DialogContextValue {
   isOpen: boolean;
@@ -43,22 +45,33 @@ export function Dialog({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   return (
-    <DialogContext.Provider value={{ isOpen, onClose }}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-sidebar/70 backdrop-blur-xs transition-opacity animate-in fade-in"
-          onClick={onClose}
-        />
-        {/* Content Container */}
-        <div className="relative z-50 w-full max-w-lg overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-xl animate-in zoom-in-95">
-          {children}
-        </div>
-      </div>
-    </DialogContext.Provider>
+    <AnimatePresence>
+      {isOpen && (
+        <DialogContext.Provider value={{ isOpen, onClose }}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+              onClick={onClose}
+            />
+            {/* Content Container */}
+            <motion.div
+              variants={modalVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="relative z-50 w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-elevated"
+            >
+              {children}
+            </motion.div>
+          </div>
+        </DialogContext.Provider>
+      )}
+    </AnimatePresence>
   );
 }
 

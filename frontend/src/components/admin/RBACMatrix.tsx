@@ -187,7 +187,7 @@ export function RBACMatrix() {
 
                     <TableCell className="text-center">
                       {act.companyOwner ? (
-                        <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                        <Check className="h-4 w-4 text-success mx-auto" />
                       ) : (
                         <X className="h-4 w-4 text-muted-foreground/30 mx-auto" />
                       )}
@@ -195,7 +195,7 @@ export function RBACMatrix() {
 
                     <TableCell className="text-center">
                       {act.branchManager ? (
-                        <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                        <Check className="h-4 w-4 text-success mx-auto" />
                       ) : (
                         <X className="h-4 w-4 text-muted-foreground/30 mx-auto" />
                       )}
@@ -203,7 +203,7 @@ export function RBACMatrix() {
 
                     <TableCell className="text-center">
                       {act.nocEngineer ? (
-                        <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                        <Check className="h-4 w-4 text-success mx-auto" />
                       ) : (
                         <X className="h-4 w-4 text-muted-foreground/30 mx-auto" />
                       )}
@@ -211,7 +211,7 @@ export function RBACMatrix() {
 
                     <TableCell className="text-center">
                       {act.helpdeskCSR ? (
-                        <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                        <Check className="h-4 w-4 text-success mx-auto" />
                       ) : (
                         <X className="h-4 w-4 text-muted-foreground/30 mx-auto" />
                       )}
@@ -219,7 +219,7 @@ export function RBACMatrix() {
 
                     <TableCell className="text-center">
                       {act.fieldEngineer ? (
-                        <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                        <Check className="h-4 w-4 text-success mx-auto" />
                       ) : (
                         <X className="h-4 w-4 text-muted-foreground/30 mx-auto" />
                       )}

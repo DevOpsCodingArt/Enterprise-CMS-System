@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
+  MessageSquare,
   Ticket,
   Search,
   Send,
@@ -10,13 +12,51 @@ import {
   Activity,
   Radio,
   RefreshCw,
+  PanelRightClose,
+  PanelRightOpen,
+  Check,
+  CheckCheck,
+  Phone,
+  User,
+  Wifi,
+  Paperclip,
+  Smile,
+  Shield,
+  Clock,
+  Sparkles,
+  ChevronRight,
+  AlertCircle,
+  Globe,
+  Smartphone,
+  Play,
+  Pause,
+  Volume2,
+  FileText,
+  Image as ImageIcon,
+  MoreVertical,
+  Plus,
+  Filter,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/toast";
 import { mockDb, SubscriberRecord } from "@/mock/db";
 import { cn } from "@/lib/utils";
 
-interface MessageItem {
+interface ConversationThread {
+  id: string;
+  subscriber: SubscriberRecord;
+  channel: "whatsapp" | "web_chat" | "mobile_app";
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadCount: number;
+  status: "open" | "unassigned" | "mine" | "resolved";
+  category: "Fiber Outage" | "Billing Query" | "Speed Upgrade" | "General";
+  isOnline: boolean;
+}
+
+interface ChatMessage {
   id: string;
   sender: "customer" | "staff" | "system";
   senderName: string;
@@ -24,67 +64,141 @@ interface MessageItem {
   isInternalNote: boolean;
   time: string;
   status: "sent" | "delivered" | "read";
+  type?: "text" | "voice" | "system";
+  audioDuration?: string;
 }
 
 export function LiveChatWorkspace() {
-  const [activeFilter, setActiveFilter] = useState<"all" | "my_chats" | "waiting" | "closed">("all");
+  const toast = useToast();
+  const [activeFilter, setActiveFilter] = useState<"all" | "unread" | "mine" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCustomer, setSelectedCustomer] = useState<SubscriberRecord>(mockDb.subscribers[0]);
-  const [opticalDbm, setOpticalDbm] = useState<number>(-19.24);
   const [isInternalNote, setIsInternalNote] = useState(false);
   const [chatInput, setChatInput] = useState("");
-  const [isCustomerHudOpen, setIsCustomerHudOpen] = useState(true);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [messages, setMessages] = useState<MessageItem[]>([
+  // Customer 360 / Contact Info Drawer - closed by default
+  const [isCustomerHudOpen, setIsCustomerHudOpen] = useState(false);
+
+  // Realistic WhatsApp/Telegram-style conversation threads
+  const [threads, setThreads] = useState<ConversationThread[]>([
+    {
+      id: "thread-1",
+      subscriber: mockDb.subscribers[0], // Ali Hassan
+      channel: "whatsapp",
+      lastMessage: "Our technician Usman is en route with OTDR meter.",
+      lastMessageTime: "10:43 AM",
+      unreadCount: 0,
+      status: "mine",
+      category: "Fiber Outage",
+      isOnline: true,
+    },
+    {
+      id: "thread-2",
+      subscriber: mockDb.subscribers[1], // Dr. Farooq Khan
+      channel: "whatsapp",
+      lastMessage: "I want to upgrade my package to 100 Mbps Gigabit plan.",
+      lastMessageTime: "10:20 AM",
+      unreadCount: 2,
+      status: "unassigned",
+      category: "Speed Upgrade",
+      isOnline: true,
+    },
+    {
+      id: "thread-3",
+      subscriber: mockDb.subscribers[2], // Bilal Qureshi
+      channel: "mobile_app",
+      lastMessage: "Invoice for August has been settled via JazzCash.",
+      lastMessageTime: "09:15 AM",
+      unreadCount: 0,
+      status: "mine",
+      category: "Billing Query",
+      isOnline: false,
+    },
+    {
+      id: "thread-4",
+      subscriber: mockDb.subscribers[3], // Zainab Bibi
+      channel: "web_chat",
+      lastMessage: "Router reconnected successfully. Thank you for your support!",
+      lastMessageTime: "Yesterday",
+      unreadCount: 0,
+      status: "resolved",
+      category: "General",
+      isOnline: false,
+    },
+  ]);
+
+  const [selectedThreadId, setSelectedThreadId] = useState<string>("thread-1");
+  const selectedThread = threads.find((t) => t.id === selectedThreadId) || threads[0];
+  const selectedCustomer = selectedThread.subscriber;
+
+  // Active message history for current thread
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "msg-1",
       sender: "customer",
       senderName: "Ali Hassan",
-      content: "Salam, my router LOS light started blinking red 10 minutes ago. Link is disconnected.",
+      content: "Salam, my internet stopped working about 10 minutes ago and the LOS light on the optical router is blinking red.",
       isInternalNote: false,
       time: "10:40 AM",
       status: "read",
+      type: "text",
     },
     {
       id: "msg-2",
       sender: "system",
       senderName: "SmartOLT Radar",
-      content: "⚡ Automated Diagnostic: Optical RX dropped to -27.4 dBm on Slot 0/2, PON-04 (High Attenuation).",
+      content: "Optical RX signal dropped below nominal threshold to -27.4 dBm on Slot 0/2, PON-04 (High Attenuation detected).",
       isInternalNote: false,
       time: "10:41 AM",
       status: "read",
+      type: "system",
     },
     {
       id: "msg-3",
-      sender: "staff",
-      senderName: "Eng. Moiz (Internal Note)",
-      content: "🔒 Note: Checked FAT-12 port 3 on pole. Splicer Usman (Van #04) is 4 mins away.",
-      isInternalNote: true,
-      time: "10:42 AM",
+      sender: "customer",
+      senderName: "Ali Hassan",
+      content: "Voice note from customer describing router lights.",
+      isInternalNote: false,
+      time: "10:41 AM",
       status: "read",
+      type: "voice",
+      audioDuration: "0:14",
     },
     {
       id: "msg-4",
       sender: "staff",
-      senderName: "Eng. Moiz (NOC Lead)",
-      content: "Walaikum Assalam Ali! We verified the optical drop. Ticket #TK-8842 has been generated and Splicer Usman (Van #04) is en route with OTDR meter.",
+      senderName: "Eng. Moiz Ahmad",
+      content: "Checked FAT-12 port 3 on pole. Field Splicer Usman (Van #04) is en route with OTDR meter.",
+      isInternalNote: true,
+      time: "10:42 AM",
+      status: "read",
+      type: "text",
+    },
+    {
+      id: "msg-5",
+      sender: "staff",
+      senderName: "Eng. Moiz Ahmad (NOC)",
+      content: "Walaikum Assalam Ali! We verified the optical drop on your sector. Ticket #TK-8842 has been dispatched and Splicer Usman is 4 minutes away.",
       isInternalNote: false,
       time: "10:43 AM",
       status: "delivered",
+      type: "text",
     },
   ]);
 
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
 
-    const newMsg: MessageItem = {
+    const newMsg: ChatMessage = {
       id: `msg-${Date.now()}`,
       sender: "staff",
-      senderName: isInternalNote ? "Eng. Moiz (Internal Note)" : "Eng. Moiz (NOC Lead)",
+      senderName: isInternalNote ? "Eng. Moiz Ahmad (Private Note)" : "Eng. Moiz Ahmad (NOC)",
       content: chatInput.trim(),
       isInternalNote,
-      time: "Just now",
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       status: "sent",
+      type: "text",
     };
 
     setMessages((prev) => [...prev, newMsg]);
@@ -92,143 +206,168 @@ export function LiveChatWorkspace() {
   };
 
   const handleCannedInsert = (template: string) => {
-    setChatInput(template);
+    setChatInput(template.replace("{{optical_signal}}", `${selectedCustomer.opticalRxDbm}`));
   };
 
-  const handleToggleFiberCut = () => {
-    if (opticalDbm < -25) {
-      setOpticalDbm(-19.24);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `msg-sys-${Date.now()}`,
-          sender: "system",
-          senderName: "SmartOLT Radar",
-          content: "✅ SMARTOLT RESTORED: Optical RX recovered to nominal -19.24 dBm. PPPoE link re-authenticated.",
-          isInternalNote: false,
-          time: "Just now",
-          status: "read",
-        },
-      ]);
-    } else {
-      setOpticalDbm(-32.54);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `msg-sys-${Date.now()}`,
-          sender: "system",
-          senderName: "SmartOLT Radar",
-          content: "🚨 SMARTOLT ALARM: Optical signal loss degraded to -32.54 dBm (Critical Fiber Cut detected).",
-          isInternalNote: false,
-          time: "Just now",
-          status: "read",
-        },
-      ]);
-    }
-  };
+  const filteredThreads = threads.filter((t) => {
+    const matchesSearch =
+      t.subscriber.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.subscriber.pppoeUsername.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.lastMessage.toLowerCase().includes(searchQuery.toLowerCase());
+
+    if (!matchesSearch) return false;
+    if (activeFilter === "unread") return t.unreadCount > 0;
+    if (activeFilter === "mine") return t.status === "mine";
+    if (activeFilter === "resolved") return t.status === "resolved";
+    return true;
+  });
 
   return (
-    <div className="flex h-full w-full bg-background overflow-hidden border-0">
-      {/* Col 1: Queue Inboxes (Left) */}
-      <div className="w-80 border-r border-border bg-card flex flex-col shrink-0">
-        <div className="p-3 border-b border-border flex items-center justify-between">
-          <span className="font-heading font-bold text-xs uppercase tracking-wider text-muted-foreground">
-            Inboxes & Queues
-          </span>
-          <Badge variant="secondary" className="text-[10px] font-mono">
-            Islamabad F-10
-          </Badge>
+    <div className="flex h-full w-full bg-background overflow-hidden select-none font-body">
+      {/* ======================================================================= */}
+      {/* COLUMN 1: WhatsApp / Telegram Thread List (Left Sidebar — 340px)        */}
+      {/* ======================================================================= */}
+      <div className="flex flex-col h-full w-84 border-r border-border bg-card shrink-0 overflow-hidden z-20 shadow-ambient">
+        {/* 1. Header (WhatsApp Web style) */}
+        <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-card shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground font-heading font-extrabold text-sm shadow-xs">
+              M
+              <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-heading font-extrabold text-sm text-foreground leading-tight">
+                Chats
+              </span>
+              <span className="text-[10px] text-muted-foreground font-mono">
+                Eng. Moiz (NOC Lead)
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <Tooltip content="New Conversation" position="bottom">
+              <button
+                onClick={() => toast.info("New Chat", "Select customer from subscriber directory.")}
+                className="p-2 rounded-xl text-muted-foreground hover:bg-card-subtle hover:text-foreground transition-colors cursor-pointer"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </Tooltip>
+          </div>
         </div>
 
-        {/* Search */}
-        <div className="p-2.5 border-b border-border/70 bg-muted/20">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+        {/* 2. WhatsApp Search Bar */}
+        <div className="p-3 border-b border-border/70 bg-card-subtle/30 shrink-0">
+          <div className="relative flex items-center">
+            <Search className="absolute left-3 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
             <input
               type="text"
-              placeholder="Search subscriber, PPPoE, phone..."
+              placeholder="Search or start new chat..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-card rounded-lg border border-border focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-card rounded-xl border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs transition-all"
             />
           </div>
         </div>
 
-        {/* Filter Chips */}
-        <div className="grid grid-cols-4 p-1.5 border-b border-border text-[11px] font-medium text-center">
+        {/* 3. Filter Pills */}
+        <div className="flex items-center gap-1.5 px-3 py-2 border-b border-border bg-card overflow-x-auto custom-scrollbar shrink-0 text-xs font-medium">
           <button
             onClick={() => setActiveFilter("all")}
             className={cn(
-              "py-1 rounded-md transition-colors",
-              activeFilter === "all" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
+              "px-3 py-1 rounded-full text-[11px] transition-all cursor-pointer whitespace-nowrap",
+              activeFilter === "all"
+                ? "bg-primary text-primary-foreground font-bold shadow-2xs"
+                : "bg-card-subtle text-muted-foreground hover:text-foreground"
             )}
           >
-            All (3)
+            All
           </button>
           <button
-            onClick={() => setActiveFilter("my_chats")}
+            onClick={() => setActiveFilter("unread")}
             className={cn(
-              "py-1 rounded-md transition-colors",
-              activeFilter === "my_chats" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
+              "px-3 py-1 rounded-full text-[11px] transition-all cursor-pointer whitespace-nowrap",
+              activeFilter === "unread"
+                ? "bg-primary text-primary-foreground font-bold shadow-2xs"
+                : "bg-card-subtle text-muted-foreground hover:text-foreground"
             )}
           >
-            Mine (1)
+            Unread
           </button>
           <button
-            onClick={() => setActiveFilter("waiting")}
+            onClick={() => setActiveFilter("mine")}
             className={cn(
-              "py-1 rounded-md transition-colors",
-              activeFilter === "waiting" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
+              "px-3 py-1 rounded-full text-[11px] transition-all cursor-pointer whitespace-nowrap",
+              activeFilter === "mine"
+                ? "bg-primary text-primary-foreground font-bold shadow-2xs"
+                : "bg-card-subtle text-muted-foreground hover:text-foreground"
             )}
           >
-            Waiting (1)
+            My Chats
           </button>
           <button
-            onClick={() => setActiveFilter("closed")}
+            onClick={() => setActiveFilter("resolved")}
             className={cn(
-              "py-1 rounded-md transition-colors",
-              activeFilter === "closed" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:bg-muted"
+              "px-3 py-1 rounded-full text-[11px] transition-all cursor-pointer whitespace-nowrap",
+              activeFilter === "resolved"
+                ? "bg-primary text-primary-foreground font-bold shadow-2xs"
+                : "bg-card-subtle text-muted-foreground hover:text-foreground"
             )}
           >
-            Closed (1)
+            Resolved
           </button>
         </div>
 
-        {/* Conversation List */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1.5 custom-scrollbar">
-          {mockDb.subscribers.map((sub) => {
-            const isSelected = selectedCustomer.id === sub.id;
+        {/* 4. WhatsApp / Telegram Thread List */}
+        <div className="flex-1 overflow-y-auto divide-y divide-border/40 custom-scrollbar">
+          {filteredThreads.map((thread) => {
+            const isSelected = selectedThreadId === thread.id;
+
             return (
               <button
-                key={sub.id}
-                onClick={() => {
-                  setSelectedCustomer(sub);
-                  setOpticalDbm(sub.opticalRxDbm);
-                }}
+                key={thread.id}
+                onClick={() => setSelectedThreadId(thread.id)}
                 className={cn(
-                  "w-full text-left p-3 rounded-xl border transition-all cursor-pointer",
+                  "w-full text-left p-3.5 transition-all cursor-pointer flex items-center gap-3 relative",
                   isSelected
-                    ? "bg-primary/10 border-primary/40 shadow-2xs"
-                    : "bg-card border-border/70 hover:bg-muted/40"
+                    ? "bg-primary/10 border-l-4 border-primary"
+                    : "hover:bg-card-hover"
                 )}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-heading font-bold text-xs text-foreground truncate">
-                    {sub.fullName}
-                  </span>
-                  <Badge
-                    variant={sub.opticalRxDbm < -25 ? "destructive" : "success"}
-                    className="text-[9.5px] py-0 px-1 font-mono"
-                  >
-                    {sub.opticalRxDbm} dBm
-                  </Badge>
+                {/* Avatar */}
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary font-heading font-extrabold text-sm shrink-0 border border-primary/25 shadow-2xs">
+                  {thread.subscriber.fullName.charAt(0)}
+                  {thread.isOnline && (
+                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
+                  )}
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                  <span className="font-mono">{sub.pppoeUsername}</span>
-                  <span>50M Ultra</span>
-                </div>
-                <div className="text-[10px] text-muted-foreground/80 mt-1 truncate">
-                  House 24, St 12, Sector F-10/2...
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <span className="font-heading font-bold text-xs text-foreground truncate">
+                      {thread.subscriber.fullName}
+                    </span>
+                    <span className="text-[10px] font-mono text-muted-foreground shrink-0 ml-1">
+                      {thread.lastMessageTime}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 min-w-0 flex-1 mr-2">
+                      {thread.id === "thread-1" && (
+                        <CheckCheck className="h-3.5 w-3.5 text-info shrink-0" />
+                      )}
+                      <span className="truncate text-[11px]">{thread.lastMessage}</span>
+                    </div>
+
+                    {thread.unreadCount > 0 && (
+                      <span className="flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-primary-foreground font-mono text-[9.5px] font-bold shrink-0 shadow-2xs">
+                        {thread.unreadCount}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </button>
             );
@@ -236,142 +375,302 @@ export function LiveChatWorkspace() {
         </div>
       </div>
 
-      {/* Col 2: Active Message Stream (Center) */}
-      <div className="flex-1 flex flex-col bg-muted/15 min-w-0 border-r border-border">
-        {/* Topbar of active chat */}
-        <div className="p-3 border-b border-border bg-card flex items-center justify-between shadow-2xs shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xs font-heading border border-primary/20">
+      {/* ======================================================================= */}
+      {/* COLUMN 2: WhatsApp / Telegram Chat Area (Center)                         */}
+      {/* ======================================================================= */}
+      <div className="flex-1 flex flex-col h-full bg-card-subtle/20 min-w-0 overflow-hidden relative">
+        {/* 1. WhatsApp Header Bar */}
+        <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-card shadow-2xs shrink-0 z-10">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/15 text-primary font-heading font-extrabold text-sm shrink-0 border border-primary/25 shadow-2xs">
               {selectedCustomer.fullName.charAt(0)}
+              {selectedThread.isOnline && (
+                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
+              )}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-heading font-bold text-sm text-foreground">
-                  {selectedCustomer.fullName}
-                </span>
-                <Badge variant="secondary" className="text-[10px] font-mono">
-                  {selectedCustomer.customerCode}
-                </Badge>
-                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-medium flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" /> Live Session
-                </span>
-              </div>
-              <div className="text-[11px] text-muted-foreground mt-0.5">
-                {selectedCustomer.packageName} · {selectedCustomer.address}
-              </div>
+
+            <div className="flex flex-col min-w-0">
+              <span className="font-heading font-extrabold text-sm text-foreground truncate">
+                {selectedCustomer.fullName}
+              </span>
+              <span className="text-[11px] text-success font-medium flex items-center gap-1">
+                {selectedThread.isOnline ? "online" : "last seen today at 09:15 AM"}
+              </span>
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => alert(`Escalated to Trouble Ticket for ${selectedCustomer.fullName}`)}
-              className="text-xs"
+          {/* Action Icons */}
+          <div className="flex items-center gap-2 shrink-0">
+            <Tooltip content={`Call ${selectedCustomer.phone}`} position="bottom">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => toast.info("Calling Customer", `Connecting VoIP bridge to ${selectedCustomer.phone}`)}
+                className="h-9 px-3 rounded-xl text-xs font-medium cursor-pointer shadow-2xs"
+              >
+                <Phone className="h-3.5 w-3.5 text-primary mr-1.5" />
+                <span className="hidden sm:inline font-mono">{selectedCustomer.phone}</span>
+              </Button>
+            </Tooltip>
+
+            <Tooltip content="Escalate to NOC Trouble Ticket" position="bottom">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => toast.info("Ticket Escalated", `Trouble ticket opened for ${selectedCustomer.fullName}`)}
+                className="h-9 px-3 rounded-xl text-xs font-medium cursor-pointer shadow-2xs"
+              >
+                <Ticket className="h-3.5 w-3.5 text-warning mr-1.5" />
+                <span className="hidden sm:inline">Ticket</span>
+              </Button>
+            </Tooltip>
+
+            {/* Telegram-style Contact Info / NOC Toggle */}
+            <Tooltip
+              content={isCustomerHudOpen ? "Close Customer Profile" : "Open Customer Profile & Telemetry"}
+              position="bottom"
             >
-              <Ticket className="h-3.5 w-3.5 text-warning mr-1" /> Ticket
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsCustomerHudOpen(!isCustomerHudOpen)}
-              className="text-xs"
-            >
-              <Activity className="h-3.5 w-3.5 text-primary mr-1" /> Customer 360
-            </Button>
+              <button
+                onClick={() => setIsCustomerHudOpen(!isCustomerHudOpen)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-2xs",
+                  isCustomerHudOpen
+                    ? "bg-primary text-primary-foreground border-primary shadow-glow-primary"
+                    : "bg-card text-foreground border-border hover:bg-card-hover hover:border-primary/40"
+                )}
+                aria-label="Toggle Customer Profile"
+              >
+                <Activity className="h-3.5 w-3.5 shrink-0" />
+                <span>Profile & NOC</span>
+                {isCustomerHudOpen ? (
+                  <PanelRightClose className="h-3.5 w-3.5 ml-0.5" />
+                ) : (
+                  <PanelRightOpen className="h-3.5 w-3.5 ml-0.5 text-primary" />
+                )}
+              </button>
+            </Tooltip>
           </div>
         </div>
 
-        {/* Message Stream */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={cn(
-                "flex flex-col max-w-[85%]",
-                m.sender === "staff" ? "ml-auto items-end" : "items-start",
-                m.sender === "system" && "mx-auto items-center max-w-[95%]"
-              )}
-            >
-              <span className="text-[10px] text-muted-foreground mb-0.5 px-1 font-medium">
-                {m.senderName} · {m.time}
-              </span>
+        {/* 2. WhatsApp / Telegram Message Stream */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 custom-scrollbar">
+          {/* Centered Date Badge */}
+          <div className="flex items-center justify-center my-3">
+            <span className="px-3.5 py-1 rounded-lg bg-card/90 backdrop-blur-md border border-border text-[11px] font-mono font-bold text-muted-foreground shadow-2xs uppercase tracking-wider">
+              TODAY
+            </span>
+          </div>
 
+          {messages.map((m) => {
+            const isStaff = m.sender === "staff";
+            const isSystem = m.sender === "system";
+
+            if (isSystem) {
+              return (
+                <div key={m.id} className="flex justify-center my-2">
+                  <div className="max-w-md w-full p-2.5 rounded-xl border border-border bg-card/90 shadow-2xs text-center space-y-0.5">
+                    <div className="flex items-center justify-center gap-1.5 text-[10.5px] font-mono font-bold text-foreground">
+                      <Radio className="h-3.5 w-3.5 text-primary" />
+                      <span>{m.senderName}</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground font-body leading-relaxed">
+                      {m.content}
+                    </p>
+                    <span className="text-[9.5px] font-mono text-muted-foreground block">{m.time}</span>
+                  </div>
+                </div>
+              );
+            }
+
+            // Voice Note Message Bubble (Telegram / WhatsApp style)
+            if (m.type === "voice") {
+              return (
+                <div
+                  key={m.id}
+                  className={cn(
+                    "flex flex-col max-w-[70%]",
+                    isStaff ? "ml-auto items-end" : "items-start"
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "p-3 rounded-2xl flex items-center gap-3 shadow-2xs select-none",
+                      isStaff
+                        ? "bg-primary text-primary-foreground rounded-tr-xs"
+                        : "bg-card border border-border/80 text-foreground rounded-tl-xs"
+                    )}
+                  >
+                    <button
+                      onClick={() => setIsPlayingAudio(!isPlayingAudio)}
+                      className={cn(
+                        "flex h-9 w-9 items-center justify-center rounded-full transition-transform active:scale-95 cursor-pointer shadow-xs",
+                        isStaff ? "bg-primary-foreground text-primary" : "bg-primary text-primary-foreground"
+                      )}
+                    >
+                      {isPlayingAudio ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
+                    </button>
+
+                    <div className="flex flex-col min-w-[140px] space-y-1">
+                      {/* Waveform graphic */}
+                      <div className="flex items-center gap-0.5 h-4">
+                        {[40, 70, 30, 90, 60, 100, 45, 80, 60, 35, 90, 50, 75, 40, 65, 85].map((h, i) => (
+                          <span
+                            key={i}
+                            style={{ height: `${h}%` }}
+                            className={cn(
+                              "w-1 rounded-full",
+                              isStaff ? "bg-primary-foreground/70" : "bg-primary/70"
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] font-mono opacity-80">
+                        <span>{m.audioDuration || "0:14"}</span>
+                        <span>{m.time}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            // Standard Text / Internal Note Message Bubble
+            return (
               <div
+                key={m.id}
                 className={cn(
-                  "p-3 rounded-2xl text-xs leading-relaxed",
-                  m.isInternalNote
-                    ? "bg-warning/20 border border-warning/40 text-warning-foreground dark:text-warning rounded-tr-none font-medium shadow-2xs"
-                    : m.sender === "staff"
-                      ? "bg-primary text-primary-foreground rounded-tr-none shadow-xs"
-                      : m.sender === "system"
-                        ? "bg-card border border-border text-foreground font-mono text-[11px] text-center"
-                        : "bg-card border border-border text-foreground rounded-tl-none shadow-2xs"
+                  "flex flex-col max-w-[70%]",
+                  isStaff ? "ml-auto items-end" : "items-start"
                 )}
               >
-                {m.content}
+                <div
+                  className={cn(
+                    "p-3.5 rounded-2xl text-xs leading-relaxed select-text relative shadow-2xs",
+                    m.isInternalNote
+                      ? "bg-warning/15 border border-warning/30 text-foreground rounded-tr-xs shadow-xs"
+                      : isStaff
+                        ? "bg-primary text-primary-foreground rounded-tr-xs shadow-glow-primary"
+                        : "bg-card border border-border/80 text-foreground rounded-tl-xs"
+                  )}
+                >
+                  {/* Internal Note Banner Header */}
+                  {m.isInternalNote && (
+                    <div className="flex items-center gap-1.5 text-[10.5px] font-mono font-bold text-warning mb-1.5 pb-1 border-b border-warning/20">
+                      <Lock className="h-3 w-3" />
+                      <span>STAFF PRIVATE NOTE</span>
+                    </div>
+                  )}
+
+                  <p className="pr-12">{m.content}</p>
+
+                  {/* WhatsApp-style Timestamp & Delivery Ticks in bottom-right */}
+                  <div
+                    className={cn(
+                      "flex items-center justify-end gap-1 text-[9.5px] font-mono mt-1",
+                      isStaff ? "text-primary-foreground/80" : "text-muted-foreground"
+                    )}
+                  >
+                    <span>{m.time}</span>
+                    {isStaff && !m.isInternalNote && (
+                      <span className="text-info font-bold">
+                        {m.status === "sent" ? (
+                          <Check className="inline h-3 w-3" />
+                        ) : (
+                          <CheckCheck className="inline h-3.5 w-3.5 text-cyan-300" />
+                        )}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* Composer & Slash Replies */}
-        <div className="p-3 border-t border-border bg-card space-y-2 shrink-0">
-          {/* Quick Canned Chips */}
+        {/* 3. WhatsApp / Telegram Input Composer */}
+        <div className="p-3 border-t border-border bg-card space-y-2 shrink-0 shadow-elevated z-10">
+          {/* Internal Staff Note Banner (When active) */}
+          {isInternalNote && (
+            <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-warning/15 border border-warning/30 text-xs text-foreground font-medium animate-in fade-in-0 duration-150">
+              <div className="flex items-center gap-2">
+                <Lock className="h-3.5 w-3.5 text-warning shrink-0" />
+                <span>Internal Note Mode (Saved to subscriber log, NOT sent to customer)</span>
+              </div>
+              <button
+                onClick={() => setIsInternalNote(false)}
+                className="text-[11px] text-warning underline hover:no-underline font-bold cursor-pointer"
+              >
+                Switch to Customer Reply
+              </button>
+            </div>
+          )}
+
+          {/* Quick Canned Shortcuts Pill Bar */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs custom-scrollbar">
-            <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-mono font-bold">
+            <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-mono font-bold shrink-0">
               <Zap className="h-3 w-3 text-warning" /> /
             </span>
             {mockDb.cannedShortcuts.map((c) => (
               <button
                 key={c.id}
-                onClick={() => handleCannedInsert(c.templateText.replace("{{optical_signal}}", `${opticalDbm}`))}
-                className="px-2 py-0.5 rounded-md bg-muted/60 hover:bg-primary/10 hover:text-primary border border-border text-[10.5px] font-mono text-muted-foreground transition-colors shrink-0 cursor-pointer"
+                onClick={() => handleCannedInsert(c.templateText)}
+                className="px-2.5 py-1 rounded-lg bg-card-subtle hover:bg-primary/10 hover:text-primary border border-border text-[10.5px] font-mono text-muted-foreground transition-all shrink-0 cursor-pointer shadow-2xs"
               >
                 {c.shortcut}
               </button>
             ))}
           </div>
 
-          {/* Private Staff Note Mode Banner */}
-          {isInternalNote && (
-            <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-warning/15 border border-warning/30 text-xs text-warning-foreground dark:text-warning font-medium">
-              <div className="flex items-center gap-1.5">
-                <Lock className="h-3.5 w-3.5" />
-                <span>Internal Staff Note Mode (Visible only to NOC & Helpdesk, NOT Customer)</span>
-              </div>
-              <button
-                onClick={() => setIsInternalNote(false)}
-                className="text-[11px] underline hover:no-underline font-semibold cursor-pointer"
-              >
-                Switch to Public Reply
-              </button>
-            </div>
-          )}
-
-          {/* Text Input */}
+          {/* WhatsApp Composer Bar */}
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setIsInternalNote(!isInternalNote)}
-              className={cn(
-                "p-2 rounded-lg border transition-colors cursor-pointer",
-                isInternalNote
-                  ? "bg-warning/20 border-warning text-warning-foreground dark:text-warning"
-                  : "bg-muted/40 border-border text-muted-foreground hover:text-foreground"
-              )}
-              title={isInternalNote ? "Switch to Customer Reply" : "Write Confidential Staff Note"}
-            >
-              <Lock className="h-4 w-4" />
-            </button>
+            {/* Emoji & Attachments */}
+            <div className="flex items-center gap-1 text-muted-foreground shrink-0">
+              <Tooltip content="Insert Emoji" position="top">
+                <button
+                  type="button"
+                  onClick={() => setChatInput((prev) => prev + " 👍")}
+                  className="p-2 rounded-xl hover:bg-card-subtle hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <Smile className="h-5 w-5" />
+                </button>
+              </Tooltip>
 
+              <Tooltip content="Attach File / Image" position="top">
+                <button
+                  type="button"
+                  onClick={() => toast.info("Attachment", "Select file or screenshot to upload.")}
+                  className="p-2 rounded-xl hover:bg-card-subtle hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <Paperclip className="h-5 w-5" />
+                </button>
+              </Tooltip>
+            </div>
+
+            {/* Lock Mode Switcher Button */}
+            <Tooltip content={isInternalNote ? "Switch to Customer Reply" : "Write Confidential Staff Note"} position="top">
+              <button
+                type="button"
+                onClick={() => setIsInternalNote(!isInternalNote)}
+                className={cn(
+                  "flex h-9 w-9 items-center justify-center rounded-xl border transition-all cursor-pointer shadow-2xs shrink-0",
+                  isInternalNote
+                    ? "bg-warning/20 border-warning text-warning"
+                    : "bg-card-subtle border-border text-muted-foreground hover:text-foreground"
+                )}
+                aria-label="Toggle Staff Note"
+              >
+                <Lock className="h-4 w-4" />
+              </button>
+            </Tooltip>
+
+            {/* Input Field */}
             <input
               type="text"
               placeholder={
                 isInternalNote
-                  ? "Type confidential internal note (saved to subscriber audit trail)..."
-                  : "Type message or click / shortcuts above..."
+                  ? "Type confidential internal note..."
+                  : "Type a message or press '/' for quick replies..."
               }
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
@@ -382,129 +681,168 @@ export function LiveChatWorkspace() {
                 }
               }}
               className={cn(
-                "flex-1 rounded-lg border px-3.5 py-2 text-xs text-foreground focus:outline-none transition-all",
+                "flex-1 rounded-xl border px-4 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none transition-all shadow-2xs",
                 isInternalNote
                   ? "bg-warning/5 border-warning/40 focus:ring-1 focus:ring-warning"
                   : "bg-card border-border focus:ring-1 focus:ring-primary"
               )}
             />
 
+            {/* Send Button */}
             <Button
               variant={isInternalNote ? "secondary" : "primary"}
               size="sm"
               onClick={handleSendMessage}
+              className="h-10 px-4 rounded-xl cursor-pointer shadow-2xs"
             >
-              <Send className="h-3.5 w-3.5 mr-1" />
-              {isInternalNote ? "Add Note" : "Send"}
+              <Send className="h-4 w-4 mr-1" />
+              <span>{isInternalNote ? "Note" : "Send"}</span>
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Col 3: Customer 360 & SmartOLT HUD (Right) */}
-      {isCustomerHudOpen && (
-        <div className="w-84 border-l border-border bg-card flex flex-col shrink-0 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-          <div className="flex items-center justify-between pb-2 border-b border-border">
-            <div className="flex items-center gap-1.5">
-              <Activity className="h-4 w-4 text-primary" />
-              <span className="font-heading font-bold text-xs uppercase tracking-wider text-foreground">
-                Customer 360° NOC HUD
+      {/* ======================================================================= */}
+      {/* COLUMN 3: Telegram-Style Contact & NOC Profile Drawer (Right, 340px)    */}
+      {/* ======================================================================= */}
+      <AnimatePresence initial={false}>
+        {isCustomerHudOpen && (
+          <motion.div
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 340, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 35 }}
+            className="flex flex-col h-full border-l border-border bg-card shrink-0 overflow-y-auto custom-scrollbar z-20 shadow-ambient"
+          >
+            {/* 1. Header */}
+            <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-card shrink-0">
+              <span className="font-heading font-extrabold text-sm text-foreground">
+                Contact Info
               </span>
-            </div>
-            <Badge variant={opticalDbm < -25 ? "destructive" : "success"} className="text-[10px] font-mono">
-              {opticalDbm} dBm
-            </Badge>
-          </div>
 
-          {/* Optical Power Gauge Card */}
-          <div className="p-3.5 rounded-xl bg-muted/30 border border-border/80 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="font-heading font-bold text-xs text-foreground flex items-center gap-1.5">
-                <Radio className="h-3.5 w-3.5 text-primary" /> SmartOLT Optical Power
-              </span>
-              <button
-                onClick={handleToggleFiberCut}
-                className="text-[10px] text-primary hover:underline font-bold cursor-pointer"
+              <Badge
+                variant={selectedCustomer.opticalRxDbm < -25 ? "destructive" : "success"}
+                className="text-[10px] font-mono font-bold"
               >
-                Simulate {opticalDbm < -25 ? "Restore" : "Cut"}
-              </button>
+                {selectedCustomer.opticalRxDbm} dBm
+              </Badge>
             </div>
 
-            <div className="p-2.5 rounded-lg bg-card border border-border text-center space-y-1">
-              <div className="text-[10.5px] text-muted-foreground">RX Signal Level</div>
-              <div
-                className={cn(
-                  "font-mono font-extrabold text-2xl",
-                  opticalDbm < -25 ? "text-destructive animate-pulse" : "text-emerald-600 dark:text-emerald-400"
-                )}
-              >
-                {opticalDbm} dBm
+            {/* 2. Contact Banner & Details */}
+            <div className="p-4 space-y-4">
+              {/* Profile Card */}
+              <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-card-subtle/50 border border-border shadow-2xs space-y-2">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground font-heading font-extrabold text-2xl shadow-sm">
+                  {selectedCustomer.fullName.charAt(0)}
+                </div>
+                <div className="space-y-0.5">
+                  <h3 className="font-heading font-extrabold text-sm text-foreground">
+                    {selectedCustomer.fullName}
+                  </h3>
+                  <span className="font-mono text-xs text-muted-foreground block">
+                    {selectedCustomer.phone}
+                  </span>
+                  <span className="text-[11px] text-muted-foreground block">
+                    {selectedCustomer.address}
+                  </span>
+                </div>
               </div>
-              <div className="text-[10px] font-medium text-muted-foreground">
-                {opticalDbm < -25 ? "CRITICAL: Fiber Cut Detected" : "Nominal Optical Range (-15 to -24 dBm)"}
-              </div>
-            </div>
 
-            <div className="space-y-1 text-[11px] text-muted-foreground font-mono">
-              <div className="flex justify-between">
-                <span>Chassis:</span>
-                <span className="font-bold text-foreground">Huawei MA5800-X7</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Port:</span>
-                <span className="font-bold text-foreground">Slot 0/2 · PON-04</span>
-              </div>
-              <div className="flex justify-between">
-                <span>ONU Serial:</span>
-                <span className="font-bold text-foreground">HWTC-98B2-F104</span>
-              </div>
-            </div>
-          </div>
+              {/* Live Optical Signal Meter */}
+              <div className="p-3.5 rounded-2xl bg-card border border-border shadow-2xs space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-heading font-bold text-xs text-foreground flex items-center gap-1.5">
+                    <Radio className="h-3.5 w-3.5 text-primary" /> Fiber RX Telemetry
+                  </span>
+                  <Badge variant="success" className="text-[9px] py-0 px-1 font-mono">
+                    ONLINE
+                  </Badge>
+                </div>
 
-          {/* Identity & Technical Info */}
-          <div className="p-3.5 rounded-xl bg-card border border-border space-y-2 text-xs">
-            <div className="font-heading font-bold text-xs text-foreground mb-1">
-              Broadband & PPPoE Binding
-            </div>
-            <div className="flex justify-between text-[11px]">
-              <span className="text-muted-foreground">PPPoE User:</span>
-              <span className="font-mono font-bold text-primary">{selectedCustomer.pppoeUsername}</span>
-            </div>
-            <div className="flex justify-between text-[11px]">
-              <span className="text-muted-foreground">Monthly Fee:</span>
-              <span className="font-mono font-bold text-foreground">PKR {selectedCustomer.monthlyFeePkr.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between text-[11px]">
-              <span className="text-muted-foreground">Ledger Balance:</span>
-              <span className="font-mono font-bold text-emerald-600">PKR {selectedCustomer.ledgerBalancePkr} (Clear)</span>
-            </div>
-            <div className="flex justify-between text-[11px]">
-              <span className="text-muted-foreground">Phone:</span>
-              <span className="font-mono">{selectedCustomer.phone}</span>
-            </div>
-          </div>
+                <div className="p-3 rounded-xl bg-card-subtle/50 border border-border text-center space-y-1">
+                  <div className="text-[10.5px] text-muted-foreground font-medium">Optical Signal Strength</div>
+                  <div
+                    className={cn(
+                      "font-mono font-extrabold text-2xl tracking-tight",
+                      selectedCustomer.opticalRxDbm < -25 ? "text-destructive" : "text-success"
+                    )}
+                  >
+                    {selectedCustomer.opticalRxDbm} dBm
+                  </div>
+                  <div className="text-[10px] font-medium text-muted-foreground">
+                    Nominal Target: -15.0 to -24.0 dBm
+                  </div>
+                </div>
 
-          {/* Remote Actions */}
-          <div className="space-y-2 pt-1">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-start text-xs"
-              onClick={() => alert(`TR-069 soft reboot signal sent to ONU ${selectedCustomer.onuSerial}`)}
-            >
-              <RefreshCw className="h-3.5 w-3.5 text-warning mr-2" /> TR-069 Soft Reboot Router
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-start text-xs"
-              onClick={() => alert(`Creating linked trouble ticket for ${selectedCustomer.fullName}`)}
-            >
-              <Ticket className="h-3.5 w-3.5 text-primary mr-2" /> Escalate to NOC Dispatch
-            </Button>
-          </div>
-        </div>
-      )}
+                <div className="space-y-1.5 text-[11px] text-muted-foreground font-mono">
+                  <div className="flex justify-between">
+                    <span>OLT Chassis:</span>
+                    <span className="font-bold text-foreground">Huawei MA5800-X7</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>PON Port:</span>
+                    <span className="font-bold text-foreground">Slot 0/2 · PON-04</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>ONU Serial:</span>
+                    <span className="font-bold text-foreground">{selectedCustomer.onuSerial}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Account & Billing */}
+              <div className="p-3.5 rounded-2xl bg-card border border-border shadow-2xs space-y-2 text-xs">
+                <div className="font-heading font-bold text-xs text-foreground mb-1 flex items-center justify-between">
+                  <span>Subscription Plan</span>
+                  <Badge variant="secondary" className="text-[9px] py-0 px-1 font-mono">
+                    {selectedCustomer.customerCode}
+                  </Badge>
+                </div>
+                <div className="flex justify-between text-[11px]">
+                  <span className="text-muted-foreground">PPPoE ID:</span>
+                  <span className="font-mono font-bold text-primary">{selectedCustomer.pppoeUsername}</span>
+                </div>
+                <div className="flex justify-between text-[11px]">
+                  <span className="text-muted-foreground">Tariff Plan:</span>
+                  <span className="font-bold text-foreground">{selectedCustomer.packageName}</span>
+                </div>
+                <div className="flex justify-between text-[11px]">
+                  <span className="text-muted-foreground">Monthly Fee:</span>
+                  <span className="font-mono font-bold text-foreground">PKR {selectedCustomer.monthlyFeePkr.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-[11px]">
+                  <span className="text-muted-foreground">Ledger Balance:</span>
+                  <span className="font-mono font-bold text-success">PKR {selectedCustomer.ledgerBalancePkr} (Paid)</span>
+                </div>
+              </div>
+
+              {/* Quick Remote NOC Actions */}
+              <div className="space-y-2 pt-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start text-xs rounded-xl cursor-pointer"
+                  onClick={() =>
+                    toast.success("TR-069 Reboot Dispatched", `Soft reboot signal sent to ONU ${selectedCustomer.onuSerial}`)
+                  }
+                >
+                  <RefreshCw className="h-3.5 w-3.5 text-warning mr-2 shrink-0" /> TR-069 Router Soft Reboot
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start text-xs rounded-xl cursor-pointer"
+                  onClick={() =>
+                    toast.info("Escalated to Dispatch", `Dispatched field splicer ticket for ${selectedCustomer.fullName}`)
+                  }
+                >
+                  <Ticket className="h-3.5 w-3.5 text-primary mr-2 shrink-0" /> Escalate to Field Splicer
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -256,7 +256,7 @@ export function PrimeDeskWorkspace() {
                   </div>
                 ) : msg.isPrivateNote ? (
                   <PermissionGuard permission="chat.view_internal_notes">
-                    <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-xs font-mono text-amber-500 flex items-center gap-2">
+                    <div className="w-full bg-warning/10 border border-warning/30 rounded-xl p-2.5 text-xs font-mono text-warning flex items-center gap-2">
                       <Lock className="h-3.5 w-3.5 shrink-0" />
                       <span>{msg.content}</span>
                     </div>
@@ -309,7 +309,7 @@ export function PrimeDeskWorkspace() {
                   type="button"
                   onClick={() => setIsPrivateNoteMode(!isPrivateNoteMode)}
                   className={`font-mono flex items-center gap-1 cursor-pointer transition-colors ${
-                    isPrivateNoteMode ? "text-amber-500 font-bold" : "text-muted-foreground hover:text-foreground"
+                    isPrivateNoteMode ? "text-warning font-bold" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   <Lock className="h-3 w-3" />

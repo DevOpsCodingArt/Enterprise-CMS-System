@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SidebarNav } from "@/components/layouts/SidebarNav";
 import { Topbar } from "@/components/layouts/Topbar";
 import { useTenantStore } from "@/stores/useTenantStore";
@@ -12,6 +12,18 @@ export default function CompanyOperationsLayout({
 }) {
   const { activeCompanyTab, setActiveCompanyTab } = useTenantStore();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  // Global keyboard shortcut Ctrl+B / Cmd+B to toggle sidebar
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
+        e.preventDefault();
+        setIsSidebarCollapsed((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <div className="flex h-screen max-h-screen overflow-hidden bg-background text-foreground font-body">
@@ -25,7 +37,9 @@ export default function CompanyOperationsLayout({
 
       {/* 2. Main Workspace Body */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0 h-full">
-        <Topbar onOpenNotificationCenter={() => setActiveCompanyTab("audit")} />
+        <Topbar
+          onOpenNotificationCenter={() => setActiveCompanyTab("audit")}
+        />
 
         <main className="flex-1 min-h-0 overflow-hidden flex flex-col">
           {children}

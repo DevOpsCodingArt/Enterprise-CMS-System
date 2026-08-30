@@ -19,6 +19,18 @@ export default function PlatformDashboardPage() {
   const [activeTab, setActiveTab] = useState<PlatformTab>("overview");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
+  // Global keyboard shortcut Ctrl+B / Cmd+B to toggle sidebar
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
+        e.preventDefault();
+        setIsSidebarCollapsed((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="flex min-h-screen bg-background text-foreground font-body">
       {/* 1. Dedicated SaaS Platform Sidebar */}
@@ -31,7 +43,10 @@ export default function PlatformDashboardPage() {
 
       {/* 2. Main Platform Control Plane Body */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-        <PlatformTopbar />
+        <PlatformTopbar
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        />
 
         <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
           {activeTab === "overview" && (

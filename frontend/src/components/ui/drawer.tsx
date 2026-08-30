@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { drawerVariants } from "@/lib/motion";
 
 interface DrawerContextValue {
   isOpen: boolean;
@@ -49,8 +51,6 @@ export function Drawer({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   const sizeClasses = {
     sm: "max-w-sm",
     md: "max-w-md",
@@ -59,30 +59,41 @@ export function Drawer({
   };
 
   const sideClasses = {
-    right: "right-0 border-l animate-in slide-in-from-right",
-    left: "left-0 border-r animate-in slide-in-from-left",
+    right: "right-0 border-l",
+    left: "left-0 border-r",
   };
 
   return (
-    <DrawerContext.Provider value={{ isOpen, onClose }}>
-      <div className="fixed inset-0 z-50 flex">
-        {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-sidebar/50 backdrop-blur-xs transition-opacity animate-in fade-in"
-          onClick={onClose}
-        />
-        {/* Drawer Surface */}
-        <div
-          className={cn(
-            "fixed top-0 bottom-0 z-50 flex flex-col w-full bg-card text-card-foreground border-border shadow-2xl transition-all duration-300",
-            sizeClasses[size],
-            sideClasses[side]
-          )}
-        >
-          {children}
-        </div>
-      </div>
-    </DrawerContext.Provider>
+    <AnimatePresence>
+      {isOpen && (
+        <DrawerContext.Provider value={{ isOpen, onClose }}>
+          <div className="fixed inset-0 z-50 flex">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+              onClick={onClose}
+            />
+            {/* Drawer Surface */}
+            <motion.div
+              variants={drawerVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className={cn(
+                "fixed top-0 bottom-0 z-50 flex flex-col w-full bg-card text-card-foreground border-border shadow-elevated",
+                sizeClasses[size],
+                sideClasses[side]
+              )}
+            >
+              {children}
+            </motion.div>
+          </div>
+        </DrawerContext.Provider>
+      )}
+    </AnimatePresence>
   );
 }
 

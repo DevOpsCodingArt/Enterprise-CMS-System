@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Clock, AlertCircle } from "lucide-react";
+import { Clock, AlertCircle, Ticket } from "lucide-react";
 import { FullTroubleTicket } from "./TicketDetailPane";
+import { RichEmptyState } from "@/components/ui/shared/RichEmptyState";
 
 export function TicketList({
   tickets,
@@ -45,8 +46,16 @@ export function TicketList({
 
   if (tickets.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8 text-muted-foreground text-xs font-mono">
-        No tickets found matching the current filters.
+      <div className="flex-1 flex items-center justify-center p-6 bg-card">
+        <RichEmptyState
+          icon={Ticket}
+          title="No Trouble Tickets Found"
+          description="There are currently no trouble tickets matching your active filter criteria."
+          tips={[
+            "Broaden or reset your active priority and status filters",
+            "Generate a new dispatch ticket for incoming customer calls",
+          ]}
+        />
       </div>
     );
   }
