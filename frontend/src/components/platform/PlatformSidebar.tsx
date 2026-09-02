@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Activity,
   Building2,
@@ -13,59 +14,48 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
-  Zap,
-  PanelLeftClose,
-  PanelLeftOpen,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-export type PlatformTab =
-  | "overview"
-  | "tenants"
-  | "billing"
-  | "infrastructure"
-  | "telemetry"
-  | "audit"
-  | "settings";
-
-interface NavItem {
-  id: PlatformTab;
+export interface NavItem {
+  id: string;
   label: string;
+  href: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: string | number;
   badgeVariant?: "success" | "warning" | "destructive" | "info" | "secondary";
 }
 
-interface NavGroup {
+export interface NavGroup {
   title: string;
   items: NavItem[];
 }
 
 export function PlatformSidebar({
-  activeTab,
-  onTabChange,
   isCollapsed,
   onToggleCollapse,
 }: {
-  activeTab: PlatformTab;
-  onTabChange: (tab: PlatformTab) => void;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
 }) {
+  const pathname = usePathname();
+
   const navGroups: NavGroup[] = [
     {
-      title: "FLEET OPERATIONS",
+      title: "1. FLEET OPERATIONS",
       items: [
         {
           id: "overview",
           label: "Fleet Overview",
+          href: "/platform/overview",
           icon: Activity,
         },
         {
           id: "tenants",
           label: "ISP Tenants",
+          href: "/platform/tenants",
           icon: Building2,
           badge: "8 Active",
           badgeVariant: "info",
@@ -73,6 +63,7 @@ export function PlatformSidebar({
         {
           id: "billing",
           label: "SaaS Subscriptions",
+          href: "/platform/billing",
           icon: CreditCard,
           badge: "$142.5k",
           badgeVariant: "success",
@@ -80,11 +71,12 @@ export function PlatformSidebar({
       ],
     },
     {
-      title: "INFRASTRUCTURE & NODES",
+      title: "2. INFRASTRUCTURE & NODES",
       items: [
         {
           id: "infrastructure",
           label: "Server Clusters",
+          href: "/platform/infrastructure",
           icon: Server,
           badge: "4 Live",
           badgeVariant: "success",
@@ -92,6 +84,7 @@ export function PlatformSidebar({
         {
           id: "telemetry",
           label: "API Telemetry",
+          href: "/platform/telemetry",
           icon: Radio,
           badge: "14ms",
           badgeVariant: "secondary",
@@ -99,16 +92,18 @@ export function PlatformSidebar({
       ],
     },
     {
-      title: "GOVERNANCE & SYSTEM",
+      title: "3. GOVERNANCE & SYSTEM",
       items: [
         {
           id: "audit",
           label: "Audit Logs",
+          href: "/platform/audit",
           icon: ShieldAlert,
         },
         {
           id: "settings",
           label: "Platform Settings",
+          href: "/platform/settings",
           icon: Sliders,
         },
       ],
@@ -116,105 +111,85 @@ export function PlatformSidebar({
   ];
 
   return (
-    <motion.aside
-      initial={false}
-      animate={{ width: isCollapsed ? 68 : 264 }}
-      transition={{ type: "spring", stiffness: 400, damping: 32 }}
-      className="flex flex-col h-full max-h-full border-r border-sidebar-border bg-sidebar text-sidebar-foreground select-none shrink-0 z-30 overflow-hidden"
+    <aside
+      className={cn(
+        "flex flex-col h-full max-h-full border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-in-out select-none shrink-0 z-30 overflow-hidden",
+        isCollapsed ? "w-16" : "w-68"
+      )}
     >
       {/* 1. Header / Master Brand */}
-      <div className="flex h-16 items-center justify-between px-3 border-b border-sidebar-border shrink-0">
+      <div className="flex h-16 items-center justify-between px-3.5 border-b border-sidebar-border shrink-0">
         {!isCollapsed ? (
-          <>
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground font-heading font-extrabold text-sm shadow-xs shrink-0">
-                P1
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-heading font-extrabold text-sm leading-none text-sidebar-foreground truncate">
-                    Prime One
-                  </span>
-                  <Badge variant="info" className="text-[8px] py-0 px-1 font-mono">
-                    MASTER
-                  </Badge>
-                </div>
-                <span className="font-mono text-[9.5px] uppercase tracking-wider text-sidebar-muted mt-0.5 truncate">
-                  SaaS Control Plane
-                </span>
-              </div>
+          <Link href="/platform/overview" className="flex items-center gap-2.5 min-w-0">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground font-heading font-extrabold text-sm shadow-sm shrink-0">
+              P1
             </div>
-
-            <Tooltip content="Collapse Sidebar (Ctrl+B)" position="bottom">
-              <button
-                onClick={onToggleCollapse}
-                className="rounded-lg p-1.5 text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors cursor-pointer border border-transparent hover:border-sidebar-border"
-                aria-label="Collapse Sidebar"
-              >
-                <PanelLeftClose className="h-4 w-4" />
-              </button>
-            </Tooltip>
-          </>
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="font-heading font-extrabold text-sm leading-none text-sidebar-foreground truncate">
+                  Prime One
+                </span>
+                <Badge variant="info" className="text-[8px] py-0 px-1 font-mono">
+                  MASTER
+                </Badge>
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-wider text-sidebar-muted mt-0.5 truncate">
+                SaaS Control Plane
+              </span>
+            </div>
+          </Link>
         ) : (
-          <div className="flex w-full items-center justify-center">
-            <Tooltip content="Expand Sidebar (Ctrl+B)" position="right">
-              <button
-                onClick={onToggleCollapse}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer shadow-2xs border border-primary/20"
-                aria-label="Expand Sidebar"
-              >
-                <PanelLeftOpen className="h-4 w-4" />
-              </button>
-            </Tooltip>
+          <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground font-heading font-extrabold text-sm shadow-sm">
+            P1
           </div>
         )}
+
+        <button
+          onClick={onToggleCollapse}
+          className={cn(
+            "rounded-md p-1.5 text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors cursor-pointer",
+            isCollapsed && "hidden"
+          )}
+          title="Collapse Sidebar"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
       </div>
 
       {/* 2. Grouped Navigation Menu */}
-      <div className="flex-1 min-h-0 p-2 overflow-y-auto overflow-x-hidden custom-scrollbar space-y-3">
-        {navGroups.map((group, groupIdx) => (
+      <div className="flex-1 min-h-0 space-y-4 p-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar">
+        {navGroups.map((group) => (
           <div key={group.title} className="space-y-1">
-            {groupIdx > 0 && (
-              <div className={cn("border-t border-sidebar-border/40 my-2", isCollapsed ? "mx-1" : "mx-2")} />
-            )}
-
             {!isCollapsed && (
-              <div className="px-2.5 py-1 text-[9.5px] font-mono font-bold tracking-wider text-sidebar-muted uppercase truncate">
+              <span className="px-2.5 text-[9.5px] font-mono font-bold tracking-wider text-sidebar-muted uppercase">
                 {group.title}
-              </div>
+              </span>
             )}
 
             {group.items.map((item) => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
+              const isActive = pathname === item.href || (item.href !== "/platform" && pathname.startsWith(`${item.href}/`));
 
-              const navButton = (
-                <button
-                  onClick={() => onTabChange(item.id)}
+              const navLink = (
+                <Link
+                  href={item.href}
                   className={cn(
-                    "group relative flex items-center rounded-xl text-xs font-medium transition-all cursor-pointer select-none",
-                    isCollapsed
-                      ? "h-10 w-10 mx-auto justify-center p-0"
-                      : "w-full gap-2.5 px-3 py-2 justify-start",
+                    "group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors cursor-pointer select-none",
                     isActive
-                      ? "bg-primary/15 text-primary font-bold border border-primary/25 shadow-2xs"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border border-transparent"
+                      ? "bg-primary/10 text-primary font-bold border border-primary/20"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    isCollapsed && "justify-center px-0 h-10"
                   )}
-                  aria-label={item.label}
                 >
                   {isActive && (
-                    <motion.span
-                      layoutId="platformSidebarActiveIndicator"
-                      className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-primary shadow-glow-primary"
-                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                    />
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-primary" />
                   )}
 
                   <Icon
                     className={cn(
                       "h-4 w-4 shrink-0 transition-transform group-hover:scale-105",
                       isActive
-                        ? "text-primary filter drop-shadow-xs"
+                        ? "text-primary"
                         : "text-sidebar-muted group-hover:text-sidebar-foreground"
                     )}
                   />
@@ -225,82 +200,56 @@ export function PlatformSidebar({
                       {item.badge && (
                         <Badge
                           variant={item.badgeVariant}
-                          className="text-[9px] py-0 px-1.5 font-mono font-bold shrink-0 ml-1.5"
+                          className="text-[9.5px] py-0 px-1.5 font-mono font-bold shrink-0 ml-1"
                         >
                           {item.badge}
                         </Badge>
                       )}
                     </div>
                   )}
-                </button>
+                </Link>
               );
 
               if (isCollapsed) {
                 return (
-                  <Tooltip
-                    key={item.id}
-                    content={
-                      <div className="flex items-center gap-1.5">
-                        <span>{item.label}</span>
-                        {item.badge && (
-                          <span className="text-[9px] px-1 py-0.2 rounded bg-primary/20 text-primary font-mono">
-                            {item.badge}
-                          </span>
-                        )}
-                      </div>
-                    }
-                    position="right"
-                    containerClassName="w-full flex justify-center"
-                  >
-                    {navButton}
+                  <Tooltip key={item.id} content={item.label} position="right" containerClassName="w-full">
+                    {navLink}
                   </Tooltip>
                 );
               }
 
-              return <div key={item.id}>{navButton}</div>;
+              return <div key={item.id}>{navLink}</div>;
             })}
           </div>
         ))}
       </div>
 
-      {/* 3. Footer / Root Super-Admin Card & Expand/Collapse Bar */}
-      <div className="p-2 border-t border-sidebar-border shrink-0 bg-sidebar">
+      {/* 3. Footer / Root Super-Admin Card */}
+      <div className="p-2.5 border-t border-sidebar-border shrink-0">
         {!isCollapsed ? (
-          <div className="flex items-center justify-between gap-2 rounded-xl bg-sidebar-accent p-2 border border-sidebar-border/60">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-card text-foreground font-bold text-xs shadow-2xs shrink-0 border border-border">
-                <ShieldCheck className="h-4 w-4 text-primary" />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-xs font-bold text-sidebar-foreground truncate leading-tight">
-                  Platform Master
-                </span>
-                <span className="font-mono text-[9px] text-sidebar-muted uppercase tracking-wider truncate">
-                  Super Admin (Root)
-                </span>
-              </div>
+          <div className="flex items-center gap-2.5 rounded-lg bg-sidebar-accent p-2 border border-sidebar-border/50">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-card text-foreground font-bold text-xs shadow-xs shrink-0">
+              <ShieldCheck className="h-4 w-4 text-primary" />
             </div>
-            <Tooltip content="Collapse Sidebar (Ctrl+B)">
-              <button
-                onClick={onToggleCollapse}
-                className="p-1 rounded-md text-sidebar-muted hover:bg-sidebar hover:text-sidebar-foreground transition-colors cursor-pointer"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-            </Tooltip>
+            <div className="flex flex-col min-w-0 flex-1">
+              <span className="text-xs font-bold text-sidebar-foreground truncate leading-tight">
+                Platform Master
+              </span>
+              <span className="font-mono text-[9px] text-sidebar-muted uppercase tracking-wider truncate">
+                Super-Admin (Root)
+              </span>
+            </div>
           </div>
         ) : (
-          <Tooltip content="Expand Sidebar (Ctrl+B)" position="right" containerClassName="w-full flex justify-center">
-            <button
-              onClick={onToggleCollapse}
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-sidebar-accent text-sidebar-foreground hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer border border-sidebar-border"
-              title="Expand Sidebar"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </Tooltip>
+          <button
+            onClick={onToggleCollapse}
+            className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors cursor-pointer"
+            title="Expand Sidebar"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         )}
       </div>
-    </motion.aside>
+    </aside>
   );
 }

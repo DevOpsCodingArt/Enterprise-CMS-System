@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { ROUTE_PERMISSIONS } from "./config/route-permissions";
+import { getRoleHomeRoute } from "./config/role-routing";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -11,6 +12,7 @@ export function proxy(request: NextRequest) {
     pathname.startsWith("/api") ||
     pathname.startsWith("/favicon.ico") ||
     pathname === "/" ||
+    pathname === "/login" ||
     pathname.startsWith("/portal")
   ) {
     return NextResponse.next();
@@ -51,9 +53,11 @@ export function proxy(request: NextRequest) {
 
           if (!hasAccess) {
             console.warn(
-              `[Security Edge] Unauthorized access attempt to ${pathname} by user ${decodedPayload.sub || decodedPayload.id}`
+              `[Security Edge] Unauthorized access attempt to ${pathname} by user ${decodedPayload.sub || decodedPayload.id} (${userRole})`
             );
-            return NextResponse.redirect(new URL("/company", request.url));
+            // Redirect to the user's role-designated home route
+            const homeRoute = getRoleHomeRoute(userRole);
+            return NextResponse.redirect(new URL(homeRoute, request.url));
           }
         }
       }

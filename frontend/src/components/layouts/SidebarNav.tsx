@@ -177,7 +177,7 @@ export function SidebarNav({
   return (
     <aside
       className={cn(
-        "flex flex-col h-full max-h-full border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300 select-none shrink-0 z-30 overflow-hidden",
+        "flex flex-col h-full max-h-full border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-in-out select-none shrink-0 z-30 overflow-hidden",
         isCollapsed ? "w-16" : "w-68"
       )}
     >

@@ -11,6 +11,16 @@ export interface RouteConfig {
 }
 
 export const ROUTE_PERMISSIONS: Record<string, string[]> = {
+  // 0. SaaS Platform Owner Master Suite
+  "/platform": ["platform.admin"],
+  "/platform/overview": ["platform.admin"],
+  "/platform/tenants": ["platform.manage_tenants"],
+  "/platform/billing": ["platform.view_mrr"],
+  "/platform/infrastructure": ["platform.view_nodes"],
+  "/platform/telemetry": ["platform.view_nodes"],
+  "/platform/audit": ["platform.view_logs"],
+  "/platform/settings": ["platform.admin"],
+
   // 1. Executive Suite (Company Owner / Top Management)
   "/company": ["company.executive_view"],
   "/company/overview": ["company.executive_view"],

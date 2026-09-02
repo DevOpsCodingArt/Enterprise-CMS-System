@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Search,
   Bell,
@@ -8,8 +10,11 @@ import {
   Moon,
   Shield,
   Command,
-  PanelLeftClose,
-  PanelLeftOpen,
+  LogOut,
+  ChevronDown,
+  User,
+  Zap,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +23,11 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { SmartSearchInput } from "@/components/ui/shared/SmartSearchInput";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { NotificationDrawer } from "@/components/notifications/NotificationDrawer";
+import { DEMO_USERS, DemoUserCredential, getRoleHomeRoute, getRoleDisplayName } from "@/config/role-routing";
+import { mockDb } from "@/mock/db";
+import { useToast } from "@/components/ui/toast";
+
+import { useTheme } from "@/hooks/useTheme";
 
 export function Topbar({
   onOpenNotificationCenter,
@@ -26,22 +36,40 @@ export function Topbar({
   isSidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
 }) {
-  const { user, company } = useAuthStore();
+  const router = useRouter();
+  const toast = useToast();
+  const { user, company, setAuth, logout } = useAuthStore();
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const { isDark: isDarkMode, toggleTheme } = useTheme();
 
-  const isDarkMode = React.useSyncExternalStore(
-    (callback) => {
-      window.addEventListener("theme-change", callback);
-      return () => window.removeEventListener("theme-change", callback);
-    },
-    () => typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
-    () => false
-  );
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const toggleTheme = () => {
-    const isDark = document.documentElement.classList.toggle("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-    window.dispatchEvent(new Event("theme-change"));
+  const handleSwitchPersona = (persona: DemoUserCredential) => {
+    const userProfile = mockDb.users[persona.role as keyof typeof mockDb.users] || mockDb.users.company_owner;
+    setAuth(userProfile, mockDb.tenantCompany, "mock-jwt-token-prime-one", "mock-jwt-refresh-token");
+    document.cookie = `prime_access_token=mock-jwt-token-prime-one; path=/; max-age=86400; SameSite=Lax`;
+    setIsProfileMenuOpen(false);
+    toast.success("Switched Persona", `Active as ${persona.name} (${persona.badgeLabel})`);
+    router.push(persona.homeRoute);
+  };
+
+  const handleLogout = () => {
+    logout();
+    document.cookie = "prime_access_token=; path=/; max-age=0;";
+    setIsProfileMenuOpen(false);
+    toast.info("Logged Out", "You have been signed out of your console.");
+    router.push("/login");
   };
 
   return (
@@ -54,7 +82,7 @@ export function Topbar({
               {company?.name || "Prime Networks (Pvt) Ltd"}
             </span>
             <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-              Company Owner Command Suite
+              Company Operations Suite
             </span>
           </div>
         </div>
@@ -98,22 +126,97 @@ export function Topbar({
             </Button>
           </Tooltip>
 
-          {/* Company Owner Profile Display */}
-          <div className="flex items-center gap-3 border-l border-border pl-3.5 py-0.5">
-            <Avatar name={user?.name || "Tariq Mehmood"} presence="online" size="md" />
-            <div className="hidden sm:flex flex-col text-left">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-foreground">
-                  {user?.name || "Tariq Mehmood"}
+          {/* User Profile & Role Switcher Dropdown */}
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+              className="flex items-center gap-2.5 border-l border-border pl-3.5 py-0.5 hover:opacity-80 transition-opacity cursor-pointer select-none text-left"
+            >
+              <Avatar name={user?.name || "Eng. Moiz Ahmad"} presence="online" size="md" />
+              <div className="hidden sm:flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-foreground truncate max-w-[130px]">
+                    {user?.name || "Eng. Moiz Ahmad"}
+                  </span>
+                  <Badge variant="success" className="text-[8px] py-0 px-1 font-mono uppercase">
+                    {user?.role ? user.role.split("_")[0] : "ACTIVE"}
+                  </Badge>
+                </div>
+                <span className="font-mono text-[10px] text-muted-foreground truncate max-w-[150px]">
+                  {getRoleDisplayName(user?.role)}
                 </span>
-                <Badge variant="success" className="text-[8px] py-0 px-1 font-mono uppercase">
-                  OWNER
-                </Badge>
               </div>
-              <span className="font-mono text-[10px] text-muted-foreground">
-                Company Owner (CEO)
-              </span>
-            </div>
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block ml-0.5" />
+            </button>
+
+            {/* Profile & Switcher Menu */}
+            {isProfileMenuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-72 bg-card border border-border rounded-xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 space-y-2">
+                {/* Header User Card */}
+                <div className="p-2.5 rounded-lg bg-muted/40 border border-border/60 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-foreground truncate">{user?.name}</span>
+                    <Badge variant="info" className="text-[9px] py-0 px-1 font-mono">
+                      {user?.role?.toUpperCase()}
+                    </Badge>
+                  </div>
+                  <span className="font-mono text-[10px] text-muted-foreground block truncate">
+                    {user?.email || "owner@primenetworks.pk"}
+                  </span>
+                </div>
+
+                {/* Quick Persona Switcher Section */}
+                <div className="space-y-1">
+                  <div className="px-2 py-1 text-[9.5px] font-mono font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+                    <Zap className="h-3 w-3 text-warning" /> Switch Persona (Demo Mode)
+                  </div>
+                  <div className="max-h-48 overflow-y-auto custom-scrollbar space-y-0.5">
+                    {DEMO_USERS.map((persona) => {
+                      const isActive = user?.role?.toLowerCase() === persona.role.toLowerCase();
+                      return (
+                        <button
+                          key={persona.email}
+                          type="button"
+                          onClick={() => handleSwitchPersona(persona)}
+                          className={`w-full px-2 py-1.5 rounded-lg text-left text-xs transition-colors flex items-center justify-between cursor-pointer ${
+                            isActive
+                              ? "bg-primary/15 text-primary font-bold"
+                              : "text-foreground hover:bg-muted"
+                          }`}
+                        >
+                          <div className="flex flex-col min-w-0">
+                            <span className="truncate">{persona.name}</span>
+                            <span className="font-mono text-[9px] text-muted-foreground truncate">{persona.badgeLabel}</span>
+                          </div>
+                          {isActive && <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Gateway & Logout Actions */}
+                <div className="pt-1 border-t border-border space-y-1">
+                  <Link
+                    href="/"
+                    onClick={() => setIsProfileMenuOpen(false)}
+                    className="w-full px-2 py-1.5 rounded-lg text-xs text-foreground hover:bg-muted transition-colors flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Universal Landing Page</span>
+                    <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full px-2 py-1.5 rounded-lg text-xs text-destructive hover:bg-destructive/10 transition-colors flex items-center justify-between cursor-pointer font-medium"
+                  >
+                    <span>Sign Out</span>
+                    <LogOut className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </header>
