@@ -196,9 +196,11 @@ export default function UniversalLandingGatewayPage() {
             src="/images/fiber_bg.jpg"
             alt="Enterprise Software Abstract Light Wave"
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             priority
             className="object-cover opacity-90 scale-105"
           />
+
           <div className="absolute inset-0 bg-gradient-to-t from-[#040814]/90 via-[#040814]/40 to-[#040814]/20" />
         </div>
 

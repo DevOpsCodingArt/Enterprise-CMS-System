@@ -11,6 +11,8 @@ import { s3Config } from './config/s3.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { TenantModule } from './modules/tenant/tenant.module';
 import { CustomerModule } from './modules/customer/customer.module';
+import { RbacModule } from './modules/rbac/rbac.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { CustomerModule } from './modules/customer/customer.module';
     AuthModule,
     TenantModule,
     CustomerModule,
+    RbacModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
