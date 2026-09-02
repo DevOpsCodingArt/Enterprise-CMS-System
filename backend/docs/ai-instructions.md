@@ -156,7 +156,40 @@ Prime One discards rigid hard-coded roles. Access is strictly permission-driven:
 
 ---
 
-## 8. RESPONSE & ERROR STANDARDIZATION
+## 8. REDIS RESILIENCE & FAULT TOLERANCE (CRITICAL)
+
+The SaaS platform must be **100% resilient to Redis crashes, restarts, or connection drops**:
+1. **Zero-Crash Policy:** Under no circumstances should an unhandled Redis disconnect crash the NestJS server or cause HTTP requests to fail with 500 errors.
+2. **Graceful PostgreSQL Fallback:**
+   - All cache lookups (`permissions`, `settings`, `customer360`) must wrap Redis operations in `try/catch` fallbacks. If Redis is unavailable, immediately query PostgreSQL directly and log a silent warning.
+   - Authentication relies on **stateless cryptographic JWT verification** and database-backed `refresh_tokens`. Logins and API access must function seamlessly even when Redis is down.
+3. **Auto-Reconnection (`ioredis`):**
+   - Configure `enableOfflineQueue: false` and exponential `retryStrategy`.
+   - On Redis reconnection, the application must automatically resume cache reads and writes without requiring a server restart.
+
+---
+
+## 9. DRIZZLE ORM SCHEMA INDEXING STANDARDS
+
+All Drizzle table definitions (`src/db/schema/*.ts`) must declare indexes in their table configuration callback `(table) => [...]` to prevent full sequential table scans:
+1. **Mandatory RLS Index:** Every tenant-scoped table must index `table.companyId` (`index('idx_<table>_company').on(table.companyId)`).
+2. **Composite Query Indexes:** Add composite indexes for common dashboard filters (e.g. `(table.companyId, table.status)`, `(table.companyId, table.branchId)`).
+3. **Unique Keys:** Unique lookups per tenant (e.g. `customer_code`, `ticket_number`) must use `uniqueIndex().on(table.companyId, table.<field>)`.
+4. **Lookup Indexes:** Add indexes on high-frequency search fields (`phone`, `username`, `email`, `cnic`).
+5. **Trigram Search:** Use `pg_trgm` GIN indexes for customer full-text fuzzy searches.
+
+---
+
+## 10. FASTIFY PLATFORM AGNOSTICISM & RUNTIME GUARDRAILS
+
+Because the backend runs on `@nestjs/platform-fastify`:
+1. **No Express Dependencies:** Never import or cast to `express.Request` or `express.Response`.
+2. **Fastify Types:** Use standard NestJS decorators (`@Req()`, `@Res()`, `@Ip()`) or explicitly type with `FastifyRequest` / `FastifyReply`.
+3. **Cookie Handling:** Use `@fastify/cookie` for Edge proxy cookie validation and JWT token extraction.
+
+---
+
+## 11. RESPONSE & ERROR STANDARDIZATION
 
 All API endpoints must conform to the unified response contract:
 
@@ -190,7 +223,7 @@ All API endpoints must conform to the unified response contract:
 
 ---
 
-## 9. SCRIPT PLACEMENT & REPOSITORY HYGIENE
+## 12. SCRIPT PLACEMENT & REPOSITORY HYGIENE
 
 - **Root Directory Purity:** Never create scratch scripts, loose `.js`/`.ts` files, or test outputs in the project root or inside `src/`.
 - **Allowed Script Paths:** Place temporary database seeders, migration helpers, or debug scripts exclusively inside `scripts/` or `_dev_scripts/`.

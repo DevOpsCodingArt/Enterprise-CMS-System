@@ -77,8 +77,9 @@ async function seed() {
     }
 
     await runTenantSeed(companyId, passwordHash);
-  } catch (err: any) {
-    console.error('❌ Seeding failed:', err.message);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('❌ Seeding failed:', msg);
   } finally {
     await client.end();
   }
@@ -115,7 +116,7 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
     })
     .returning();
 
-  const [branchLhr] = await db
+  await db
     .insert(schema.branches)
     .values({
       companyId,
@@ -163,38 +164,106 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
     { cat: 'chat', slug: 'chat.assign', name: 'Assign Chat Conversations' },
     { cat: 'chat', slug: 'chat.transfer', name: 'Transfer Chat to Agent/Dept' },
     { cat: 'chat', slug: 'chat.close', name: 'Close Chat with Outcome' },
-    { cat: 'chat', slug: 'chat.view_internal_notes', name: 'View Private Staff Notes' },
-    { cat: 'chat', slug: 'chat.add_internal_note', name: 'Add Private Staff Notes' },
-    { cat: 'chat', slug: 'chat.manage_quick_replies', name: 'Manage Canned Quick Replies' },
+    {
+      cat: 'chat',
+      slug: 'chat.view_internal_notes',
+      name: 'View Private Staff Notes',
+    },
+    {
+      cat: 'chat',
+      slug: 'chat.add_internal_note',
+      name: 'Add Private Staff Notes',
+    },
+    {
+      cat: 'chat',
+      slug: 'chat.manage_quick_replies',
+      name: 'Manage Canned Quick Replies',
+    },
     // Tickets
     { cat: 'ticket', slug: 'ticket.view', name: 'View Trouble Tickets' },
-    { cat: 'ticket', slug: 'ticket.create', name: 'Create Complaints & Work Orders' },
-    { cat: 'ticket', slug: 'ticket.assign', name: 'Dispatch & Assign Engineers' },
-    { cat: 'ticket', slug: 'ticket.update_status', name: 'Update Ticket Status & Notes' },
-    { cat: 'ticket', slug: 'ticket.resolve', name: 'Resolve Ticket with Evidence' },
+    {
+      cat: 'ticket',
+      slug: 'ticket.create',
+      name: 'Create Complaints & Work Orders',
+    },
+    {
+      cat: 'ticket',
+      slug: 'ticket.assign',
+      name: 'Dispatch & Assign Engineers',
+    },
+    {
+      cat: 'ticket',
+      slug: 'ticket.update_status',
+      name: 'Update Ticket Status & Notes',
+    },
+    {
+      cat: 'ticket',
+      slug: 'ticket.resolve',
+      name: 'Resolve Ticket with Evidence',
+    },
     { cat: 'ticket', slug: 'ticket.close', name: 'Close & Verify Tickets' },
     // Customer
     { cat: 'customer', slug: 'customer.view', name: 'View Customer Directory' },
-    { cat: 'customer', slug: 'customer.view_360', name: 'View Customer 360° Diagnostics' },
-    { cat: 'customer', slug: 'customer.create', name: 'Register New Customers' },
-    { cat: 'customer', slug: 'customer.edit', name: 'Edit Customer Information' },
+    {
+      cat: 'customer',
+      slug: 'customer.view_360',
+      name: 'View Customer 360° Diagnostics',
+    },
+    {
+      cat: 'customer',
+      slug: 'customer.create',
+      name: 'Register New Customers',
+    },
+    {
+      cat: 'customer',
+      slug: 'customer.edit',
+      name: 'Edit Customer Information',
+    },
     // User / Staff
     { cat: 'user', slug: 'user.view', name: 'View Staff Directory' },
     { cat: 'user', slug: 'user.create', name: 'Create Staff Users' },
     { cat: 'user', slug: 'user.edit', name: 'Edit Staff Details' },
-    { cat: 'user', slug: 'user.manage_permissions', name: 'Manage RBAC Permissions' },
+    {
+      cat: 'user',
+      slug: 'user.manage_permissions',
+      name: 'Manage RBAC Permissions',
+    },
     // Branch
     { cat: 'branch', slug: 'branch.view', name: 'View Branches' },
     { cat: 'branch', slug: 'branch.manage', name: 'Create & Edit Branches' },
     // Network
-    { cat: 'network', slug: 'network.diagnostics', name: 'View MikroTik & OLT Signal Diagnostics' },
-    { cat: 'network', slug: 'network.reboot_onu', name: 'Remote Reboot ONU / PPPoE Reset' },
+    {
+      cat: 'network',
+      slug: 'network.diagnostics',
+      name: 'View MikroTik & OLT Signal Diagnostics',
+    },
+    {
+      cat: 'network',
+      slug: 'network.reboot_onu',
+      name: 'Remote Reboot ONU / PPPoE Reset',
+    },
     // Reports
-    { cat: 'reports', slug: 'reports.view_chat', name: 'View Helpdesk Chat Analytics' },
-    { cat: 'reports', slug: 'reports.view_tickets', name: 'View Ticket SLA & Outage Reports' },
+    {
+      cat: 'reports',
+      slug: 'reports.view_chat',
+      name: 'View Helpdesk Chat Analytics',
+    },
+    {
+      cat: 'reports',
+      slug: 'reports.view_tickets',
+      name: 'View Ticket SLA & Outage Reports',
+    },
     // Settings
-    { cat: 'settings', slug: 'settings.branding', name: 'Update Company Branding & Colors' },
-    { cat: 'settings', slug: 'settings.working_hours', name: 'Configure Working Hours' },
+    {
+      cat: 'settings',
+      slug: 'settings.branding',
+      name: 'Update Company Branding & Colors',
+    },
+    {
+      cat: 'settings',
+      slug: 'settings.working_hours',
+      name: 'Configure Working Hours',
+    },
   ];
 
   const permMap = new Map<string, string>();
@@ -241,7 +310,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
     .values({
       companyId,
       name: 'Helpdesk Agent (CSR)',
-      description: 'Handles incoming live chats, creates tickets, views customer 360',
+      description:
+        'Handles incoming live chats, creates tickets, views customer 360',
       isDefault: true,
     })
     .returning();
@@ -251,7 +321,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
     .values({
       companyId,
       name: 'Field Engineer',
-      description: 'Resolves assigned trouble tickets and records material usage',
+      description:
+        'Resolves assigned trouble tickets and records material usage',
       isDefault: false,
     })
     .returning();
@@ -379,7 +450,7 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
     })
     .returning();
 
-  const [custFatima] = await db
+  await db
     .insert(schema.customers)
     .values({
       companyId,
@@ -446,7 +517,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       companyId,
       title: 'Standard Greeting',
       shortcut: '/welcome',
-      content: 'Hello! Thank you for contacting Prime Networks Customer Support. My name is Ali. How may I assist you with your internet connection today?',
+      content:
+        'Hello! Thank you for contacting Prime Networks Customer Support. My name is Ali. How may I assist you with your internet connection today?',
       category: 'General',
       createdBy: agentUser.id,
     },
@@ -454,7 +526,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       companyId,
       title: 'Reboot Router Guidance',
       shortcut: '/restart',
-      content: 'Please turn off your fiber optical router/ONU from the main power switch, wait for 30 seconds, and turn it back on. Check if the PON and Internet lights turn solid green.',
+      content:
+        'Please turn off your fiber optical router/ONU from the main power switch, wait for 30 seconds, and turn it back on. Check if the PON and Internet lights turn solid green.',
       category: 'Troubleshooting',
       createdBy: agentUser.id,
     },
@@ -462,7 +535,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       companyId,
       title: 'Speed Test Request',
       shortcut: '/speedtest',
-      content: 'Could you please connect your PC/Laptop directly via Ethernet LAN cable and run a test at https://speedtest.net, then share a screenshot of the results here?',
+      content:
+        'Could you please connect your PC/Laptop directly via Ethernet LAN cable and run a test at https://speedtest.net, then share a screenshot of the results here?',
       category: 'Technical',
       createdBy: agentUser.id,
     },
@@ -470,7 +544,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       companyId,
       title: 'Payment Verification Received',
       shortcut: '/billing',
-      content: 'Thank you for uploading the payment screenshot. We have sent it to our Billing Department for verification. Your account recharge will be posted within 15 minutes.',
+      content:
+        'Thank you for uploading the payment screenshot. We have sent it to our Billing Department for verification. Your account recharge will be posted within 15 minutes.',
       category: 'Billing',
       createdBy: agentUser.id,
     },
@@ -478,7 +553,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       companyId,
       title: 'Issue Resolution Farewell',
       shortcut: '/farewell',
-      content: 'We are glad your connection has been resolved! Please rate our service. Thank you for choosing Prime Networks. Have a wonderful day!',
+      content:
+        'We are glad your connection has been resolved! Please rate our service. Thank you for choosing Prime Networks. Have a wonderful day!',
       category: 'General',
       createdBy: agentUser.id,
     },
@@ -511,7 +587,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       senderCustomerId: custAli.id,
       senderName: 'Muhammad Ali Khan',
       messageType: 'text',
-      content: 'Hello, my internet speed is dropping significantly every evening around 8 PM. Can you check my connection?',
+      content:
+        'Hello, my internet speed is dropping significantly every evening around 8 PM. Can you check my connection?',
       status: 'read',
     },
     {
@@ -521,7 +598,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       senderUserId: agentUser.id,
       senderName: 'Agent Ali',
       messageType: 'text',
-      content: 'Hello Muhammad Ali! Let me check your optical signal power and MikroTik live session right now.',
+      content:
+        'Hello Muhammad Ali! Let me check your optical signal power and MikroTik live session right now.',
       status: 'read',
     },
     {
@@ -532,7 +610,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       senderName: 'Agent Ali',
       messageType: 'text',
       isInternalNote: true,
-      content: 'Checked SmartOLT: Signal is optimal (-19.5 dBm). MikroTik interface shows high latency on F-10 core switch.',
+      content:
+        'Checked SmartOLT: Signal is optimal (-19.5 dBm). MikroTik interface shows high latency on F-10 core switch.',
       status: 'read',
     },
     {
@@ -560,7 +639,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       priority: 'urgent',
       status: 'in_progress',
       title: 'Red LOS Light - Total Optical Signal Loss in Saddar RWP',
-      description: 'Customer reports sudden internet disconnection. Optical signal degraded to -27.8 dBm (LOS blinking red). Drop cable suspected to be damaged near street pole #14.',
+      description:
+        'Customer reports sudden internet disconnection. Optical signal degraded to -27.8 dBm (LOS blinking red). Drop cable suspected to be damaged near street pole #14.',
       assignedDepartment: 'field_operations',
       assignedTo: fieldUser.id,
       createdBy: agentUser.id,
@@ -577,14 +657,16 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       companyId,
       userId: agentUser.id,
       activityType: 'created',
-      comment: 'Trouble Ticket generated from customer inquiry. Dispatched to Rawalpindi Field Team.',
+      comment:
+        'Trouble Ticket generated from customer inquiry. Dispatched to Rawalpindi Field Team.',
     },
     {
       ticketId: tkt1.id,
       companyId,
       userId: fieldUser.id,
       activityType: 'status_changed',
-      comment: 'Engineer reached Saddar site. Located cable damage near street 4.',
+      comment:
+        'Engineer reached Saddar site. Located cable damage near street 4.',
       oldValues: { status: 'open' },
       newValues: { status: 'in_progress' },
     },
@@ -595,10 +677,12 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
   console.log('🔑 Seed Credentials for Testing:');
   console.log('   Platform Super Admin: superadmin@primeone.io | Password123!');
   console.log('   Company Admin:        admin@primenetworks.pk | Password123!');
-  console.log('   Helpdesk Supervisor:  supervisor@primenetworks.pk | Password123!');
+  console.log(
+    '   Helpdesk Supervisor:  supervisor@primenetworks.pk | Password123!',
+  );
   console.log('   Helpdesk CSR Agent:   agent@primenetworks.pk | Password123!');
   console.log('   Field Technician:     field@primenetworks.pk | Password123!');
   console.log('----------------------------------------------------');
 }
 
-seed();
+void seed();

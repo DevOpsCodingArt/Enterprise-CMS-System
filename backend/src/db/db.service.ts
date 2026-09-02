@@ -1,4 +1,9 @@
-import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
@@ -30,9 +35,12 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
       // Test the database connection
       await this.client`SELECT 1`;
       this.logger.log(' Connected to PostgreSQL database successfully.');
-    } catch (error: any) {
-      this.logger.warn(`⚠️ PostgreSQL connection attempt: ${error.message}.`);
-      this.logger.warn('Ensure PostgreSQL container is running via podman-compose up -d');
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      this.logger.warn(`⚠️ PostgreSQL connection attempt: ${msg}.`);
+      this.logger.warn(
+        'Ensure PostgreSQL container is running via podman-compose up -d',
+      );
     }
   }
 
@@ -47,8 +55,9 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
   async setTenantContext(companyId: string) {
     try {
       await this.client`SET LOCAL app.current_company_id = ${companyId}`;
-    } catch (err: any) {
-      this.logger.error(`Failed to set tenant context: ${err.message}`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      this.logger.error(`Failed to set tenant context: ${msg}`);
     }
   }
 }

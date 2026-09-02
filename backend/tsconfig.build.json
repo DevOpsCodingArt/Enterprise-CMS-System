@@ -1,5 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "src/db/seed.ts"]
+  "compilerOptions": {
+    "rootDir": "src"
+  },
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "src/db/seed.ts", "drizzle.config.ts"]
 }
+
 
