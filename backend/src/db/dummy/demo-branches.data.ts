@@ -1,0 +1,32 @@
+export const DEMO_BRANCHES = [
+  {
+    name: 'Islamabad Head Office',
+    code: 'ISB-01',
+    address: 'Plot 12, Executive Heights, Blue Area, Islamabad',
+    phone: '+92 51 2800100',
+    email: 'isb@primenetworks.pk',
+    latitude: '33.7182',
+    longitude: '73.0605',
+    isActive: true,
+  },
+  {
+    name: 'Rawalpindi Branch',
+    code: 'RWP-01',
+    address: 'Bank Road, Saddar, Rawalpindi',
+    phone: '+92 51 5560100',
+    email: 'rwp@primenetworks.pk',
+    latitude: '33.5989',
+    longitude: '73.0538',
+    isActive: true,
+  },
+  {
+    name: 'Lahore Central Branch',
+    code: 'LHR-01',
+    address: 'Main Boulevard, Gulberg III, Lahore',
+    phone: '+92 42 3570010',
+    email: 'lhr@primenetworks.pk',
+    latitude: '31.5204',
+    longitude: '74.3587',
+    isActive: true,
+  },
+];

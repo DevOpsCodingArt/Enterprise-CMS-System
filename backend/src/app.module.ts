@@ -9,6 +9,7 @@ import { redisConfig } from './config/redis.config';
 import { jwtConfig } from './config/jwt.config';
 import { s3Config } from './config/s3.config';
 import { AuthModule } from './modules/auth/auth.module';
+import { TenantModule } from './modules/tenant/tenant.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
     DbModule,
     RedisModule,
     AuthModule,
+    TenantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

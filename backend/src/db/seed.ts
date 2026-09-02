@@ -4,6 +4,19 @@ import { eq } from 'drizzle-orm';
 import * as bcrypt from 'bcryptjs';
 import * as dotenv from 'dotenv';
 import * as schema from './schema';
+import {
+  DEMO_PLATFORM_OWNER,
+  DEMO_COMPANY,
+  DEMO_BRANCHES,
+  DEMO_PERMISSION_CATEGORIES,
+  DEMO_PERMISSIONS_LIST,
+  DEFAULT_PERMISSION_GROUPS,
+  DEMO_STAFF_USERS,
+  DEMO_CUSTOMERS,
+  DEMO_QUICK_REPLIES,
+  DEMO_CONVERSATION,
+  DEMO_TICKETS,
+} from './dummy';
 
 dotenv.config();
 
@@ -21,14 +34,12 @@ async function seed() {
     const passwordHash = await bcrypt.hash('Password123!', 10);
 
     // 1. Seed Platform Owner (Super Admin)
-    console.log('1. Seeding Platform Owner...');
+    console.log('1. Seeding Platform Owner from dummy presets...');
     const [platformOwner] = await db
       .insert(schema.platformOwners)
       .values({
-        email: 'superadmin@primeone.io',
-        name: 'Prime One Super Admin',
+        ...DEMO_PLATFORM_OWNER,
         passwordHash,
-        isActive: true,
       })
       .onConflictDoNothing()
       .returning();
@@ -36,27 +47,11 @@ async function seed() {
     const ownerId = platformOwner?.id;
 
     // 2. Seed Initial ISP Tenant (Prime Networks)
-    console.log('2. Seeding ISP Company (Prime Networks)...');
+    console.log('2. Seeding ISP Company from dummy presets...');
     const [company] = await db
       .insert(schema.companies)
       .values({
-        name: 'Prime Networks',
-        slug: 'prime-networks',
-        logoUrl: '/logos/prime-networks.png',
-        primaryColor: '#0ea5e9', // Sky Blue
-        secondaryColor: '#0284c7',
-        address: 'Tower A, Blue Area, Islamabad, Pakistan',
-        phone: '+92 51 111 774 631',
-        email: 'info@primenetworks.pk',
-        website: 'https://primenetworks.pk',
-        apiKey: 'pk_live_primenet_a98f7e6d5c4b3a21',
-        apiSecret: 'sk_live_primenet_sec_998877665544332211',
-        subscriptionPlan: 'enterprise_isp',
-        maxUsers: 150,
-        maxBranches: 20,
-        isActive: true,
-        timezone: 'Asia/Karachi',
-        defaultLanguage: 'en',
+        ...DEMO_COMPANY,
         createdBy: ownerId,
       })
       .onConflictDoNothing()
@@ -69,7 +64,7 @@ async function seed() {
       const [existingCompany] = await db
         .select()
         .from(schema.companies)
-        .where(eq(schema.companies.slug, 'prime-networks'));
+        .where(eq(schema.companies.slug, DEMO_COMPANY.slug));
       if (!existingCompany) {
         throw new Error('Failed to resolve company ID');
       }
@@ -87,64 +82,41 @@ async function seed() {
 
 async function runTenantSeed(companyId: string, passwordHash: string) {
   // 3. Seed Branches
-  console.log('3. Seeding Branches...');
-  const [branchIsb] = await db
-    .insert(schema.branches)
-    .values({
-      companyId,
-      name: 'Islamabad Head Office',
-      code: 'ISB-01',
-      address: 'Plot 12, Executive Heights, Blue Area, Islamabad',
-      phone: '+92 51 2800100',
-      email: 'isb@primenetworks.pk',
-      latitude: '33.7182',
-      longitude: '73.0605',
-    })
-    .returning();
+  console.log('3. Seeding Branches from dummy presets...');
+  const branchMap = new Map<string, string>();
 
-  const [branchRwp] = await db
-    .insert(schema.branches)
-    .values({
-      companyId,
-      name: 'Rawalpindi Branch',
-      code: 'RWP-01',
-      address: 'Bank Road, Saddar, Rawalpindi',
-      phone: '+92 51 5560100',
-      email: 'rwp@primenetworks.pk',
-      latitude: '33.5989',
-      longitude: '73.0538',
-    })
-    .returning();
+  for (const b of DEMO_BRANCHES) {
+    const [insertedBranch] = await db
+      .insert(schema.branches)
+      .values({
+        ...b,
+        companyId,
+      })
+      .onConflictDoNothing()
+      .returning();
 
-  await db
-    .insert(schema.branches)
-    .values({
-      companyId,
-      name: 'Lahore Central Branch',
-      code: 'LHR-01',
-      address: 'Main Boulevard, Gulberg III, Lahore',
-      phone: '+92 42 3570010',
-      email: 'lhr@primenetworks.pk',
-      latitude: '31.5204',
-      longitude: '74.3587',
-    })
-    .returning();
+    if (insertedBranch) {
+      branchMap.set(b.code, insertedBranch.id);
+    }
+  }
+
+  if (branchMap.size === 0) {
+    const existingBranches = await db
+      .select()
+      .from(schema.branches)
+      .where(eq(schema.branches.companyId, companyId));
+    for (const eb of existingBranches) {
+      branchMap.set(eb.code, eb.id);
+    }
+  }
+
+  const defaultBranchId =
+    branchMap.get('ISB-01') || Array.from(branchMap.values())[0];
 
   // 4. Seed Permission Categories & Permissions
-  console.log('4. Seeding Granular RBAC Permissions...');
-  const categoriesData = [
-    { name: 'Live Chat Management', slug: 'chat', order: 1 },
-    { name: 'Trouble Tickets & Complaints', slug: 'ticket', order: 2 },
-    { name: 'Customer 360 & CRM', slug: 'customer', order: 3 },
-    { name: 'User & Staff Management', slug: 'user', order: 4 },
-    { name: 'Branch Operations', slug: 'branch', order: 5 },
-    { name: 'Network & Hardware Diagnostics', slug: 'network', order: 6 },
-    { name: 'Reports & Analytics', slug: 'reports', order: 7 },
-    { name: 'Company Settings & Branding', slug: 'settings', order: 8 },
-  ];
-
+  console.log('4. Seeding Granular RBAC Permissions from dummy presets...');
   const catMap = new Map<string, string>();
-  for (const cat of categoriesData) {
+  for (const cat of DEMO_PERMISSION_CATEGORIES) {
     const [insertedCat] = await db
       .insert(schema.permissionCategories)
       .values({
@@ -153,121 +125,26 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
         slug: cat.slug,
         displayOrder: cat.order,
       })
+      .onConflictDoNothing()
       .returning();
-    catMap.set(cat.slug, insertedCat.id);
+
+    if (insertedCat) {
+      catMap.set(cat.slug, insertedCat.id);
+    }
   }
 
-  const permissionsList = [
-    // Chat
-    { cat: 'chat', slug: 'chat.view', name: 'View Live Chats' },
-    { cat: 'chat', slug: 'chat.send', name: 'Send Chat Messages' },
-    { cat: 'chat', slug: 'chat.assign', name: 'Assign Chat Conversations' },
-    { cat: 'chat', slug: 'chat.transfer', name: 'Transfer Chat to Agent/Dept' },
-    { cat: 'chat', slug: 'chat.close', name: 'Close Chat with Outcome' },
-    {
-      cat: 'chat',
-      slug: 'chat.view_internal_notes',
-      name: 'View Private Staff Notes',
-    },
-    {
-      cat: 'chat',
-      slug: 'chat.add_internal_note',
-      name: 'Add Private Staff Notes',
-    },
-    {
-      cat: 'chat',
-      slug: 'chat.manage_quick_replies',
-      name: 'Manage Canned Quick Replies',
-    },
-    // Tickets
-    { cat: 'ticket', slug: 'ticket.view', name: 'View Trouble Tickets' },
-    {
-      cat: 'ticket',
-      slug: 'ticket.create',
-      name: 'Create Complaints & Work Orders',
-    },
-    {
-      cat: 'ticket',
-      slug: 'ticket.assign',
-      name: 'Dispatch & Assign Engineers',
-    },
-    {
-      cat: 'ticket',
-      slug: 'ticket.update_status',
-      name: 'Update Ticket Status & Notes',
-    },
-    {
-      cat: 'ticket',
-      slug: 'ticket.resolve',
-      name: 'Resolve Ticket with Evidence',
-    },
-    { cat: 'ticket', slug: 'ticket.close', name: 'Close & Verify Tickets' },
-    // Customer
-    { cat: 'customer', slug: 'customer.view', name: 'View Customer Directory' },
-    {
-      cat: 'customer',
-      slug: 'customer.view_360',
-      name: 'View Customer 360° Diagnostics',
-    },
-    {
-      cat: 'customer',
-      slug: 'customer.create',
-      name: 'Register New Customers',
-    },
-    {
-      cat: 'customer',
-      slug: 'customer.edit',
-      name: 'Edit Customer Information',
-    },
-    // User / Staff
-    { cat: 'user', slug: 'user.view', name: 'View Staff Directory' },
-    { cat: 'user', slug: 'user.create', name: 'Create Staff Users' },
-    { cat: 'user', slug: 'user.edit', name: 'Edit Staff Details' },
-    {
-      cat: 'user',
-      slug: 'user.manage_permissions',
-      name: 'Manage RBAC Permissions',
-    },
-    // Branch
-    { cat: 'branch', slug: 'branch.view', name: 'View Branches' },
-    { cat: 'branch', slug: 'branch.manage', name: 'Create & Edit Branches' },
-    // Network
-    {
-      cat: 'network',
-      slug: 'network.diagnostics',
-      name: 'View MikroTik & OLT Signal Diagnostics',
-    },
-    {
-      cat: 'network',
-      slug: 'network.reboot_onu',
-      name: 'Remote Reboot ONU / PPPoE Reset',
-    },
-    // Reports
-    {
-      cat: 'reports',
-      slug: 'reports.view_chat',
-      name: 'View Helpdesk Chat Analytics',
-    },
-    {
-      cat: 'reports',
-      slug: 'reports.view_tickets',
-      name: 'View Ticket SLA & Outage Reports',
-    },
-    // Settings
-    {
-      cat: 'settings',
-      slug: 'settings.branding',
-      name: 'Update Company Branding & Colors',
-    },
-    {
-      cat: 'settings',
-      slug: 'settings.working_hours',
-      name: 'Configure Working Hours',
-    },
-  ];
+  if (catMap.size === 0) {
+    const existingCats = await db
+      .select()
+      .from(schema.permissionCategories)
+      .where(eq(schema.permissionCategories.companyId, companyId));
+    for (const ec of existingCats) {
+      catMap.set(ec.slug, ec.id);
+    }
+  }
 
   const permMap = new Map<string, string>();
-  for (const p of permissionsList) {
+  for (const p of DEMO_PERMISSIONS_LIST) {
     const categoryId = catMap.get(p.cat);
     if (categoryId) {
       const [insertedPerm] = await db
@@ -278,411 +155,260 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
           slug: p.slug,
           isSystem: true,
         })
+        .onConflictDoNothing()
         .returning();
-      permMap.set(p.slug, insertedPerm.id);
+
+      if (insertedPerm) {
+        permMap.set(p.slug, insertedPerm.id);
+      }
     }
   }
 
-  // 5. Seed Permission Groups
-  console.log('5. Seeding Permission Groups...');
-  const [adminGroup] = await db
-    .insert(schema.permissionGroups)
-    .values({
-      companyId,
-      name: 'Company Owner / Admin',
-      description: 'Full administrative access across all modules',
-      isDefault: false,
-    })
-    .returning();
+  if (permMap.size === 0) {
+    const existingPerms = await db.select().from(schema.permissions);
+    for (const ep of existingPerms) {
+      permMap.set(ep.slug, ep.id);
+    }
+  }
 
-  const [supervisorGroup] = await db
-    .insert(schema.permissionGroups)
-    .values({
-      companyId,
-      name: 'Support Supervisor',
-      description: 'Monitors chats, escalates tickets, views analytics',
-      isDefault: false,
-    })
-    .returning();
+  // 5. Seed Permission Groups from dummy presets
+  console.log('5. Seeding Permission Groups from dummy presets...');
+  const groupMap = new Map<string, string>();
 
-  const [helpdeskGroup] = await db
-    .insert(schema.permissionGroups)
-    .values({
-      companyId,
-      name: 'Helpdesk Agent (CSR)',
-      description:
-        'Handles incoming live chats, creates tickets, views customer 360',
-      isDefault: true,
-    })
-    .returning();
+  for (const group of DEFAULT_PERMISSION_GROUPS) {
+    const [insertedGroup] = await db
+      .insert(schema.permissionGroups)
+      .values({
+        companyId,
+        name: group.name,
+        description: group.description,
+        isDefault: group.isDefault,
+      })
+      .onConflictDoNothing()
+      .returning();
 
-  const [fieldGroup] = await db
-    .insert(schema.permissionGroups)
-    .values({
-      companyId,
-      name: 'Field Engineer',
-      description:
-        'Resolves assigned trouble tickets and records material usage',
-      isDefault: false,
-    })
-    .returning();
+    if (insertedGroup) {
+      groupMap.set(group.name, insertedGroup.id);
+    }
+  }
+
+  if (groupMap.size === 0) {
+    const existingGroups = await db
+      .select()
+      .from(schema.permissionGroups)
+      .where(eq(schema.permissionGroups.companyId, companyId));
+    for (const eg of existingGroups) {
+      groupMap.set(eg.name, eg.id);
+    }
+  }
+
+  const adminGroupId = Array.from(groupMap.values())[0];
 
   // Attach all permissions to Admin Group
   for (const permId of permMap.values()) {
-    await db.insert(schema.permissionGroupPermissions).values({
-      permissionGroupId: adminGroup.id,
-      permissionId: permId,
-      granted: true,
-    });
+    await db
+      .insert(schema.permissionGroupPermissions)
+      .values({
+        permissionGroupId: adminGroupId,
+        permissionId: permId,
+        granted: true,
+      })
+      .onConflictDoNothing();
   }
 
-  // 6. Seed Staff Accounts
-  console.log('6. Seeding Staff Accounts...');
-  const [adminUser] = await db
-    .insert(schema.users)
-    .values({
-      companyId,
-      branchId: branchIsb.id,
-      email: 'admin@primenetworks.pk',
-      username: 'admin',
-      fullName: 'Tariq Mehmood',
-      displayName: 'Tariq (Admin)',
-      userType: 'company_owner',
-      department: 'management',
-      designation: 'CEO / Operations Director',
-      passwordHash,
-      isActive: true,
-      isOnline: true,
-    })
-    .returning();
+  // 6. Seed Staff Accounts from dummy presets
+  console.log('6. Seeding Staff Accounts from dummy presets...');
+  const userMap = new Map<string, string>();
 
-  const [supervisorUser] = await db
-    .insert(schema.users)
-    .values({
-      companyId,
-      branchId: branchIsb.id,
-      email: 'supervisor@primenetworks.pk',
-      username: 'supervisor',
-      fullName: 'Khurram Shahzad',
-      displayName: 'Khurram (Supervisor)',
-      userType: 'staff',
-      department: 'helpdesk',
-      designation: 'Support Operations Supervisor',
-      passwordHash,
-      isActive: true,
-      isOnline: true,
-    })
-    .returning();
+  for (const u of DEMO_STAFF_USERS) {
+    const branchId = branchMap.get(u.branchCode) || defaultBranchId;
+    const [insertedUser] = await db
+      .insert(schema.users)
+      .values({
+        companyId,
+        branchId,
+        email: u.email,
+        username: u.username,
+        fullName: u.fullName,
+        displayName: u.displayName,
+        userType: u.userType,
+        department: u.department,
+        designation: u.designation,
+        passwordHash,
+        isActive: u.isActive,
+        isOnline: u.isOnline,
+      })
+      .onConflictDoNothing()
+      .returning();
 
-  const [agentUser] = await db
-    .insert(schema.users)
-    .values({
-      companyId,
-      branchId: branchIsb.id,
-      email: 'agent@primenetworks.pk',
-      username: 'agent.ali',
-      fullName: 'Ali Raza',
-      displayName: 'Agent Ali',
-      userType: 'staff',
-      department: 'helpdesk',
-      designation: 'Helpdesk Senior CSR',
-      passwordHash,
-      isActive: true,
-      isOnline: true,
-    })
-    .returning();
+    if (insertedUser) {
+      userMap.set(u.key, insertedUser.id);
+      userMap.set(u.username, insertedUser.id);
 
-  const [fieldUser] = await db
-    .insert(schema.users)
-    .values({
-      companyId,
-      branchId: branchRwp.id,
-      email: 'field@primenetworks.pk',
-      username: 'field.usman',
-      fullName: 'Usman Splicer',
-      displayName: 'Usman (Field Tech)',
-      userType: 'staff',
-      department: 'field_operations',
-      designation: 'Senior Fiber Splicer',
-      passwordHash,
-      isActive: true,
-      isOnline: false,
-    })
-    .returning();
+      // Attach to admin group
+      await db
+        .insert(schema.userPermissionGroups)
+        .values({
+          userId: insertedUser.id,
+          permissionGroupId: adminGroupId,
+        })
+        .onConflictDoNothing();
+    }
+  }
 
-  // Link users to permission groups
-  await db.insert(schema.userPermissionGroups).values([
-    { userId: adminUser.id, permissionGroupId: adminGroup.id },
-    { userId: supervisorUser.id, permissionGroupId: supervisorGroup.id },
-    { userId: agentUser.id, permissionGroupId: helpdeskGroup.id },
-    { userId: fieldUser.id, permissionGroupId: fieldGroup.id },
-  ]);
+  // 7. Seed ISP Customers from dummy presets
+  console.log('7. Seeding ISP Customers from dummy presets...');
+  const customerMap = new Map<string, string>();
 
-  // 7. Seed ISP Customers
-  console.log('7. Seeding ISP Customers with Telemetry...');
-  const [custAli] = await db
-    .insert(schema.customers)
-    .values({
-      companyId,
-      branchId: branchIsb.id,
-      customerCode: 'CUS-1001',
-      fullName: 'Muhammad Ali Khan',
-      cnic: '61101-1234567-1',
-      email: 'ali.khan@gmail.com',
-      phone: '+92 300 1234567',
-      username: 'ali.fiber50',
-      passwordHash,
-      address: 'House 45, Street 12, F-10/2, Islamabad',
-      area: 'F-10/2',
-      city: 'Islamabad',
-      latitude: '33.6934',
-      longitude: '73.0112',
-      customerClass: 'residential',
-      packageName: '50 Mbps Fiber Unlimited',
-      packageSpeed: '50 Mbps',
-      monthlyBilling: '3500.00',
-      pppoeStatus: 'online',
-      currentIp: '192.168.10.45',
-      macAddress: 'BC:A9:93:4F:11:A2',
-      onuSignalDbm: '-19.50',
-      oltPonPort: 'EPON0/1:4',
-      status: 'active',
-    })
-    .returning();
+  for (const c of DEMO_CUSTOMERS) {
+    const branchId = branchMap.get(c.branchCode) || defaultBranchId;
+    const [insertedCust] = await db
+      .insert(schema.customers)
+      .values({
+        companyId,
+        branchId,
+        customerCode: c.customerCode,
+        fullName: c.fullName,
+        cnic: c.cnic,
+        email: c.email,
+        phone: c.phone,
+        username: c.username,
+        passwordHash,
+        address: c.address,
+        area: c.area,
+        city: c.city,
+        latitude: c.latitude,
+        longitude: c.longitude,
+        customerClass: c.customerClass,
+        packageName: c.packageName,
+        packageSpeed: c.packageSpeed,
+        monthlyBilling: c.monthlyBilling,
+        pppoeStatus: c.pppoeStatus,
+        currentIp: c.currentIp,
+        macAddress: c.macAddress,
+        onuSignalDbm: c.onuSignalDbm,
+        oltPonPort: c.oltPonPort,
+        status: c.status,
+      })
+      .onConflictDoNothing()
+      .returning();
 
-  await db
-    .insert(schema.customers)
-    .values({
-      companyId,
-      branchId: branchIsb.id,
-      customerCode: 'CUS-1002',
-      fullName: 'Fatima Corporate Services Ltd',
-      cnic: '37405-9876543-2',
-      email: 'info@fatimacorp.pk',
-      phone: '+92 333 9876543',
-      username: 'fatima.corp100',
-      passwordHash,
-      address: 'Office 402, Evacuee Trust Complex, Blue Area, Islamabad',
-      area: 'Blue Area',
-      city: 'Islamabad',
-      latitude: '33.7214',
-      longitude: '73.0782',
-      customerClass: 'corporate',
-      packageName: '100 Mbps Dedicated Symmetrical Fiber',
-      packageSpeed: '100 Mbps',
-      monthlyBilling: '18500.00',
-      pppoeStatus: 'online',
-      currentIp: '192.168.10.82',
-      macAddress: '48:8F:5A:21:6E:9C',
-      onuSignalDbm: '-18.20',
-      oltPonPort: 'GPON0/2:1',
-      status: 'active',
-    })
-    .returning();
+    if (insertedCust) {
+      customerMap.set(c.customerCode, insertedCust.id);
+    }
+  }
 
-  const [custUsman] = await db
-    .insert(schema.customers)
-    .values({
-      companyId,
-      branchId: branchRwp.id,
-      customerCode: 'CUS-1003',
-      fullName: 'Usman Tariq',
-      cnic: '37405-1122334-9',
-      email: 'usman.t@yahoo.com',
-      phone: '+92 321 5566778',
-      username: 'usman.home30',
-      passwordHash,
-      address: 'Flat 3, Al-Madina Arcade, Saddar, Rawalpindi',
-      area: 'Saddar',
-      city: 'Rawalpindi',
-      latitude: '33.5992',
-      longitude: '73.0545',
-      customerClass: 'residential',
-      packageName: '30 Mbps Fiber Starter',
-      packageSpeed: '30 Mbps',
-      monthlyBilling: '2500.00',
-      pppoeStatus: 'offline',
-      currentIp: '0.0.0.0',
-      macAddress: 'E8:94:F6:12:34:56',
-      onuSignalDbm: '-27.80', // Warning Weak Signal
-      oltPonPort: 'EPON0/3:2',
-      status: 'active',
-    })
-    .returning();
+  // 8. Seed Quick Replies from dummy presets
+  console.log('8. Seeding Quick Replies from dummy presets...');
+  const agentUserId = userMap.get('agent') || Array.from(userMap.values())[0];
 
-  // 8. Seed Canned Quick Replies
-  console.log('8. Seeding Quick Replies...');
-  await db.insert(schema.quickReplies).values([
-    {
-      companyId,
-      title: 'Standard Greeting',
-      shortcut: '/welcome',
-      content:
-        'Hello! Thank you for contacting Prime Networks Customer Support. My name is Ali. How may I assist you with your internet connection today?',
-      category: 'General',
-      createdBy: agentUser.id,
-    },
-    {
-      companyId,
-      title: 'Reboot Router Guidance',
-      shortcut: '/restart',
-      content:
-        'Please turn off your fiber optical router/ONU from the main power switch, wait for 30 seconds, and turn it back on. Check if the PON and Internet lights turn solid green.',
-      category: 'Troubleshooting',
-      createdBy: agentUser.id,
-    },
-    {
-      companyId,
-      title: 'Speed Test Request',
-      shortcut: '/speedtest',
-      content:
-        'Could you please connect your PC/Laptop directly via Ethernet LAN cable and run a test at https://speedtest.net, then share a screenshot of the results here?',
-      category: 'Technical',
-      createdBy: agentUser.id,
-    },
-    {
-      companyId,
-      title: 'Payment Verification Received',
-      shortcut: '/billing',
-      content:
-        'Thank you for uploading the payment screenshot. We have sent it to our Billing Department for verification. Your account recharge will be posted within 15 minutes.',
-      category: 'Billing',
-      createdBy: agentUser.id,
-    },
-    {
-      companyId,
-      title: 'Issue Resolution Farewell',
-      shortcut: '/farewell',
-      content:
-        'We are glad your connection has been resolved! Please rate our service. Thank you for choosing Prime Networks. Have a wonderful day!',
-      category: 'General',
-      createdBy: agentUser.id,
-    },
-  ]);
+  for (const qr of DEMO_QUICK_REPLIES) {
+    await db
+      .insert(schema.quickReplies)
+      .values({
+        companyId,
+        title: qr.title,
+        shortcut: qr.shortcut,
+        content: qr.content,
+        category: qr.category,
+        createdBy: agentUserId,
+      })
+      .onConflictDoNothing();
+  }
 
-  // 9. Seed Sample Live Chat Conversations & Messages
-  console.log('9. Seeding Demo Conversations & Messages...');
-  const [conv1] = await db
-    .insert(schema.conversations)
-    .values({
-      companyId,
-      customerId: custAli.id,
-      initiatedBy: 'customer',
-      status: 'active',
-      assignedTo: agentUser.id,
-      assignedAt: new Date(),
-      priority: 'high',
-      subject: 'Internet speed drop in evening hours',
-      lastMessageAt: new Date(),
-      unreadCountStaff: 0,
-      unreadCountCustomer: 0,
-    })
-    .returning();
+  // 9. Seed Demo Live Chat Conversation from dummy presets
+  console.log('9. Seeding Demo Chat from dummy presets...');
+  const chatCustomerId =
+    customerMap.get(DEMO_CONVERSATION.customerCode) ||
+    Array.from(customerMap.values())[0];
 
-  await db.insert(schema.messages).values([
-    {
-      conversationId: conv1.id,
-      companyId,
-      senderType: 'customer',
-      senderCustomerId: custAli.id,
-      senderName: 'Muhammad Ali Khan',
-      messageType: 'text',
-      content:
-        'Hello, my internet speed is dropping significantly every evening around 8 PM. Can you check my connection?',
-      status: 'read',
-    },
-    {
-      conversationId: conv1.id,
-      companyId,
-      senderType: 'staff',
-      senderUserId: agentUser.id,
-      senderName: 'Agent Ali',
-      messageType: 'text',
-      content:
-        'Hello Muhammad Ali! Let me check your optical signal power and MikroTik live session right now.',
-      status: 'read',
-    },
-    {
-      conversationId: conv1.id,
-      companyId,
-      senderType: 'staff',
-      senderUserId: agentUser.id,
-      senderName: 'Agent Ali',
-      messageType: 'text',
-      isInternalNote: true,
-      content:
-        'Checked SmartOLT: Signal is optimal (-19.5 dBm). MikroTik interface shows high latency on F-10 core switch.',
-      status: 'read',
-    },
-    {
-      conversationId: conv1.id,
-      companyId,
-      senderType: 'customer',
-      senderCustomerId: custAli.id,
-      senderName: 'Muhammad Ali Khan',
-      messageType: 'text',
-      content: 'Thank you. I have attached the speed test screenshot as well.',
-      status: 'read',
-    },
-  ]);
+  if (chatCustomerId && agentUserId) {
+    const [conv1] = await db
+      .insert(schema.conversations)
+      .values({
+        companyId,
+        customerId: chatCustomerId,
+        initiatedBy: DEMO_CONVERSATION.initiatedBy,
+        status: DEMO_CONVERSATION.status,
+        assignedTo: agentUserId,
+        assignedAt: new Date(),
+        priority: DEMO_CONVERSATION.priority,
+        subject: DEMO_CONVERSATION.subject,
+        lastMessageAt: new Date(),
+        unreadCountStaff: 0,
+        unreadCountCustomer: 0,
+      })
+      .onConflictDoNothing()
+      .returning();
 
-  // 10. Seed Sample Trouble Ticket
-  console.log('10. Seeding Trouble Ticket...');
-  const [tkt1] = await db
-    .insert(schema.tickets)
-    .values({
-      companyId,
-      ticketNumber: 'TKT-2026-0001',
-      customerId: custUsman.id,
-      branchId: branchRwp.id,
-      category: 'fiber_break',
-      priority: 'urgent',
-      status: 'in_progress',
-      title: 'Red LOS Light - Total Optical Signal Loss in Saddar RWP',
-      description:
-        'Customer reports sudden internet disconnection. Optical signal degraded to -27.8 dBm (LOS blinking red). Drop cable suspected to be damaged near street pole #14.',
-      assignedDepartment: 'field_operations',
-      assignedTo: fieldUser.id,
-      createdBy: agentUser.id,
-      ettr: new Date(Date.now() + 3 * 3600 * 1000), // 3 hours from now
-      materialUsed: '150m 1-Core Drop Cable, 2x SC Fast Connectors',
-      latitude: '33.5992',
-      longitude: '73.0545',
-    })
-    .returning();
+    if (conv1) {
+      for (const msg of DEMO_CONVERSATION.messages) {
+        await db.insert(schema.messages).values({
+          conversationId: conv1.id,
+          companyId,
+          senderType: msg.senderType,
+          senderCustomerId:
+            msg.senderType === 'customer' ? chatCustomerId : null,
+          senderUserId: msg.senderType === 'staff' ? agentUserId : null,
+          senderName: msg.senderName,
+          messageType: msg.messageType,
+          isInternalNote: msg.isInternalNote ?? false,
+          content: msg.content,
+          status: msg.status,
+        });
+      }
+    }
+  }
 
-  await db.insert(schema.ticketActivities).values([
-    {
-      ticketId: tkt1.id,
-      companyId,
-      userId: agentUser.id,
-      activityType: 'created',
-      comment:
-        'Trouble Ticket generated from customer inquiry. Dispatched to Rawalpindi Field Team.',
-    },
-    {
-      ticketId: tkt1.id,
-      companyId,
-      userId: fieldUser.id,
-      activityType: 'status_changed',
-      comment:
-        'Engineer reached Saddar site. Located cable damage near street 4.',
-      oldValues: { status: 'open' },
-      newValues: { status: 'in_progress' },
-    },
-  ]);
+  // 10. Seed Demo Trouble Ticket from dummy presets
+  console.log('10. Seeding Demo Tickets from dummy presets...');
+  for (const tkt of DEMO_TICKETS) {
+    const tktCustomerId =
+      customerMap.get(tkt.customerCode) || Array.from(customerMap.values())[0];
+    const tktBranchId = branchMap.get(tkt.branchCode) || defaultBranchId;
+    const assignedUserId = userMap.get(tkt.assignedUsername) || agentUserId;
+
+    if (tktCustomerId && tktBranchId) {
+      const [insertedTicket] = await db
+        .insert(schema.tickets)
+        .values({
+          companyId,
+          ticketNumber: tkt.ticketNumber,
+          customerId: tktCustomerId,
+          branchId: tktBranchId,
+          category: tkt.category,
+          priority: tkt.priority,
+          status: tkt.status,
+          title: tkt.title,
+          description: tkt.description,
+          assignedDepartment: tkt.assignedDepartment,
+          assignedTo: assignedUserId,
+          createdBy: agentUserId,
+          ettr: new Date(Date.now() + 3 * 3600 * 1000),
+          materialUsed: tkt.materialUsed,
+          latitude: tkt.latitude,
+          longitude: tkt.longitude,
+        })
+        .onConflictDoNothing()
+        .returning();
+
+      if (insertedTicket) {
+        for (const act of tkt.activities) {
+          await db.insert(schema.ticketActivities).values({
+            ticketId: insertedTicket.id,
+            companyId,
+            userId: assignedUserId,
+            activityType: act.activityType,
+            comment: act.comment,
+            oldValues: act.oldValues || null,
+            newValues: act.newValues || null,
+          });
+        }
+      }
+    }
+  }
 
   console.log('✅ Prime One Database Seeding Completed Successfully!');
-  console.log('----------------------------------------------------');
-  console.log('🔑 Seed Credentials for Testing:');
-  console.log('   Platform Super Admin: superadmin@primeone.io | Password123!');
-  console.log('   Company Admin:        admin@primenetworks.pk | Password123!');
-  console.log(
-    '   Helpdesk Supervisor:  supervisor@primenetworks.pk | Password123!',
-  );
-  console.log('   Helpdesk CSR Agent:   agent@primenetworks.pk | Password123!');
-  console.log('   Field Technician:     field@primenetworks.pk | Password123!');
-  console.log('----------------------------------------------------');
 }
 
 void seed();
