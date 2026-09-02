@@ -13,6 +13,7 @@ import { TenantModule } from './modules/tenant/tenant.module';
 import { CustomerModule } from './modules/customer/customer.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { UsersModule } from './modules/users/users.module';
+import { TicketsModule } from './modules/tickets/tickets.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UsersModule } from './modules/users/users.module';
     CustomerModule,
     RbacModule,
     UsersModule,
+    TicketsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

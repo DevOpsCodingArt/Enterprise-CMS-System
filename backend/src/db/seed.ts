@@ -363,18 +363,20 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
   // 10. Seed Demo Trouble Ticket from dummy presets
   console.log('10. Seeding Demo Tickets from dummy presets...');
   for (const tkt of DEMO_TICKETS) {
-    const tktCustomerId =
-      customerMap.get(tkt.customerCode) || Array.from(customerMap.values())[0];
+    const tktCustomerId = tkt.customerCode
+      ? customerMap.get(tkt.customerCode)
+      : null;
     const tktBranchId = branchMap.get(tkt.branchCode) || defaultBranchId;
     const assignedUserId = userMap.get(tkt.assignedUsername) || agentUserId;
 
-    if (tktCustomerId && tktBranchId) {
+    if (tktBranchId) {
       const [insertedTicket] = await db
         .insert(schema.tickets)
         .values({
           companyId,
           ticketNumber: tkt.ticketNumber,
-          customerId: tktCustomerId,
+          ticketScope: tkt.ticketScope || 'subscriber',
+          customerId: tktCustomerId || null,
           branchId: tktBranchId,
           category: tkt.category,
           priority: tkt.priority,
@@ -384,6 +386,16 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
           assignedDepartment: tkt.assignedDepartment,
           assignedTo: assignedUserId,
           createdBy: agentUserId,
+          areaAffected: tkt.areaAffected || null,
+          affectedSubscribersCount: tkt.affectedSubscribersCount || 0,
+          oltPonPort: tkt.oltPonPort || null,
+          sourcePonPort: tkt.sourcePonPort || null,
+          destinationPonPort: tkt.destinationPonPort || null,
+          splitterId: tkt.splitterId || null,
+          coreCountAffected: tkt.coreCountAffected || null,
+          cableType: tkt.cableType || null,
+          otdrBreakDistanceMeters: tkt.otdrBreakDistanceMeters || null,
+          opticalFaultType: tkt.opticalFaultType || null,
           ettr: new Date(Date.now() + 3 * 3600 * 1000),
           materialUsed: tkt.materialUsed,
           latitude: tkt.latitude,

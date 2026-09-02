@@ -8,6 +8,20 @@
       "when": 1788334557552,
       "tag": "0000_giant_secret_warriors",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788342536980,
+      "tag": "0001_fair_swarm",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788342726544,
+      "tag": "0002_easy_nebula",
+      "breakpoints": true
     }
   ]
 }
