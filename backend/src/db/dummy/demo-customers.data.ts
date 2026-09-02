@@ -11,16 +11,17 @@ export interface DemoCustomer {
   city: string;
   latitude: string;
   longitude: string;
-  customerClass: 'residential' | 'corporate';
+  customerClass:
+    'residential' | 'business' | 'corporate' | 'government' | 'vip';
   packageName: string;
   packageSpeed: string;
   monthlyBilling: string;
-  pppoeStatus: 'online' | 'offline' | 'disabled';
+  pppoeStatus: string;
   currentIp: string;
   macAddress: string;
   onuSignalDbm: string;
   oltPonPort: string;
-  status: 'active' | 'suspended' | 'expired' | 'terminated';
+  status: 'active' | 'inactive' | 'suspended' | 'disconnected';
 }
 
 export const DEMO_CUSTOMERS: DemoCustomer[] = [

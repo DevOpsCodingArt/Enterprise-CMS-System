@@ -18,13 +18,24 @@ export interface DemoTicket {
   assignedUsername: string;
   category:
     | 'fiber_break'
-    | 'slow_speed'
+    | 'onu_failure'
     | 'router_config'
-    | 'billing'
+    | 'wire_damage'
+    | 'slow_speed'
+    | 'new_installation'
     | 'relocation'
+    | 'billing_inquiry'
+    | 'recharge_verification'
     | 'other';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  status: 'open' | 'in_progress' | 'waiting_customer' | 'resolved' | 'closed';
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  status:
+    | 'open'
+    | 'assigned'
+    | 'in_progress'
+    | 'pending_field'
+    | 'resolved'
+    | 'closed'
+    | 'cancelled';
   title: string;
   description: string;
   assignedDepartment: string;

@@ -1,7 +1,15 @@
 export interface DemoChatMessage {
   senderType: 'customer' | 'staff' | 'system';
   senderName: string;
-  messageType: 'text' | 'image' | 'file';
+  messageType:
+    | 'text'
+    | 'image'
+    | 'voice'
+    | 'video'
+    | 'document'
+    | 'system'
+    | 'ticket_created'
+    | 'payment_proof';
   isInternalNote?: boolean;
   content: string;
   status: 'sent' | 'delivered' | 'read';
@@ -11,7 +19,7 @@ export interface DemoConversation {
   customerCode: string;
   userUsername: string;
   initiatedBy: 'customer' | 'staff';
-  status: 'active' | 'queued' | 'closed';
+  status: 'active' | 'waiting' | 'on_hold' | 'closed';
   priority: 'low' | 'normal' | 'high' | 'urgent';
   subject: string;
   messages: DemoChatMessage[];

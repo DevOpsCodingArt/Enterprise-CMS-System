@@ -10,6 +10,7 @@ import { jwtConfig } from './config/jwt.config';
 import { s3Config } from './config/s3.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { TenantModule } from './modules/tenant/tenant.module';
+import { CustomerModule } from './modules/customer/customer.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TenantModule } from './modules/tenant/tenant.module';
     RedisModule,
     AuthModule,
     TenantModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
