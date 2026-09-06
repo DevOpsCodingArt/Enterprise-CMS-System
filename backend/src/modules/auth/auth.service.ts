@@ -181,6 +181,7 @@ export class AuthService {
         logoUrl: company.logoUrl,
         primaryColor: company.primaryColor,
         secondaryColor: company.secondaryColor,
+        timezone: company.timezone || 'Asia/Karachi',
       },
       accessToken,
       refreshToken,
@@ -312,6 +313,7 @@ export class AuthService {
             name: company.name,
             slug: company.slug,
             logoUrl: company.logoUrl,
+            timezone: company.timezone || 'Asia/Karachi',
           }
         : null,
       accessToken,
@@ -661,6 +663,7 @@ export class AuthService {
             logoUrl: company.logoUrl,
             primaryColor: company.primaryColor,
             secondaryColor: company.secondaryColor,
+            timezone: company.timezone || 'Asia/Karachi',
           }
         : null,
     };

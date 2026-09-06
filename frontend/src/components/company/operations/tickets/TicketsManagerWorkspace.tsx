@@ -136,6 +136,7 @@ export function TicketsManagerWorkspace() {
         vanNo: "Van #04 (OTDR Equipped)",
         slaMinutesLeft: isExpired ? 0 : isClosed ? 0 : 45 + idx * 15,
         description: t.description,
+        companyTimezone: (t as any).companyTimezone || "Asia/Karachi",
       };
     })
   );

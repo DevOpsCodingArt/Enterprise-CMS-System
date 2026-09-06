@@ -18,6 +18,7 @@ export interface TenantCompany {
     omniChat: boolean;
     aiDiagnostics: boolean;
   };
+  timezone?: string;
   themeTokens?: {
     primaryHex?: string;
     secondaryHex?: string;

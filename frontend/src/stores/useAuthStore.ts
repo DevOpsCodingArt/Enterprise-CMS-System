@@ -12,8 +12,8 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   setAuth: (user: UserProfile, company: TenantCompany, accessToken: string, refreshToken?: string) => void;
+  updateCompanyTimezone: (timezone: string) => void;
   logout: () => void;
-  switchDemoRole: (role: UserRole) => void;
   can: (permissionSlug: string) => boolean;
   canAll: (permissionSlugs: string[]) => boolean;
   canAny: (permissionSlugs: string[]) => boolean;
@@ -40,6 +40,11 @@ export const useAuthStore = create<AuthState>()(
           isLoading: false,
         }),
 
+      updateCompanyTimezone: (timezone: string) =>
+        set((state) => ({
+          company: state.company ? { ...state.company, timezone } : null,
+        })),
+
       logout: () =>
         set({
           user: null,
@@ -49,14 +54,6 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
           isLoading: false,
         }),
-
-      switchDemoRole: (role) => {
-        const demoUser = mockDb.users[role];
-        set({
-          user: demoUser,
-          isAuthenticated: true,
-        });
-      },
 
       can: (permissionSlug) => {
         const { user } = get();

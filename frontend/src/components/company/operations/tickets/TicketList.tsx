@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import { Clock, AlertCircle, Ticket } from "lucide-react";
+import { Ticket } from "lucide-react";
 import { FullTroubleTicket } from "./TicketDetailPane";
 import { RichEmptyState } from "@/components/ui/shared/RichEmptyState";
+import { EttrLiveCountdown } from "./EttrLiveCountdown";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { DEFAULT_TENANT_TIMEZONE } from "@/lib/timezone";
 
 export function TicketList({
   tickets,
@@ -14,6 +17,8 @@ export function TicketList({
   selectedTicketId: string | null;
   onSelectTicket: (id: string) => void;
 }) {
+  const currentCompanyTz = useAuthStore((s) => s.company?.timezone) || DEFAULT_TENANT_TIMEZONE;
+
   const getPriorityStyle = (priority: string) => {
     switch (priority) {
       case "Critical":
@@ -28,54 +33,23 @@ export function TicketList({
     }
   };
 
-  const getStatusStyle = (status: string) => {
-    switch (status) {
-      case "Closed":
-      case "closed":
-      case "resolved":
-        return "bg-success/10 text-success border-success/20";
-      case "In Progress":
-      case "in_progress":
-        return "bg-primary/10 text-primary border-primary/20";
-      case "Expired":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      default:
-        return "bg-warning/10 text-warning border-warning/20";
-    }
-  };
-
   if (tickets.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center p-6 bg-card">
+      <div className="flex-1 p-6 flex items-center justify-center">
         <RichEmptyState
           icon={Ticket}
-          title="No Trouble Tickets Found"
-          description="There are currently no trouble tickets matching your active filter criteria."
-          tips={[
-            "Broaden or reset your active priority and status filters",
-            "Generate a new dispatch ticket for incoming customer calls",
-          ]}
+          title="No Tickets Found"
+          description="There are no active trouble tickets matching your filter criteria."
         />
       </div>
     );
   }
 
-  // Calculate hours left
-  const getHoursLeft = (ettrString?: string) => {
-    if (!ettrString) return 2;
-    const ettr = new Date(ettrString);
-    if (isNaN(ettr.getTime())) return 2;
-    const now = new Date();
-    const diffMs = ettr.getTime() - now.getTime();
-    return Math.floor(diffMs / (1000 * 60 * 60));
-  };
-
   return (
     <div className="flex-1 overflow-y-auto divide-y divide-border custom-scrollbar bg-card">
       {tickets.map((t) => {
         const isSelected = t.id === selectedTicketId;
-        const hrsLeft = getHoursLeft(t.ettr);
-        const isExpired = hrsLeft < 0 || t.status === "Expired";
+        const isClosed = t.status === "Closed" || t.status === "closed" || t.status === "resolved";
 
         return (
           <div
@@ -119,7 +93,7 @@ export function TicketList({
               <div className="flex items-center gap-1.5">
                 <div
                   className={`w-2 h-2 rounded-full ${
-                    t.status === "Closed" || t.status === "closed" || t.status === "resolved"
+                    isClosed
                       ? "bg-success"
                       : t.status === "Expired"
                       ? "bg-destructive"
@@ -133,20 +107,12 @@ export function TicketList({
                 </span>
               </div>
 
-              {t.status !== "Closed" && t.status !== "closed" && t.status !== "resolved" && (
-                <div
-                  className={`flex items-center gap-1 font-mono text-xs font-bold ${
-                    isExpired ? "text-destructive" : "text-foreground"
-                  }`}
-                >
-                  {isExpired ? (
-                    <AlertCircle className="w-3.5 h-3.5" />
-                  ) : (
-                    <Clock className="w-3.5 h-3.5 opacity-70" />
-                  )}
-                  <span>{isExpired ? "EXPIRED" : `${hrsLeft}h left`}</span>
-                </div>
-              )}
+              <EttrLiveCountdown
+                compact
+                ettrUtc={t.ettr}
+                companyTimezone={t.companyTimezone || currentCompanyTz}
+                isResolved={isClosed}
+              />
             </div>
           </div>
         );

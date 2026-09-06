@@ -11,17 +11,29 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
+import { SUPPORTED_TIMEZONES } from "@/lib/timezone";
+import { Globe } from "lucide-react";
 
 export function TenantProvisioningModal({
   isOpen,
   onClose,
+  onProvision,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  onProvision?: (tenantData: {
+    name: string;
+    subdomain: string;
+    timezone: string;
+    adminEmail: string;
+    branchesQuota: number;
+    subscribersQuota: number;
+  }) => void;
 }) {
   const toast = useToast();
   const [companyName, setCompanyName] = useState("");
   const [subdomain, setSubdomain] = useState("");
+  const [timezone, setTimezone] = useState("Asia/Karachi");
   const [branchesQuota, setBranchesQuota] = useState("20");
   const [subscribersQuota, setSubscribersQuota] = useState("150000");
   const [adminEmail, setAdminEmail] = useState("");
@@ -30,9 +42,20 @@ export function TenantProvisioningModal({
     e.preventDefault();
     if (!companyName.trim()) return;
 
+    if (onProvision) {
+      onProvision({
+        name: companyName,
+        subdomain,
+        timezone,
+        adminEmail,
+        branchesQuota: Number(branchesQuota) || 20,
+        subscribersQuota: Number(subscribersQuota) || 150000,
+      });
+    }
+
     toast.success(
       "Tenant Provisioned",
-      `New instance for "${companyName}" (${subdomain}.primeone.io) has been created.`
+      `New instance for "${companyName}" (${subdomain}.primeone.io) provisioned in timezone ${timezone}.`
     );
     onClose();
   };
@@ -69,6 +92,28 @@ export function TenantProvisioningModal({
             placeholder="subdomain"
             required
           />
+
+          {/* Tenant Regional Timezone */}
+          <div>
+            <label className="block text-xs font-medium text-foreground mb-1.5 flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5 text-primary" />
+              <span>Tenant Regional Timezone</span>
+            </label>
+            <select
+              value={timezone}
+              onChange={(e) => setTimezone(e.target.value)}
+              className="w-full bg-card-subtle/50 rounded-lg p-2 border border-border text-foreground font-mono text-xs focus:ring-1 focus:ring-primary focus:outline-none"
+            >
+              {SUPPORTED_TIMEZONES.map((tz) => (
+                <option key={tz.value} value={tz.value} className="bg-card text-foreground">
+                  {tz.label}
+                </option>
+              ))}
+            </select>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Governs ticket SLA timers, ETTR countdowns, subscriber billing cycles, and staff shifts for this instance.
+            </p>
+          </div>
 
           <div className="grid grid-cols-2 gap-3">
             <Input

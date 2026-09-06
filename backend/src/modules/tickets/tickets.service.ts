@@ -281,8 +281,13 @@ export class TicketsService {
         attachments: schema.tickets.attachments,
         createdAt: schema.tickets.createdAt,
         updatedAt: schema.tickets.updatedAt,
+        companyTimezone: schema.companies.timezone,
       })
       .from(schema.tickets)
+      .leftJoin(
+        schema.companies,
+        eq(schema.tickets.companyId, schema.companies.id),
+      )
       .leftJoin(
         schema.customers,
         eq(schema.tickets.customerId, schema.customers.id),
@@ -394,8 +399,13 @@ export class TicketsService {
         attachments: schema.tickets.attachments,
         createdAt: schema.tickets.createdAt,
         updatedAt: schema.tickets.updatedAt,
+        companyTimezone: schema.companies.timezone,
       })
       .from(schema.tickets)
+      .leftJoin(
+        schema.companies,
+        eq(schema.tickets.companyId, schema.companies.id),
+      )
       .leftJoin(
         schema.customers,
         eq(schema.tickets.customerId, schema.customers.id),

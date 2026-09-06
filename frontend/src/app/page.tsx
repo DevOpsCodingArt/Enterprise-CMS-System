@@ -20,8 +20,7 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useToast } from "@/components/ui/toast";
 import { useTheme } from "@/hooks/useTheme";
-import { DEMO_USERS, getRoleHomeRoute } from "@/config/role-routing";
-import { mockDb } from "@/mock/db";
+import { getRoleHomeRoute } from "@/config/role-routing";
 import { apiClient } from "@/lib/api";
 import { loginFormSchema } from "@/schemas/auth.schema";
 
@@ -235,7 +234,7 @@ function SplitLoginForm() {
             </label>
             <button
               type="button"
-              onClick={() => toast.info("Demo Mode", "Password for all demo accounts is Password123!")}
+              onClick={() => toast.info("Password Reset", "Please contact your organization administrator to request a password reset.")}
               className="text-xs text-primary hover:underline font-medium cursor-pointer"
             >
               Forgot password?
@@ -308,36 +307,11 @@ function SplitLoginForm() {
           </Button>
         </div>
 
-        {/* Quick Autofill Demo Personas */}
-        <div className="pt-4 border-t border-border/60 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
-              Demo Test Accounts
-            </span>
-            <span className="text-[10px] font-mono text-muted-foreground/80">
-              One-click fill
-            </span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-            {DEMO_USERS.map((persona) => (
-              <button
-                key={persona.email}
-                type="button"
-                onClick={() => {
-                  setEmail(persona.email);
-                  setPassword(persona.password);
-                  setFieldErrors({});
-                }}
-                className="flex flex-col text-left p-2 rounded-lg border border-border bg-card/60 hover:bg-card hover:border-primary/50 transition-all cursor-pointer group"
-              >
-                <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">
-                  {persona.name.split(" ")[0]}
-                </span>
-                <span className="text-[10px] text-muted-foreground font-mono truncate">
-                  {persona.badgeLabel.split(" ")[0]}
-                </span>
-              </button>
-            ))}
+        {/* Enterprise Security Guarantee */}
+        <div className="pt-4 border-t border-border/60">
+          <div className="flex items-center justify-center gap-2 text-xs font-mono text-muted-foreground/80 py-1">
+            <ShieldCheck className="h-4 w-4 text-emerald-500" />
+            <span>256-Bit Encrypted Enterprise Gateway</span>
           </div>
         </div>
       </form>

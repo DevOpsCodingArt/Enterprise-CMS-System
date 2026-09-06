@@ -21,6 +21,9 @@ import { DateTimePicker } from "@/components/ui/shared/DateTimePicker";
 import { Tooltip } from "@/components/ui/shared/Tooltip";
 import { ConfirmDialog } from "@/components/ui/shared/ConfirmDialog";
 import { useToast } from "@/components/ui/toast";
+import { formatTenantDateTime, getTimezoneAbbreviation, DEFAULT_TENANT_TIMEZONE } from "@/lib/timezone";
+import { EttrLiveCountdown } from "./EttrLiveCountdown";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export interface TicketNote {
   id: string;
@@ -76,6 +79,7 @@ export interface FullTroubleTicket {
   vanNo?: string;
   slaMinutesLeft?: number;
   description?: string;
+  companyTimezone?: string;
 }
 
 export function TicketDetailPane({
@@ -88,6 +92,9 @@ export function TicketDetailPane({
   onDelete?: (id: string) => void;
 }) {
   const toast = useToast();
+  const currentCompanyTz = useAuthStore((s) => s.company?.timezone);
+  const tenantTimezone = ticket?.companyTimezone || currentCompanyTz || DEFAULT_TENANT_TIMEZONE;
+
   const [expandedCard, setExpandedCard] = useState<
     "customer" | "ettr" | "transfer" | "assignment" | "diagnostics" | null
   >(null);
@@ -113,19 +120,7 @@ export function TicketDetailPane({
   }
 
   const formatDate = (isoString?: string) => {
-    if (!isoString) return "--------";
-    const d = new Date(isoString);
-    if (isNaN(d.getTime())) return isoString;
-    return d
-      .toLocaleString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      })
-      .replace(",", "");
+    return formatTenantDateTime(isoString, tenantTimezone);
   };
 
   const isClosed = ticket.status === "Closed" || ticket.status === "closed" || ticket.status === "resolved";
@@ -227,10 +222,7 @@ export function TicketDetailPane({
                     <p className="font-mono text-xs text-muted-foreground mb-1">
                       Extended by <span className="font-bold text-foreground">{detail.changedBy}</span>{" "}
                       <span className="float-right font-mono">
-                        {new Date(detail.timestamp || Date.now()).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {formatDate(detail.timestamp || new Date().toISOString())}
                       </span>
                     </p>
                     <p className="text-sm font-medium mb-1 text-foreground">{detail.change}</p>
@@ -649,13 +641,27 @@ export function TicketDetailPane({
             }`}
           >
             <div>
-              <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-wider mb-4 border-b border-border pb-2 font-bold">
-                SLA Target (ETTR)
-              </h3>
-              <p suppressHydrationWarning className="font-mono text-sm font-bold text-foreground mb-4">{formatDate(ticket.ettr)}</p>
+              <div className="flex items-center justify-between mb-3 border-b border-border pb-2">
+                <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-wider font-bold">
+                  SLA Target (ETTR)
+                </h3>
+                <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
+                  {getTimezoneAbbreviation(tenantTimezone)}
+                </span>
+              </div>
+              <p suppressHydrationWarning className="font-mono text-xs text-muted-foreground mb-2">
+                Target: <span className="font-bold text-foreground">{formatDate(ticket.ettr)}</span>
+              </p>
+              <div className="my-2">
+                <EttrLiveCountdown
+                  ettrUtc={ticket.ettr}
+                  companyTimezone={tenantTimezone}
+                  isResolved={isClosed}
+                />
+              </div>
             </div>
             <div>
-              <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mt-3">
                 <div
                   className={`h-full ${
                     isClosed
@@ -668,7 +674,7 @@ export function TicketDetailPane({
                 ></div>
               </div>
               <p className="text-[10px] text-muted-foreground mt-2 text-right font-mono uppercase font-bold">
-                {isClosed ? "Resolution Met" : "85% Time Elapsed"}
+                {isClosed ? "Resolution Met" : "Active SLA Monitoring"}
               </p>
             </div>
           </div>
@@ -945,7 +951,7 @@ export function TicketDetailPane({
                         const newHistory: EttrHistoryItem = {
                           timestamp: new Date().toISOString(),
                           changedBy: "NOC Dispatcher",
-                          change: `Changed ETTR to ${new Date(ettrUpdate).toLocaleString()}`,
+                          change: `Changed ETTR to ${formatDate(ettrUpdate)}`,
                           reason: "Field technician requested extension due to fiber cut location.",
                         };
                         onUpdate(ticket.id, {
