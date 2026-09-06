@@ -50,8 +50,18 @@ export default function CustomerLayout({
 
   const handleSwitchPersona = (persona: DemoUserCredential) => {
     const userProfile = mockDb.users[persona.role as keyof typeof mockDb.users] || mockDb.users.company_owner;
-    setAuth(userProfile, mockDb.tenantCompany, "mock-jwt-token-prime-one", "mock-jwt-refresh-token");
-    document.cookie = `prime_access_token=mock-jwt-token-prime-one; path=/; max-age=86400; SameSite=Lax`;
+    const mockJwt = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${btoa(
+      JSON.stringify({
+        id: userProfile.id,
+        email: persona.email,
+        role: persona.role,
+        role_code: persona.role,
+        permissions: userProfile.permissions || ["*"],
+        exp: Math.floor(Date.now() / 1000) + 86400,
+      })
+    )}.mock-signature`;
+    setAuth(userProfile, mockDb.tenantCompany, mockJwt, "mock-jwt-refresh-token");
+    document.cookie = `prime_access_token=${mockJwt}; path=/; max-age=86400; SameSite=Lax`;
     setIsProfileMenuOpen(false);
     toast.success("Switched Persona", `Active as ${persona.name} (${persona.badgeLabel})`);
     router.push(persona.homeRoute);
@@ -62,7 +72,7 @@ export default function CustomerLayout({
     document.cookie = "prime_access_token=; path=/; max-age=0;";
     setIsProfileMenuOpen(false);
     toast.info("Logged Out", "Signed out of Customer Portal.");
-    router.push("/login");
+    router.push("/");
   };
 
   return (

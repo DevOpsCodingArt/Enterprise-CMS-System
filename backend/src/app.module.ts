@@ -14,12 +14,14 @@ import { CustomerModule } from './modules/customer/customer.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { UsersModule } from './modules/users/users.module';
 import { TicketsModule } from './modules/tickets/tickets.module';
+import { validateEnv } from './config/env.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+      validate: validateEnv,
       load: [databaseConfig, redisConfig, jwtConfig, s3Config],
     }),
     DbModule,

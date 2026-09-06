@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -20,52 +20,156 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useToast } from "@/components/ui/toast";
 import { useTheme } from "@/hooks/useTheme";
-import { DEMO_USERS } from "@/config/role-routing";
+import { DEMO_USERS, getRoleHomeRoute } from "@/config/role-routing";
 import { mockDb } from "@/mock/db";
+import { apiClient } from "@/lib/api";
+import { loginFormSchema } from "@/schemas/auth.schema";
+
 
 function SplitLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams?.get("redirect");
   const toast = useToast();
-  const { setAuth } = useAuthStore();
+  const { user: authUser, accessToken, setAuth } = useAuthStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ identifier?: string; password?: string }>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Auto-redirect if already authenticated with a valid JWT and cookie
+  useEffect(() => {
+    if (accessToken && accessToken.includes(".") && authUser) {
+      if (typeof document !== "undefined" && document.cookie.includes("prime_access_token=")) {
+        let destination = redirectUrl;
+        if (!destination || destination === "/" || destination.startsWith("/login")) {
+          const userRole = (authUser.role as string || "").toLowerCase();
+          if (userRole === "customer" || (authUser as any).userType === "customer") {
+            destination = "/portal";
+          } else if (userRole === "platform_owner" || userRole === "super_admin") {
+            destination = "/platform";
+          } else if (userRole === "field_engineer" || (authUser as any).department === "field_operations") {
+            destination = "/company/tickets";
+          } else {
+            destination = getRoleHomeRoute(userRole);
+          }
+        }
+        window.location.href = destination;
+      }
+    }
+  }, [accessToken, authUser, redirectUrl]);
+
+  // Clean up any stale/circular redirect parameters in the URL
+  useEffect(() => {
+    if (redirectUrl === "/" || redirectUrl === "/login" || redirectUrl?.startsWith("/login")) {
+      router.replace("/");
+    }
+  }, [redirectUrl, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      toast.error("Required Fields Missing", "Please enter both your email address and password.");
+    setFieldErrors({});
+
+    // Client-side Zod boundary validation & sanitization
+    const validationResult = loginFormSchema.safeParse({
+      identifier: email,
+      password,
+    });
+
+    if (!validationResult.success) {
+      const errors: { identifier?: string; password?: string } = {};
+      for (const issue of validationResult.error.issues) {
+        if (issue.path[0] === "identifier" && !errors.identifier) {
+          errors.identifier = issue.message;
+        }
+        if (issue.path[0] === "password" && !errors.password) {
+          errors.password = issue.message;
+        }
+      }
+      setFieldErrors(errors);
+      toast.error(
+        "Validation Error",
+        errors.identifier || errors.password || "Please check your credentials."
+      );
       return;
     }
 
+    const cleanIdentifier = validationResult.data.identifier;
+    const cleanPassword = validationResult.data.password;
+
     setIsLoading(true);
 
-    setTimeout(() => {
-      // Find matching user or fallback to company owner
-      const matchedPersona =
-        DEMO_USERS.find((u) => u.email.toLowerCase() === email.trim().toLowerCase()) || DEMO_USERS[0];
+    try {
+      const isCustomer = cleanIdentifier.toLowerCase().includes("ali.khan") || cleanIdentifier.toLowerCase().includes("customer");
+      const isPlatform = cleanIdentifier.toLowerCase().includes("superadmin") || cleanIdentifier.toLowerCase().includes("primeone.io");
+
+      let loginEndpoint = "/auth/login";
+      if (isCustomer) loginEndpoint = "/auth/login/customer";
+      else if (isPlatform) loginEndpoint = "/auth/login/platform";
+
+      let payload: Record<string, any>;
+      if (isCustomer) {
+        payload = { identifier: cleanIdentifier, password: cleanPassword };
+      } else if (isPlatform) {
+        payload = { email: cleanIdentifier, password: cleanPassword };
+      } else {
+        payload = { identifier: cleanIdentifier, email: cleanIdentifier, password: cleanPassword };
+      }
+
+      const response = await apiClient.post<{
+        statusCode: number;
+        data: {
+          user: any;
+          company: any;
+          accessToken: string;
+          refreshToken: string;
+        };
+      }>(loginEndpoint, payload);
+
+      const { user, company, accessToken, refreshToken } = response.data.data;
 
       // Update Zustand Auth Store
-      const userProfile = mockDb.users[matchedPersona.role as keyof typeof mockDb.users] || mockDb.users.company_owner;
-      setAuth(userProfile, mockDb.tenantCompany, "mock-jwt-token-prime-one", "mock-jwt-refresh-token");
+      setAuth(user, company, accessToken, refreshToken);
 
       // Set cookie for Edge proxy
-      document.cookie = `prime_access_token=mock-jwt-token-prime-one; path=/; max-age=86400; SameSite=Lax`;
+      document.cookie = `prime_access_token=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
 
       toast.success(
-        `Welcome Back, ${matchedPersona.name}!`,
-        `Authenticated as ${matchedPersona.badgeLabel}. Routing to your workspace...`
+        `Welcome Back, ${user.displayName || user.name}!`,
+        `Authenticated as ${user.role}. Routing to your workspace...`
       );
 
-      // Route destination
-      const destination = redirectUrl || matchedPersona.homeRoute;
-      router.push(destination);
-    }, 500);
+      // Route destination: strictly prevent looping back to / or /login
+      let destination = redirectUrl;
+      if (!destination || destination === "/" || destination.startsWith("/login")) {
+        const userRole = (user.role || "").toLowerCase();
+        if (userRole === "customer" || user.userType === "customer") {
+          destination = "/portal";
+        } else if (userRole === "platform_owner" || userRole === "super_admin") {
+          destination = "/platform";
+        } else if (userRole === "field_engineer" || user.department === "field_operations") {
+          destination = "/company/tickets";
+        } else {
+          destination = getRoleHomeRoute(userRole);
+        }
+      }
+
+      window.location.href = destination;
+    } catch (err: any) {
+      console.error("[Auth] Login error caught:", err);
+      const errorMsg =
+        err.response?.data?.error?.message ||
+        err.response?.data?.message ||
+        "Invalid email or password. Please verify your credentials.";
+
+      toast.error("Authentication Failed", errorMsg);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
 
   return (
     <div className="w-full max-w-md mx-auto space-y-8">
@@ -95,19 +199,32 @@ function SplitLoginForm() {
         {/* Email Field */}
         <div className="space-y-2">
           <label className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground block">
-            Email Address
+            Email or Username
           </label>
           <div className="relative flex items-center">
             <Mail className="absolute left-3.5 h-4 w-4 text-muted-foreground/70 pointer-events-none" />
             <input
-              type="email"
+              type="text"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@example.com"
-              required
-              className="w-full h-12 pl-10 pr-3 text-xs bg-card dark:bg-card-subtle border-2 border-black dark:border-white/30 hover:border-black/80 focus:border-black dark:focus:border-white rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-hidden focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 transition-colors font-mono shadow-xs"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (fieldErrors.identifier) {
+                  setFieldErrors((prev) => ({ ...prev, identifier: undefined }));
+                }
+              }}
+              placeholder="name@example.com or username"
+              className={`w-full h-12 pl-10 pr-3 text-xs bg-card dark:bg-card-subtle border-2 ${
+                fieldErrors.identifier
+                  ? "border-destructive dark:border-destructive focus:border-destructive"
+                  : "border-black dark:border-white/30 hover:border-black/80 focus:border-black dark:focus:border-white"
+              } rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-hidden focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 transition-colors font-mono shadow-xs`}
             />
           </div>
+          {fieldErrors.identifier && (
+            <p className="text-[11px] text-destructive font-mono mt-1">
+              {fieldErrors.identifier}
+            </p>
+          )}
         </div>
 
         {/* Password Field */}
@@ -118,7 +235,7 @@ function SplitLoginForm() {
             </label>
             <button
               type="button"
-              onClick={() => toast.info("Demo Mode", "Password for all demo accounts is password123")}
+              onClick={() => toast.info("Demo Mode", "Password for all demo accounts is Password123!")}
               className="text-xs text-primary hover:underline font-medium cursor-pointer"
             >
               Forgot password?
@@ -129,10 +246,18 @@ function SplitLoginForm() {
             <input
               type={showPassword ? "text" : "password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (fieldErrors.password) {
+                  setFieldErrors((prev) => ({ ...prev, password: undefined }));
+                }
+              }}
               placeholder="••••••••••••"
-              required
-              className="w-full h-12 pl-10 pr-10 text-xs bg-card dark:bg-card-subtle border-2 border-black dark:border-white/30 hover:border-black/80 focus:border-black dark:focus:border-white rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-hidden focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 transition-colors font-mono shadow-xs"
+              className={`w-full h-12 pl-10 pr-10 text-xs bg-card dark:bg-card-subtle border-2 ${
+                fieldErrors.password
+                  ? "border-destructive dark:border-destructive focus:border-destructive"
+                  : "border-black dark:border-white/30 hover:border-black/80 focus:border-black dark:focus:border-white"
+              } rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-hidden focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 transition-colors font-mono shadow-xs`}
             />
             <button
               type="button"
@@ -142,6 +267,11 @@ function SplitLoginForm() {
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
+          {fieldErrors.password && (
+            <p className="text-[11px] text-destructive font-mono mt-1">
+              {fieldErrors.password}
+            </p>
+          )}
         </div>
 
         {/* Remember this device */}
@@ -176,6 +306,39 @@ function SplitLoginForm() {
               </div>
             )}
           </Button>
+        </div>
+
+        {/* Quick Autofill Demo Personas */}
+        <div className="pt-4 border-t border-border/60 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
+              Demo Test Accounts
+            </span>
+            <span className="text-[10px] font-mono text-muted-foreground/80">
+              One-click fill
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+            {DEMO_USERS.map((persona) => (
+              <button
+                key={persona.email}
+                type="button"
+                onClick={() => {
+                  setEmail(persona.email);
+                  setPassword(persona.password);
+                  setFieldErrors({});
+                }}
+                className="flex flex-col text-left p-2 rounded-lg border border-border bg-card/60 hover:bg-card hover:border-primary/50 transition-all cursor-pointer group"
+              >
+                <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                  {persona.name.split(" ")[0]}
+                </span>
+                <span className="text-[10px] text-muted-foreground font-mono truncate">
+                  {persona.badgeLabel.split(" ")[0]}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </form>
     </div>

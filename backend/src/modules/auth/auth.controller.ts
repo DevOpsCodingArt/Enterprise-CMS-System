@@ -20,9 +20,12 @@ import { Public } from '../../core/decorators/public.decorator';
 import { CurrentUser } from '../../core/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../../core/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard';
+import { RateLimitGuard } from '../../core/guards/rate-limit.guard';
+import { RateLimit } from '../../core/decorators/rate-limit.decorator';
 
 @Controller('auth')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RateLimitGuard)
+@RateLimit({ limit: 10, ttl: 60 })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

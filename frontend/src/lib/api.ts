@@ -1,7 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import type { ApiResponse, ApiErrorEnvelope } from "@/types/api.types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -101,7 +101,7 @@ apiClient.interceptors.response.use(
 
         const newAccessToken = refreshResponse.data.data.accessToken;
 
-        // Update local storage
+        // Update local storage and Edge proxy cookie
         if (typeof window !== "undefined") {
           const storedAuth = localStorage.getItem("prime-one-auth-storage");
           if (storedAuth) {
@@ -110,6 +110,7 @@ apiClient.interceptors.response.use(
             parsed.state.refreshToken = refreshResponse.data.data.refreshToken || refreshToken;
             localStorage.setItem("prime-one-auth-storage", JSON.stringify(parsed));
           }
+          document.cookie = `prime_access_token=${newAccessToken}; path=/; max-age=86400; SameSite=Lax`;
         }
 
         processQueue(null, newAccessToken);
@@ -121,7 +122,12 @@ apiClient.interceptors.response.use(
         processQueue(refreshErr as AxiosError, null);
         if (typeof window !== "undefined") {
           localStorage.removeItem("prime-one-auth-storage");
-          // Optional soft redirect
+          document.cookie = "prime_access_token=; path=/; max-age=0; SameSite=Lax";
+          const currentPath = window.location.pathname;
+          const redirectParam = currentPath && currentPath !== "/" && !currentPath.startsWith("/login")
+            ? `?redirect=${encodeURIComponent(currentPath)}`
+            : "";
+          window.location.href = `/${redirectParam}`;
         }
         return Promise.reject(refreshErr);
       } finally {

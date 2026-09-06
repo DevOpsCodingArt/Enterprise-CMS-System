@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard';
+import { RateLimitGuard } from '../../core/guards/rate-limit.guard';
 import { DbModule } from '../../db/db.module';
 import { RedisModule } from '../../core/redis/redis.module';
 
@@ -30,7 +31,7 @@ import { RedisModule } from '../../core/redis/redis.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard],
-  exports: [AuthService, JwtStrategy, JwtAuthGuard, JwtModule],
+  providers: [AuthService, JwtStrategy, JwtAuthGuard, RateLimitGuard],
+  exports: [AuthService, JwtStrategy, JwtAuthGuard, RateLimitGuard, JwtModule],
 })
 export class AuthModule {}

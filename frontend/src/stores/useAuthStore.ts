@@ -23,12 +23,11 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-      // Consumes pre-seeded user & company from mockDb for clean replacement with backend
-      user: mockDb.users.company_owner,
-      company: mockDb.tenantCompany,
-      accessToken: "mock-jwt-token-prime-one",
-      refreshToken: "mock-jwt-refresh-token",
-      isAuthenticated: true,
+      user: null,
+      company: null,
+      accessToken: null,
+      refreshToken: null,
+      isAuthenticated: false,
       isLoading: false,
 
       setAuth: (user, company, accessToken, refreshToken) =>
@@ -107,6 +106,11 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state && state.accessToken && !state.accessToken.includes(".")) {
+          state.logout();
+        }
+      },
     }
   )
 );

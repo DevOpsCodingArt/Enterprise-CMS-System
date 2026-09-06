@@ -58,9 +58,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }
     } else if (exception instanceof Error) {
       errorMessage = exception.message;
-      this.logger.error(
-        `Unhandled Exception on ${request.method} ${request.url}: ${exception.stack ?? exception.message}`,
-      );
+      const maybeStatus = (exception as unknown as { statusCode?: number }).statusCode;
+      if (typeof maybeStatus === 'number' && maybeStatus >= 400 && maybeStatus < 500) {
+        status = maybeStatus;
+        errorCode = this.mapStatusToErrorCode(status);
+      } else {
+        this.logger.error(
+          `Unhandled Exception on ${request.method} ${request.url}: ${exception.stack ?? exception.message}`,
+        );
+      }
     }
 
     const errorPayload: ApiErrorEnvelope = {
