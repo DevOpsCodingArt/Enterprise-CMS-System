@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Unplug, RotateCcw } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { Tooltip } from "@/components/ui/tooltip";
 
 export interface ColumnItem {

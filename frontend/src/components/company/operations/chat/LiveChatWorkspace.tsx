@@ -41,7 +41,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toast";
-import { mockDb, SubscriberRecord } from "@/mock/db";
+import { telecomService } from "@/services/telecom.service";
+import type { SubscriberRecord, CannedTemplate } from "@/types/telecom-entities.types";
 import { cn } from "@/lib/utils";
 
 interface ConversationThread {
@@ -55,6 +56,23 @@ interface ConversationThread {
   category: "Fiber Outage" | "Billing Query" | "Speed Upgrade" | "General";
   isOnline: boolean;
 }
+
+const DEFAULT_SUBSCRIBER: SubscriberRecord = {
+  id: "sub-ali-01",
+  customerCode: "CUS-99482",
+  fullName: "Ali Hassan",
+  cnic: "61101-1234567-1",
+  phone: "+92 300 1234567",
+  address: "House 14-B, Street 32, Sector F-10/1, Islamabad",
+  branchName: "Islamabad Core (F-10 HQ)",
+  packageName: "Fiber Pro 50 Mbps",
+  monthlyFeePkr: 3500,
+  ledgerBalancePkr: 0,
+  pppoeUsername: "ali_hassan_f10",
+  opticalRxDbm: -27.4,
+  opticalStatus: "warning",
+  status: "active",
+};
 
 interface ChatMessage {
   id: string;
@@ -84,7 +102,7 @@ export function LiveChatWorkspace() {
   const [threads, setThreads] = useState<ConversationThread[]>([
     {
       id: "thread-1",
-      subscriber: mockDb.subscribers[0], // Ali Hassan
+      subscriber: DEFAULT_SUBSCRIBER,
       channel: "whatsapp",
       lastMessage: "Our technician Usman is en route with OTDR meter.",
       lastMessageTime: "10:43 AM",
@@ -95,7 +113,14 @@ export function LiveChatWorkspace() {
     },
     {
       id: "thread-2",
-      subscriber: mockDb.subscribers[1], // Dr. Farooq Khan
+      subscriber: {
+        ...DEFAULT_SUBSCRIBER,
+        id: "sub-farooq-02",
+        customerCode: "CUS-88412",
+        fullName: "Dr. Farooq Khan",
+        phone: "+92 321 9876543",
+        packageName: "Ultra Giga 100 Mbps",
+      },
       channel: "whatsapp",
       lastMessage: "I want to upgrade my package to 100 Mbps Gigabit plan.",
       lastMessageTime: "10:20 AM",
@@ -106,7 +131,14 @@ export function LiveChatWorkspace() {
     },
     {
       id: "thread-3",
-      subscriber: mockDb.subscribers[2], // Bilal Qureshi
+      subscriber: {
+        ...DEFAULT_SUBSCRIBER,
+        id: "sub-bilal-03",
+        customerCode: "CUS-77391",
+        fullName: "Bilal Qureshi",
+        phone: "+92 333 4567890",
+        packageName: "Fiber Starter 25 Mbps",
+      },
       channel: "mobile_app",
       lastMessage: "Invoice for August has been settled via JazzCash.",
       lastMessageTime: "09:15 AM",
@@ -117,7 +149,14 @@ export function LiveChatWorkspace() {
     },
     {
       id: "thread-4",
-      subscriber: mockDb.subscribers[3], // Zainab Bibi
+      subscriber: {
+        ...DEFAULT_SUBSCRIBER,
+        id: "sub-zainab-04",
+        customerCode: "CUS-66280",
+        fullName: "Zainab Bibi",
+        phone: "+92 345 6789012",
+        packageName: "Fiber Pro 50 Mbps",
+      },
       channel: "web_chat",
       lastMessage: "Router reconnected successfully. Thank you for your support!",
       lastMessageTime: "Yesterday",
@@ -128,9 +167,36 @@ export function LiveChatWorkspace() {
     },
   ]);
 
+  const [cannedShortcuts, setCannedShortcuts] = useState<CannedTemplate[]>([]);
+
+  useEffect(() => {
+    telecomService.subscribers
+      .list()
+      .then((subs) => {
+        if (subs && subs.length > 0) {
+          setThreads((prev) =>
+            prev.map((t, idx) => ({
+              ...t,
+              subscriber: subs[idx % subs.length] || t.subscriber,
+            }))
+          );
+        }
+      })
+      .catch((err) => console.error("Failed to load subscribers in chat:", err));
+
+    telecomService.governance
+      .getCannedShortcuts()
+      .then((shortcuts) => {
+        if (shortcuts && shortcuts.length > 0) {
+          setCannedShortcuts(shortcuts);
+        }
+      })
+      .catch((err) => console.error("Failed to load canned shortcuts in chat:", err));
+  }, []);
+
   const [selectedThreadId, setSelectedThreadId] = useState<string>("thread-1");
   const selectedThread = threads.find((t) => t.id === selectedThreadId) || threads[0];
-  const selectedCustomer = selectedThread.subscriber;
+  const selectedCustomer = selectedThread?.subscriber || DEFAULT_SUBSCRIBER;
 
   // Active message history for current thread
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -205,14 +271,15 @@ export function LiveChatWorkspace() {
     setChatInput("");
   };
 
-  const handleCannedInsert = (template: string) => {
+  const handleCannedInsert = (template?: string) => {
+    if (!template) return;
     setChatInput(template.replace("{{optical_signal}}", `${selectedCustomer.opticalRxDbm}`));
   };
 
   const filteredThreads = threads.filter((t) => {
     const matchesSearch =
       t.subscriber.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.subscriber.pppoeUsername.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (t.subscriber.pppoeUsername || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.lastMessage.toLowerCase().includes(searchQuery.toLowerCase());
 
     if (!matchesSearch) return false;
@@ -611,10 +678,10 @@ export function LiveChatWorkspace() {
             <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-mono font-bold shrink-0">
               <Zap className="h-3 w-3 text-warning" /> /
             </span>
-            {mockDb.cannedShortcuts.map((c) => (
+            {cannedShortcuts.map((c) => (
               <button
                 key={c.id}
-                onClick={() => handleCannedInsert(c.templateText)}
+                onClick={() => handleCannedInsert(c.templateText || c.body)}
                 className="px-2.5 py-1 rounded-lg bg-card-subtle hover:bg-primary/10 hover:text-primary border border-border text-[10.5px] font-mono text-muted-foreground transition-all shrink-0 cursor-pointer shadow-2xs"
               >
                 {c.shortcut}
@@ -808,7 +875,7 @@ export function LiveChatWorkspace() {
                 </div>
                 <div className="flex justify-between text-[11px]">
                   <span className="text-muted-foreground">Monthly Fee:</span>
-                  <span className="font-mono font-bold text-foreground">PKR {selectedCustomer.monthlyFeePkr.toLocaleString()}</span>
+                  <span className="font-mono font-bold text-foreground">PKR {(selectedCustomer.monthlyFeePkr || Number(selectedCustomer.monthlyBilling) || 0).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-[11px]">
                   <span className="text-muted-foreground">Ledger Balance:</span>

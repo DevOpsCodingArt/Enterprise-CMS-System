@@ -1,62 +1,76 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { mockDb, NewConnectionLead } from "@/mock/db";
+import React, { useState, useMemo, useEffect } from "react";
+import type { NewConnectionLead } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { ConnectionsHeader } from "./ConnectionsHeader";
 import { ConnectionsTable, ConnectionRecordItem } from "./ConnectionsTable";
 import { ConnectionBottomPane } from "./ConnectionBottomPane";
 import { ConnectionModals } from "./ConnectionModals";
 import { useToast } from "@/components/ui/toast";
 
+function mapLeadToItem(l: NewConnectionLead): ConnectionRecordItem {
+  return {
+    id: l.leadNo || l.id,
+    date: l.createdAt,
+    status: l.status || "Pending",
+    customer: {
+      name: l.applicantName,
+      fatherName: l.fatherName || "Muhammad Aslam",
+      mobile: l.phone,
+      cnic: l.cnic || "61101-7890123-5",
+      address: l.address,
+    },
+    services: {
+      package: l.selectedPackage,
+      connectionType: l.connectionType || "Fiber",
+      area: l.branchName || "Islamabad Core (F-10 HQ)",
+      username: `${l.applicantName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_ftth`,
+      device: l.deviceModel || "Huawei HG8145V5 Dual-Band",
+      macAddress: l.macAddress || "48:57:02:11:4A:20",
+      fiberWire: `${l.fiberDistanceMeters || 65}m`,
+      adapter: "Yes",
+      onu: "Yes",
+    },
+    accounts: {
+      otc: Number(l.otcPkr) || 5000,
+      monthlyBill: Number(l.monthlyBillPkr) || 3500,
+      otcPaid: Number(l.otcPaidPkr) || 5000,
+      monthlyBillPaid: Number(l.monthlyBillPaidPkr) || 0,
+      totalAmount: (Number(l.otcPkr) || 5000) + (Number(l.monthlyBillPkr) || 3500),
+    },
+    assignment: {
+      assignedTo: l.assignedVan || "Usman Ali (Van #04)",
+      assignedBy: l.assignedBy || "Admin_NOC",
+      remarks: l.remarks || `Nearest FAT: ${l.fatBoxNearest || "FAT-F10-18"}`,
+      diagnostics: {
+        signalStrength: l.opticalSignalDbm || "-14.2 dBm",
+        dataUsage: "142 GB",
+      },
+    },
+  };
+}
+
 export function ConnectionsManagerWorkspace() {
   const toast = useToast();
+  const [connections, setConnections] = useState<ConnectionRecordItem[]>([]);
+  const [selectedConnectionId, setSelectedConnectionId] = useState<string | null>(null);
 
-  // Initial seed from mockDb mapped to ConnectionRecordItem
-  const [connections, setConnections] = useState<ConnectionRecordItem[]>(() =>
-    mockDb.newConnections.map((l: NewConnectionLead) => ({
-      id: l.id,
-      date: l.createdAt,
-      status: l.status || "Pending",
-      customer: {
-        name: l.applicantName,
-        fatherName: l.fatherName || "Muhammad Aslam",
-        mobile: l.phone,
-        cnic: l.cnic || "61101-7890123-5",
-        address: l.address,
-      },
-      services: {
-        package: l.selectedPackage,
-        connectionType: l.connectionType || "Fiber",
-        area: l.branchName || "Islamabad Core (F-10 HQ)",
-        username: `${l.applicantName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_ftth`,
-        device: l.deviceModel || "Huawei HG8145V5 Dual-Band",
-        macAddress: l.macAddress || "48:57:02:11:4A:20",
-        fiberWire: `${l.fiberDistanceMeters || 65}m`,
-        adapter: "Yes",
-        onu: "Yes",
-      },
-      accounts: {
-        otc: l.otcPkr || 5000,
-        monthlyBill: l.monthlyBillPkr || 3500,
-        otcPaid: l.otcPaidPkr || 5000,
-        monthlyBillPaid: l.monthlyBillPaidPkr || 0,
-        totalAmount: (l.otcPkr || 5000) + (l.monthlyBillPkr || 3500),
-      },
-      assignment: {
-        assignedTo: l.assignedVan || "Usman Ali (Van #04)",
-        assignedBy: l.assignedBy || "Admin_NOC",
-        remarks: l.remarks || `Nearest FAT: ${l.fatBoxNearest || "FAT-F10-18"}`,
-        diagnostics: {
-          signalStrength: l.opticalSignalDbm || "-14.2 dBm",
-          dataUsage: "142 GB",
-        },
-      },
-    }))
-  );
-
-  const [selectedConnectionId, setSelectedConnectionId] = useState<string | null>(
-    connections[0]?.id || null
-  );
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.connections
+      .list()
+      .then((data) => {
+        if (!isMounted) return;
+        const mapped = data.map(mapLeadToItem);
+        setConnections(mapped);
+        if (mapped.length > 0) setSelectedConnectionId(mapped[0].id);
+      })
+      .catch((err) => console.error("[Connections] Fetch error:", err));
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
 

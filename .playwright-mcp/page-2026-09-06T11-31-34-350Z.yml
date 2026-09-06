@@ -1,0 +1,303 @@
+- generic [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - complementary [ref=f9e3]:
+      - generic [ref=f9e4]:
+        - generic [ref=f9e5]:
+          - generic [ref=f9e6]: P1
+          - generic [ref=f9e7]:
+            - generic [ref=f9e8]: Prime Networks
+            - generic [ref=f9e11]: ISP Command Center
+        - button "Collapse Sidebar" [ref=f9e12] [cursor=pointer]
+      - generic [ref=f9e15]:
+        - generic [ref=f9e16]:
+          - text: 1. OPERATIONS DESK
+          - link "Live Chat Desk 3 Live" [ref=f9e18] [cursor=pointer]:
+            - /url: /company/desk
+            - generic [ref=f9e21]:
+              - generic [ref=f9e22]: Live Chat Desk
+              - generic [ref=f9e23]: 3 Live
+          - link "Trouble Tickets & Jobs 5 Open" [ref=f9e25] [cursor=pointer]:
+            - /url: /company/tickets
+            - generic [ref=f9e28]:
+              - generic [ref=f9e29]: Trouble Tickets & Jobs
+              - generic [ref=f9e30]: 5 Open
+          - link "New Connections Pipeline 2 New" [ref=f9e32] [cursor=pointer]:
+            - /url: /company/connections
+            - generic [ref=f9e35]:
+              - generic [ref=f9e36]: New Connections Pipeline
+              - generic [ref=f9e37]: 2 New
+        - generic [ref=f9e38]:
+          - text: 2. SUBSCRIBERS (CRM)
+          - link "Active Directory (3,420) 3.4k" [ref=f9e40] [cursor=pointer]:
+            - /url: /company/subscribers
+            - generic [ref=f9e47]:
+              - generic [ref=f9e48]: Active Directory (3,420)
+              - generic [ref=f9e49]: 3.4k
+          - link "Tariff Packages & Speeds" [ref=f9e51] [cursor=pointer]:
+            - /url: /company/packages
+        - generic [ref=f9e58]:
+          - text: 3. WORKFORCE, HR & SHIFTS
+          - link "Departments (7 Depts)" [ref=f9e60] [cursor=pointer]:
+            - /url: /company/staff?tab=departments
+          - link "Staff Directory (52) 52" [ref=f9e67] [cursor=pointer]:
+            - /url: /company/staff?tab=staff
+            - generic [ref=f9e72]:
+              - generic [ref=f9e73]: Staff Directory (52)
+              - generic [ref=f9e74]: "52"
+          - link "Shift Rosters (24/7 NOC)" [ref=f9e76] [cursor=pointer]:
+            - /url: /company/staff?tab=shifts
+          - link "Attendance & Overtime" [ref=f9e83] [cursor=pointer]:
+            - /url: /company/staff?tab=attendance
+          - link "Task Allocation Board" [ref=f9e90] [cursor=pointer]:
+            - /url: /company/staff?tab=tasks
+        - generic [ref=f9e96]:
+          - text: 4. GOVERNANCE & SETTINGS
+          - link "RBAC Rights Matrix" [ref=f9e98] [cursor=pointer]:
+            - /url: /company/roles?tab=roles
+          - link "Canned Slash Shortcuts" [ref=f9e103] [cursor=pointer]:
+            - /url: /company/roles?tab=canned
+          - link "Working Hours & SLA Rules" [ref=f9e109] [cursor=pointer]:
+            - /url: /company/roles?tab=sla
+          - link "Company Profile & Tax" [ref=f9e115] [cursor=pointer]:
+            - /url: /company/roles?tab=profile
+      - generic [ref=f9e126]:
+        - generic [ref=f9e127]: Tariq Mehmood
+        - generic [ref=f9e128]: Company Owner (CEO)
+    - generic [ref=f9e129]:
+      - banner [ref=f9e130]:
+        - generic [ref=f9e132]:
+          - generic [ref=f9e133]: Prime Networks
+          - generic [ref=f9e134]: Company Operations Suite
+        - generic [ref=f9e137]:
+          - textbox "Search subscribers, OLT, tickets... (Ctrl+K)" [ref=f9e138]
+          - generic [ref=f9e139]: K
+        - generic [ref=f9e144]:
+          - button [ref=f9e146] [cursor=pointer]
+          - button [ref=f9e152] [cursor=pointer]
+          - button "TM Tariq Mehmood company Company Owner (CEO)" [ref=f9e156] [cursor=pointer]:
+            - generic [ref=f9e157]: TM
+            - generic [ref=f9e161]:
+              - generic [ref=f9e162]:
+                - generic [ref=f9e163]: Tariq Mehmood
+                - generic [ref=f9e164]: company
+              - generic [ref=f9e165]: Company Owner (CEO)
+      - main [ref=f9e168]:
+        - generic [ref=f9e453]:
+          - generic [ref=f9e454]:
+            - button "Subscribers" [ref=f9e455] [cursor=pointer]
+            - generic [ref=f9e460]:
+              - text: Usman Tariq (usman.home30)
+              - generic [ref=f9e461]: Live Telemetry
+          - generic [ref=f9e463]:
+            - generic [ref=f9e464]:
+              - generic [ref=f9e465] [cursor=pointer]: U
+              - generic [ref=f9e472]:
+                - heading "Usman Tariq(usman.home30)" [level=1] [ref=f9e474]:
+                  - text: Usman Tariq
+                  - generic [ref=f9e475]: (usman.home30)
+                - generic [ref=f9e476]:
+                  - generic [ref=f9e477]: Subscriber • CUS-1003
+                  - generic [ref=f9e478]: ONLINE
+                  - generic [ref=f9e479]: ACTIVE PROFILE
+                  - generic [ref=f9e480]: 30 Mbps Fiber Starter
+            - generic [ref=f9e481]:
+              - generic [ref=f9e482]:
+                - button [ref=f9e484] [cursor=pointer]
+                - button [ref=f9e492] [cursor=pointer]
+              - generic [ref=f9e496]:
+                - button "Edit Profile" [ref=f9e497] [cursor=pointer]
+                - button "Balance" [ref=f9e501] [cursor=pointer]
+                - button [ref=f9e504] [cursor=pointer]
+          - button [ref=f9e510] [cursor=pointer]
+          - generic [ref=f9e515]:
+            - generic [ref=f9e516]:
+              - generic [ref=f9e517]: Online Uptime
+              - generic [ref=f9e523]:
+                - generic [ref=f9e524]: 28d 14h
+                - generic [ref=f9e525]: Live
+            - generic [ref=f9e526]:
+              - generic [ref=f9e527]: Total Quota
+              - generic [ref=f9e532]:
+                - generic [ref=f9e533]: 1,000
+                - generic [ref=f9e534]: GB
+            - generic [ref=f9e535]:
+              - generic [ref=f9e536]: Data Used
+              - generic [ref=f9e542]:
+                - generic [ref=f9e543]: "342"
+                - generic [ref=f9e544]: GB
+            - generic [ref=f9e545]:
+              - generic [ref=f9e546]: Remaining
+              - generic [ref=f9e552]:
+                - generic [ref=f9e553]: "658"
+                - generic [ref=f9e554]: GB
+            - generic [ref=f9e555]:
+              - generic [ref=f9e556]: Ledger Balance
+              - generic [ref=f9e561]: Rs. 0
+            - generic [ref=f9e563]:
+              - generic [ref=f9e564]: Billing Due
+              - generic [ref=f9e570]: Rs. 0
+            - generic [ref=f9e572]:
+              - generic [ref=f9e573]: Trouble Tickets
+              - generic [ref=f9e578]:
+                - generic [ref=f9e579]: "1"
+                - generic [ref=f9e580]: Open
+          - generic [ref=f9e581]:
+            - generic [ref=f9e582]:
+              - button "Profile" [ref=f9e583] [cursor=pointer]
+              - button "Activities" [ref=f9e584] [cursor=pointer]
+              - button "Ledgers" [active] [ref=f9e585] [cursor=pointer]
+              - button "Invoices" [ref=f9e586] [cursor=pointer]
+              - button "Session Log" [ref=f9e587] [cursor=pointer]
+              - button "Tickets" [ref=f9e588] [cursor=pointer]
+              - button "Login Log" [ref=f9e589] [cursor=pointer]
+              - button "MAC Address" [ref=f9e590] [cursor=pointer]
+              - button "Reports" [ref=f9e591] [cursor=pointer]
+              - button "Services" [ref=f9e592] [cursor=pointer]
+              - button "Documents" [ref=f9e593] [cursor=pointer]
+              - button "CoA Logs" [ref=f9e594] [cursor=pointer]
+              - button "Attributes" [ref=f9e595] [cursor=pointer]
+            - generic [ref=f9e835]:
+              - generic [ref=f9e836]:
+                - heading "Financial Ledger Statement" [level=4] [ref=f9e840]
+                - textbox "Search Trx ID, Ref ID, Type..." [ref=f9e845]
+              - table [ref=f9e847]:
+                - rowgroup [ref=f9e848]:
+                  - row [ref=f9e849]:
+                    - columnheader "Ledger ID" [ref=f9e850]
+                    - columnheader "Transaction ID" [ref=f9e851]
+                    - columnheader "Entry Type" [ref=f9e852]
+                    - columnheader "Reference ID" [ref=f9e853]
+                    - columnheader "Debit (PKR)" [ref=f9e854]
+                    - columnheader "Credit (PKR)" [ref=f9e855]
+                    - columnheader "Running Balance" [ref=f9e856]
+                    - columnheader "Action By" [ref=f9e857]
+                    - columnheader "Created At" [ref=f9e858]
+                - rowgroup [ref=f9e859]:
+                  - row [ref=f9e860]:
+                    - cell "LED-10492" [ref=f9e861]
+                    - cell "TRX-98214-PK" [ref=f9e862]
+                    - cell "Payment (Credit)" [ref=f9e863]
+                    - cell "INV-2026-0812" [ref=f9e864]
+                    - cell "-" [ref=f9e865]
+                    - cell "Rs. 2,500" [ref=f9e866]
+                    - cell "Rs. 0" [ref=f9e867]
+                    - cell "Online Gateway (JazzCash)" [ref=f9e868]
+                    - cell "2026-08-01 10:24:15 AM" [ref=f9e869]
+                  - row [ref=f9e870]:
+                    - cell "LED-10491" [ref=f9e871]
+                    - cell "SYS-BILL-08" [ref=f9e872]
+                    - cell "Monthly Bill (Debit)" [ref=f9e873]
+                    - cell "INV-2026-0812" [ref=f9e874]
+                    - cell "Rs. 2,500" [ref=f9e875]
+                    - cell "-" [ref=f9e876]
+                    - cell "Rs. 2,500" [ref=f9e877]
+                    - cell "System (Auto Billing Cycle)" [ref=f9e878]
+                    - cell "2026-08-01 12:00:00 AM" [ref=f9e879]
+                  - row [ref=f9e880]:
+                    - cell "LED-09842" [ref=f9e881]
+                    - cell "TRX-87123-PK" [ref=f9e882]
+                    - cell "Payment (Credit)" [ref=f9e883]
+                    - cell "INV-2026-0708" [ref=f9e884]
+                    - cell "-" [ref=f9e885]
+                    - cell "Rs. 2,500" [ref=f9e886]
+                    - cell "Rs. 0" [ref=f9e887]
+                    - cell "Online Gateway (Easypaisa)" [ref=f9e888]
+                    - cell "2026-07-01 09:15:45 AM" [ref=f9e889]
+                  - row [ref=f9e890]:
+                    - cell "LED-09841" [ref=f9e891]
+                    - cell "SYS-BILL-07" [ref=f9e892]
+                    - cell "Monthly Bill (Debit)" [ref=f9e893]
+                    - cell "INV-2026-0708" [ref=f9e894]
+                    - cell "Rs. 2,500" [ref=f9e895]
+                    - cell "-" [ref=f9e896]
+                    - cell "Rs. 2,500" [ref=f9e897]
+                    - cell "System (Auto Billing Cycle)" [ref=f9e898]
+                    - cell "2026-07-01 12:00:00 AM" [ref=f9e899]
+                  - row [ref=f9e900]:
+                    - cell "LED-08201" [ref=f9e901]
+                    - cell "TRX-76012-PK" [ref=f9e902]
+                    - cell "Setup & Deposit (Credit)" [ref=f9e903]
+                    - cell "INV-2026-0604" [ref=f9e904]
+                    - cell "-" [ref=f9e905]
+                    - cell "Rs. 7,500" [ref=f9e906]
+                    - cell "Rs. 0" [ref=f9e907]
+                    - cell "Staff (Ali NOC Lead)" [ref=f9e908]
+                    - cell "2026-06-01 11:46:00 AM" [ref=f9e909]
+  - button "Open Tanstack query devtools" [ref=f9e388] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f9e442] [cursor=pointer]
+  - alert [ref=f9e446]
+  - button [ref=f9e448] [cursor=pointer]:
+    - generic:
+      - generic:
+        - button
+      - generic:
+        - button
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button
+      - generic:
+        - button
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: https://agentation.com
+            - paragraph: v3.0.2
+            - button "Switch to light mode"
+          - generic:
+            - generic:
+              - generic: Output Detail
+              - button "Standard"
+            - generic:
+              - generic: React Components
+              - generic:
+                - checkbox [checked]
+            - generic:
+              - generic: Hide Until Restart
+              - generic:
+                - checkbox
+          - generic:
+            - generic: Marker Color
+            - generic:
+              - button "Indigo"
+              - button "Blue"
+              - button "Cyan"
+              - button "Green"
+              - button "Yellow"
+              - button "Orange"
+              - button "Red"
+          - generic:
+            - generic:
+              - generic:
+                - checkbox "Clear on copy/send"
+              - generic: Clear on copy/send
+            - generic:
+              - generic:
+                - checkbox "Block page interactions" [checked]
+              - generic: Block page interactions
+          - button "Manage MCP & Webhooks"
+        - generic:
+          - button "Manage MCP & Webhooks"
+          - generic:
+            - generic: MCP Connection
+            - paragraph:
+              - text: MCP connection allows agents to receive and act on annotations.
+              - link "Learn more":
+                - /url: https://agentation.dev/mcp
+          - generic:
+            - generic:
+              - generic: Webhooks
+              - generic:
+                - generic: Auto-Send
+                - generic:
+                  - checkbox "Auto-Send" [checked] [disabled]
+            - paragraph: The webhook URL will receive live annotation changes and annotation data.
+            - textbox "Webhook URL"

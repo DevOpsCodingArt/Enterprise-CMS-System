@@ -2,7 +2,7 @@
 
 import React from "react";
 import { User, Server, Wifi, Phone, RotateCcw, Unplug, ArrowRight, ShieldCheck, Activity } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { Tooltip } from "@/components/ui/tooltip";
 
 export function SubscribersGridView({

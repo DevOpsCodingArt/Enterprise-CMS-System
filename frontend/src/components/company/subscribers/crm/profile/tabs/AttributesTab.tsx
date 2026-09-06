@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { List, Plus, Trash2 } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { useToast } from "@/components/ui/toast";
 
 export function AttributesTab({ subscriber }: { subscriber: SubscriberRecord }) {

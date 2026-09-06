@@ -1,13 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { mockDb, AttendanceRecord } from "@/mock/db";
+import type { AttendanceRecord } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function AttendanceTrackerTab() {
-  const [attendanceList] = useState<AttendanceRecord[]>(mockDb.attendance);
+  const [attendanceList, setAttendanceList] = useState<AttendanceRecord[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.workforce.getAttendance().then((data) => {
+      if (isMounted) setAttendanceList(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col overflow-hidden">
@@ -59,7 +70,7 @@ export function AttendanceTrackerTab() {
                   )}
                 </td>
                 <td className="p-3 font-mono">
-                  {att.overtimeHours > 0 ? (
+                  {Number(att.overtimeHours) > 0 ? (
                     <span className="text-warning font-bold">
                       {att.overtimeHours} hrs ({att.overtimeRateMultiplier}x OT Rate)
                     </span>

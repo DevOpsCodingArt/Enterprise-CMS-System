@@ -15,6 +15,10 @@ import {
   Sparkles,
   ShieldCheck,
   CheckCircle2,
+  Zap,
+  User,
+  Building2,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -23,6 +27,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { getRoleHomeRoute } from "@/config/role-routing";
 import { apiClient } from "@/lib/api";
 import { loginFormSchema } from "@/schemas/auth.schema";
+import { cn } from "@/lib/utils";
 
 
 function SplitLoginForm() {
@@ -170,8 +175,47 @@ function SplitLoginForm() {
   };
 
 
+  const DEMO_PERSONAS = [
+    {
+      role: "Platform Owner",
+      name: "Super Admin",
+      email: "superadmin@primeone.io",
+      password: "Password123!",
+      badge: "/platform",
+      icon: Globe,
+      color: "text-rose-500",
+      accent: "hover:border-rose-500/50 hover:bg-rose-500/5",
+      selectedBorder: "border-rose-500 bg-rose-500/10 ring-1 ring-rose-500/30",
+      badgeClass: "bg-rose-500/15 text-rose-600 dark:text-rose-400",
+    },
+    {
+      role: "Company Owner",
+      name: "Tariq Mehmood",
+      email: "admin@primenetworks.pk",
+      password: "Password123!",
+      badge: "/company",
+      icon: Building2,
+      color: "text-amber-500",
+      accent: "hover:border-amber-500/50 hover:bg-amber-500/5",
+      selectedBorder: "border-amber-500 bg-amber-500/10 ring-1 ring-amber-500/30",
+      badgeClass: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
+    },
+    {
+      role: "Customer",
+      name: "Ali Khan",
+      email: "ali.khan@gmail.com",
+      password: "Password123!",
+      badge: "/portal",
+      icon: User,
+      color: "text-purple-500",
+      accent: "hover:border-purple-500/50 hover:bg-purple-500/5",
+      selectedBorder: "border-purple-500 bg-purple-500/10 ring-1 ring-purple-500/30",
+      badgeClass: "bg-purple-500/15 text-purple-600 dark:text-purple-400",
+    },
+  ];
+
   return (
-    <div className="w-full max-w-md mx-auto space-y-8">
+    <div className="w-full max-w-md mx-auto space-y-6">
       {/* Brand & Title */}
       <div className="space-y-3 text-left">
         <div className="flex items-center gap-3">
@@ -190,6 +234,65 @@ function SplitLoginForm() {
           <p className="text-sm text-muted-foreground mt-1">
             Sign in to access your operations console
           </p>
+        </div>
+      </div>
+
+      {/* Quick Demo Autofill Switcher */}
+      <div className="space-y-2 p-3 rounded-2xl bg-muted/20 border border-border/80 shadow-2xs">
+        <div className="flex items-center justify-between px-0.5">
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <Zap className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+            <span>Select Demo Account</span>
+          </span>
+          <span className="text-[10px] text-muted-foreground font-mono">3 Core Systems</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {DEMO_PERSONAS.map((p) => {
+            const isSelected = email.toLowerCase() === p.email.toLowerCase();
+            const Icon = p.icon;
+
+            return (
+              <button
+                key={p.email}
+                type="button"
+                onClick={() => {
+                  setEmail(p.email);
+                  setPassword(p.password);
+                  setFieldErrors({});
+                  toast.info(
+                    "Demo Account Loaded",
+                    `Autofilled credentials for ${p.name} (${p.role}). Click "Sign In" to enter.`
+                  );
+                }}
+                className={cn(
+                  "text-left p-2.5 rounded-xl border transition-all cursor-pointer relative group flex flex-col justify-between",
+                  isSelected
+                    ? p.selectedBorder
+                    : cn("bg-card border-border/70", p.accent)
+                )}
+              >
+                <div>
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <Icon className={cn("h-3.5 w-3.5 shrink-0", p.color)} />
+                    <span className="text-[11px] font-bold text-foreground truncate">
+                      {p.role}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-foreground/80 font-medium truncate">{p.name}</p>
+                </div>
+
+                <div className="flex items-center justify-between gap-1 mt-2 pt-1.5 border-t border-border/40">
+                  <span className="text-[9px] font-mono text-muted-foreground truncate">
+                    {p.email.split("@")[0]}
+                  </span>
+                  <span className={cn("text-[9px] font-mono px-1.5 py-0.5 rounded font-semibold shrink-0", p.badgeClass)}>
+                    {p.badge}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 

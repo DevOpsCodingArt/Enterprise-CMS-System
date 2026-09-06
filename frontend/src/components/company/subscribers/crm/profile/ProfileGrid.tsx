@@ -10,7 +10,7 @@ import {
   PieChart,
   Cpu,
 } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 function DataField({
   label,
@@ -122,8 +122,8 @@ export function ProfileGrid({ subscriber }: { subscriber: SubscriberRecord }) {
         <DataField label="Billing Duration" value="30 Days Recurring" />
         <DataField label="Bandwidth Policy" value="50 Mbps Symmetric CIR" />
         <DataField label="Package Pool" value="pool_residential_dhcp" mono />
-        <DataField label="Monthly Bill" value={`Rs. ${subscriber.monthlyFeePkr.toLocaleString()}`} mono />
-        <DataField label="Billing Due Day" value={`Day ${subscriber.billingDueDay} of month`} mono />
+        <DataField label="Monthly Bill" value={`Rs. ${(subscriber.monthlyFeePkr || Number(subscriber.monthlyBilling) || 0).toLocaleString()}`} mono />
+        <DataField label="Billing Due Day" value={`Day ${subscriber.billingDueDay || 5} of month`} mono />
       </DataCard>
 
       {/* 5. Service Settings */}

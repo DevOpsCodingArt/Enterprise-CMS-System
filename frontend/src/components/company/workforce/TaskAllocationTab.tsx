@@ -1,15 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, MapPin, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { mockDb, WorkOrderTask } from "@/mock/db";
+import type { WorkOrderTask } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function TaskAllocationTab() {
-  const [tasksList] = useState<WorkOrderTask[]>(mockDb.workOrders);
+  const [tasksList, setTasksList] = useState<WorkOrderTask[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.workforce.getTasks().then((data) => {
+      if (isMounted) setTasksList(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col overflow-hidden">

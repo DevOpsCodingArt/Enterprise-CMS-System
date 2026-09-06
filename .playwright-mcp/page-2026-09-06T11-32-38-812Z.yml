@@ -1,0 +1,314 @@
+- generic [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - complementary [ref=f9e3]:
+      - generic [ref=f9e4]:
+        - generic [ref=f9e5]:
+          - generic [ref=f9e6]: P1
+          - generic [ref=f9e7]:
+            - generic [ref=f9e8]: Prime Networks
+            - generic [ref=f9e11]: ISP Command Center
+        - button "Collapse Sidebar" [ref=f9e12] [cursor=pointer]
+      - generic [ref=f9e15]:
+        - generic [ref=f9e16]:
+          - text: 1. OPERATIONS DESK
+          - link "Live Chat Desk 3 Live" [ref=f9e18] [cursor=pointer]:
+            - /url: /company/desk
+            - generic [ref=f9e21]:
+              - generic [ref=f9e22]: Live Chat Desk
+              - generic [ref=f9e23]: 3 Live
+          - link "Trouble Tickets & Jobs 5 Open" [ref=f9e25] [cursor=pointer]:
+            - /url: /company/tickets
+            - generic [ref=f9e28]:
+              - generic [ref=f9e29]: Trouble Tickets & Jobs
+              - generic [ref=f9e30]: 5 Open
+          - link "New Connections Pipeline 2 New" [ref=f9e32] [cursor=pointer]:
+            - /url: /company/connections
+            - generic [ref=f9e35]:
+              - generic [ref=f9e36]: New Connections Pipeline
+              - generic [ref=f9e37]: 2 New
+        - generic [ref=f9e38]:
+          - text: 2. SUBSCRIBERS (CRM)
+          - link "Active Directory (3,420) 3.4k" [ref=f9e40] [cursor=pointer]:
+            - /url: /company/subscribers
+            - generic [ref=f9e47]:
+              - generic [ref=f9e48]: Active Directory (3,420)
+              - generic [ref=f9e49]: 3.4k
+          - link "Tariff Packages & Speeds" [ref=f9e51] [cursor=pointer]:
+            - /url: /company/packages
+        - generic [ref=f9e58]:
+          - text: 3. WORKFORCE, HR & SHIFTS
+          - link "Departments (7 Depts)" [ref=f9e60] [cursor=pointer]:
+            - /url: /company/staff?tab=departments
+          - link "Staff Directory (52) 52" [ref=f9e67] [cursor=pointer]:
+            - /url: /company/staff?tab=staff
+            - generic [ref=f9e72]:
+              - generic [ref=f9e73]: Staff Directory (52)
+              - generic [ref=f9e74]: "52"
+          - link "Shift Rosters (24/7 NOC)" [ref=f9e76] [cursor=pointer]:
+            - /url: /company/staff?tab=shifts
+          - link "Attendance & Overtime" [ref=f9e83] [cursor=pointer]:
+            - /url: /company/staff?tab=attendance
+          - link "Task Allocation Board" [ref=f9e90] [cursor=pointer]:
+            - /url: /company/staff?tab=tasks
+        - generic [ref=f9e96]:
+          - text: 4. GOVERNANCE & SETTINGS
+          - link "RBAC Rights Matrix" [ref=f9e98] [cursor=pointer]:
+            - /url: /company/roles?tab=roles
+          - link "Canned Slash Shortcuts" [ref=f9e103] [cursor=pointer]:
+            - /url: /company/roles?tab=canned
+          - link "Working Hours & SLA Rules" [ref=f9e109] [cursor=pointer]:
+            - /url: /company/roles?tab=sla
+          - link "Company Profile & Tax" [ref=f9e115] [cursor=pointer]:
+            - /url: /company/roles?tab=profile
+      - generic [ref=f9e126]:
+        - generic [ref=f9e127]: Tariq Mehmood
+        - generic [ref=f9e128]: Company Owner (CEO)
+    - generic [ref=f9e129]:
+      - banner [ref=f9e130]:
+        - generic [ref=f9e132]:
+          - generic [ref=f9e133]: Prime Networks
+          - generic [ref=f9e134]: Company Operations Suite
+        - generic [ref=f9e137]:
+          - textbox "Search subscribers, OLT, tickets... (Ctrl+K)" [ref=f9e138]
+          - generic [ref=f9e139]: K
+        - generic [ref=f9e144]:
+          - button [ref=f9e146] [cursor=pointer]
+          - button [ref=f9e152] [cursor=pointer]
+          - button "TM Tariq Mehmood company Company Owner (CEO)" [ref=f9e156] [cursor=pointer]:
+            - generic [ref=f9e157]: TM
+            - generic [ref=f9e161]:
+              - generic [ref=f9e162]:
+                - generic [ref=f9e163]: Tariq Mehmood
+                - generic [ref=f9e164]: company
+              - generic [ref=f9e165]: Company Owner (CEO)
+      - main [ref=f9e168]:
+        - generic [ref=f9e453]:
+          - generic [ref=f9e454]:
+            - button "Subscribers" [ref=f9e455] [cursor=pointer]
+            - generic [ref=f9e460]:
+              - text: Usman Tariq (usman.home30)
+              - generic [ref=f9e461]: Live Telemetry
+          - generic [ref=f9e463]:
+            - generic [ref=f9e464]:
+              - generic [ref=f9e465] [cursor=pointer]: U
+              - generic [ref=f9e472]:
+                - heading "Usman Tariq(usman.home30)" [level=1] [ref=f9e474]:
+                  - text: Usman Tariq
+                  - generic [ref=f9e475]: (usman.home30)
+                - generic [ref=f9e476]:
+                  - generic [ref=f9e477]: Subscriber • CUS-1003
+                  - generic [ref=f9e478]: ONLINE
+                  - generic [ref=f9e479]: ACTIVE PROFILE
+                  - generic [ref=f9e480]: 30 Mbps Fiber Starter
+            - generic [ref=f9e481]:
+              - generic [ref=f9e482]:
+                - button [ref=f9e484] [cursor=pointer]
+                - button [ref=f9e492] [cursor=pointer]
+              - generic [ref=f9e496]:
+                - button "Edit Profile" [ref=f9e497] [cursor=pointer]
+                - button "Balance" [ref=f9e501] [cursor=pointer]
+                - button [ref=f9e504] [cursor=pointer]
+          - button [ref=f9e510] [cursor=pointer]
+          - generic [ref=f9e515]:
+            - generic [ref=f9e516]:
+              - generic [ref=f9e517]: Online Uptime
+              - generic [ref=f9e523]:
+                - generic [ref=f9e524]: 28d 14h
+                - generic [ref=f9e525]: Live
+            - generic [ref=f9e526]:
+              - generic [ref=f9e527]: Total Quota
+              - generic [ref=f9e532]:
+                - generic [ref=f9e533]: 1,000
+                - generic [ref=f9e534]: GB
+            - generic [ref=f9e535]:
+              - generic [ref=f9e536]: Data Used
+              - generic [ref=f9e542]:
+                - generic [ref=f9e543]: "342"
+                - generic [ref=f9e544]: GB
+            - generic [ref=f9e545]:
+              - generic [ref=f9e546]: Remaining
+              - generic [ref=f9e552]:
+                - generic [ref=f9e553]: "658"
+                - generic [ref=f9e554]: GB
+            - generic [ref=f9e555]:
+              - generic [ref=f9e556]: Ledger Balance
+              - generic [ref=f9e561]: Rs. 0
+            - generic [ref=f9e563]:
+              - generic [ref=f9e564]: Billing Due
+              - generic [ref=f9e570]: Rs. 0
+            - generic [ref=f9e572]:
+              - generic [ref=f9e573]: Trouble Tickets
+              - generic [ref=f9e578]:
+                - generic [ref=f9e579]: "1"
+                - generic [ref=f9e580]: Open
+          - generic [ref=f9e581]:
+            - generic [ref=f9e582]:
+              - button "Profile" [ref=f9e583] [cursor=pointer]
+              - button "Activities" [ref=f9e584] [cursor=pointer]
+              - button "Ledgers" [ref=f9e585] [cursor=pointer]
+              - button "Invoices" [ref=f9e586] [cursor=pointer]
+              - button "Session Log" [ref=f9e587] [cursor=pointer]
+              - button "Tickets" [ref=f9e588] [cursor=pointer]
+              - button "Login Log" [ref=f9e589] [cursor=pointer]
+              - button "MAC Address" [ref=f9e590] [cursor=pointer]
+              - button "Reports" [active] [ref=f9e591] [cursor=pointer]
+              - button "Services" [ref=f9e592] [cursor=pointer]
+              - button "Documents" [ref=f9e593] [cursor=pointer]
+              - button "CoA Logs" [ref=f9e594] [cursor=pointer]
+              - button "Attributes" [ref=f9e595] [cursor=pointer]
+            - generic [ref=f9e989]:
+              - generic [ref=f9e990]:
+                - generic [ref=f9e991]:
+                  - heading "Invoices Billed Trend" [level=4] [ref=f9e992]
+                  - application [ref=f9e996]:
+                    - generic [ref=f9e1010]:
+                      - generic [ref=f9e1011]:
+                        - generic [ref=f9e1012]: Jan
+                        - generic [ref=f9e1014]: Feb
+                        - generic [ref=f9e1016]: Mar
+                        - generic [ref=f9e1018]: Apr
+                        - generic [ref=f9e1020]: May
+                        - generic [ref=f9e1022]: Jun
+                        - generic [ref=f9e1024]: Jul
+                        - generic [ref=f9e1026]: Aug
+                      - generic [ref=f9e1028]:
+                        - generic [ref=f9e1029]: 0k
+                        - generic [ref=f9e1031]: 1k
+                        - generic [ref=f9e1033]: 2k
+                        - generic [ref=f9e1035]: 3k
+                        - generic [ref=f9e1037]: 4k
+                - generic [ref=f9e1039]:
+                  - heading "Payments Cleared Trend" [level=4] [ref=f9e1040]
+                  - application [ref=f9e1044]:
+                    - generic [ref=f9e1058]:
+                      - generic [ref=f9e1059]:
+                        - generic [ref=f9e1060]: Jan
+                        - generic [ref=f9e1062]: Feb
+                        - generic [ref=f9e1064]: Mar
+                        - generic [ref=f9e1066]: Apr
+                        - generic [ref=f9e1068]: May
+                        - generic [ref=f9e1070]: Jun
+                        - generic [ref=f9e1072]: Jul
+                        - generic [ref=f9e1074]: Aug
+                      - generic [ref=f9e1076]:
+                        - generic [ref=f9e1077]: 0k
+                        - generic [ref=f9e1079]: 1k
+                        - generic [ref=f9e1081]: 2k
+                        - generic [ref=f9e1083]: 3k
+                        - generic [ref=f9e1085]: 4k
+              - generic [ref=f9e1087]:
+                - generic [ref=f9e1088]:
+                  - heading "Invoicing Breakdown" [level=5] [ref=f9e1089]
+                  - generic [ref=f9e1090]:
+                    - generic [ref=f9e1091]:
+                      - generic [ref=f9e1092]: This Week
+                      - generic [ref=f9e1096]: Rs. 0.00
+                    - generic [ref=f9e1097]:
+                      - generic [ref=f9e1098]: This Month
+                      - generic [ref=f9e1102]: Rs. 2,500
+                    - generic [ref=f9e1103]:
+                      - generic [ref=f9e1104]: Last Month
+                      - generic [ref=f9e1108]: Rs. 2,500
+                    - generic [ref=f9e1109]:
+                      - generic [ref=f9e1110]: This Year
+                      - generic [ref=f9e1114]: Rs. 20,000
+                    - generic [ref=f9e1115]:
+                      - generic [ref=f9e1116]: Total Lifetime
+                      - generic [ref=f9e1121]: Rs. 45,000
+                - generic [ref=f9e1122]:
+                  - heading "Collections & Receipts Breakdown" [level=5] [ref=f9e1123]
+                  - generic [ref=f9e1124]:
+                    - generic [ref=f9e1125]:
+                      - generic [ref=f9e1126]: This Week
+                      - generic [ref=f9e1130]: Rs. 0.00
+                    - generic [ref=f9e1131]:
+                      - generic [ref=f9e1132]: This Month
+                      - generic [ref=f9e1136]: Rs. 2,500
+                    - generic [ref=f9e1137]:
+                      - generic [ref=f9e1138]: Last Month
+                      - generic [ref=f9e1142]: Rs. 2,500
+                    - generic [ref=f9e1143]:
+                      - generic [ref=f9e1144]: This Year
+                      - generic [ref=f9e1148]: Rs. 20,000
+                    - generic [ref=f9e1149]:
+                      - generic [ref=f9e1150]: Total Received
+                      - generic [ref=f9e1154]: Rs. 45,000
+  - button "Open Tanstack query devtools" [ref=f9e388] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f9e442] [cursor=pointer]
+  - alert [ref=f9e446]
+  - button [ref=f9e448] [cursor=pointer]:
+    - generic:
+      - generic:
+        - button
+      - generic:
+        - button
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button
+      - generic:
+        - button
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: https://agentation.com
+            - paragraph: v3.0.2
+            - button "Switch to light mode"
+          - generic:
+            - generic:
+              - generic: Output Detail
+              - button "Standard"
+            - generic:
+              - generic: React Components
+              - generic:
+                - checkbox [checked]
+            - generic:
+              - generic: Hide Until Restart
+              - generic:
+                - checkbox
+          - generic:
+            - generic: Marker Color
+            - generic:
+              - button "Indigo"
+              - button "Blue"
+              - button "Cyan"
+              - button "Green"
+              - button "Yellow"
+              - button "Orange"
+              - button "Red"
+          - generic:
+            - generic:
+              - generic:
+                - checkbox "Clear on copy/send"
+              - generic: Clear on copy/send
+            - generic:
+              - generic:
+                - checkbox "Block page interactions" [checked]
+              - generic: Block page interactions
+          - button "Manage MCP & Webhooks"
+        - generic:
+          - button "Manage MCP & Webhooks"
+          - generic:
+            - generic: MCP Connection
+            - paragraph:
+              - text: MCP connection allows agents to receive and act on annotations.
+              - link "Learn more":
+                - /url: https://agentation.dev/mcp
+          - generic:
+            - generic:
+              - generic: Webhooks
+              - generic:
+                - generic: Auto-Send
+                - generic:
+                  - checkbox "Auto-Send" [checked] [disabled]
+            - paragraph: The webhook URL will receive live annotation changes and annotation data.
+            - textbox "Webhook URL"
+  - generic [aria-hidden] [ref=f9e1155]: 0k

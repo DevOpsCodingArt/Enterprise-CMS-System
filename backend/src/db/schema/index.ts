@@ -8,3 +8,7 @@ export * from './chat';
 export * from './tickets';
 export * from './notifications';
 export * from './audit';
+export * from './packages';
+export * from './connection-leads';
+export * from './workforce';
+export * from './governance';

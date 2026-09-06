@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { useToast } from "@/components/ui/toast";
 
 // Modular Sub-Components & Tabs

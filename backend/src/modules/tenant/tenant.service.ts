@@ -16,7 +16,7 @@ import {
   DEFAULT_PERMISSION_GROUPS,
   DEFAULT_WORKING_HOURS,
   DEFAULT_COMPANY_SETTINGS,
-} from '../../db/dummy';
+} from '../../db/seeds';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 
 import { UpdateTenantDto } from './dto/update-tenant.dto';

@@ -1,0 +1,390 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - complementary [ref=f9e3]:
+      - generic [ref=f9e4]:
+        - generic [ref=f9e5]:
+          - generic [ref=f9e6]: P1
+          - generic [ref=f9e7]:
+            - generic [ref=f9e8]: Prime Networks
+            - generic [ref=f9e11]: ISP Command Center
+        - button "Collapse Sidebar" [ref=f9e12] [cursor=pointer]
+      - generic [ref=f9e15]:
+        - generic [ref=f9e16]:
+          - text: 1. OPERATIONS DESK
+          - link "Live Chat Desk 3 Live" [ref=f9e18] [cursor=pointer]:
+            - /url: /company/desk
+            - generic [ref=f9e21]:
+              - generic [ref=f9e22]: Live Chat Desk
+              - generic [ref=f9e23]: 3 Live
+          - link "Trouble Tickets & Jobs 5 Open" [ref=f9e25] [cursor=pointer]:
+            - /url: /company/tickets
+            - generic [ref=f9e28]:
+              - generic [ref=f9e29]: Trouble Tickets & Jobs
+              - generic [ref=f9e30]: 5 Open
+          - link "New Connections Pipeline 2 New" [ref=f9e32] [cursor=pointer]:
+            - /url: /company/connections
+            - generic [ref=f9e35]:
+              - generic [ref=f9e36]: New Connections Pipeline
+              - generic [ref=f9e37]: 2 New
+        - generic [ref=f9e38]:
+          - text: 2. SUBSCRIBERS (CRM)
+          - link "Active Directory (3,420) 3.4k" [ref=f9e40] [cursor=pointer]:
+            - /url: /company/subscribers
+            - generic [ref=f9e47]:
+              - generic [ref=f9e48]: Active Directory (3,420)
+              - generic [ref=f9e49]: 3.4k
+          - link "Tariff Packages & Speeds" [ref=f9e51] [cursor=pointer]:
+            - /url: /company/packages
+        - generic [ref=f9e58]:
+          - text: 3. WORKFORCE, HR & SHIFTS
+          - link "Departments (7 Depts)" [ref=f9e60] [cursor=pointer]:
+            - /url: /company/staff?tab=departments
+          - link "Staff Directory (52) 52" [ref=f9e67] [cursor=pointer]:
+            - /url: /company/staff?tab=staff
+            - generic [ref=f9e72]:
+              - generic [ref=f9e73]: Staff Directory (52)
+              - generic [ref=f9e74]: "52"
+          - link "Shift Rosters (24/7 NOC)" [ref=f9e76] [cursor=pointer]:
+            - /url: /company/staff?tab=shifts
+          - link "Attendance & Overtime" [ref=f9e83] [cursor=pointer]:
+            - /url: /company/staff?tab=attendance
+          - link "Task Allocation Board" [ref=f9e90] [cursor=pointer]:
+            - /url: /company/staff?tab=tasks
+        - generic [ref=f9e96]:
+          - text: 4. GOVERNANCE & SETTINGS
+          - link "RBAC Rights Matrix" [ref=f9e98] [cursor=pointer]:
+            - /url: /company/roles?tab=roles
+          - link "Canned Slash Shortcuts" [ref=f9e103] [cursor=pointer]:
+            - /url: /company/roles?tab=canned
+          - link "Working Hours & SLA Rules" [ref=f9e109] [cursor=pointer]:
+            - /url: /company/roles?tab=sla
+          - link "Company Profile & Tax" [ref=f9e115] [cursor=pointer]:
+            - /url: /company/roles?tab=profile
+      - generic [ref=f9e126]:
+        - generic [ref=f9e127]: Tariq Mehmood
+        - generic [ref=f9e128]: Company Owner (CEO)
+    - generic [ref=f9e129]:
+      - banner [ref=f9e130]:
+        - generic [ref=f9e132]:
+          - generic [ref=f9e133]: Prime Networks
+          - generic [ref=f9e134]: Company Operations Suite
+        - generic [ref=f9e137]:
+          - textbox "Search subscribers, OLT, tickets... (Ctrl+K)" [ref=f9e138]
+          - generic [ref=f9e139]: K
+        - generic [ref=f9e144]:
+          - button [ref=f9e146] [cursor=pointer]
+          - button [ref=f9e152] [cursor=pointer]
+          - button "TM Tariq Mehmood company Company Owner (CEO)" [ref=f9e156] [cursor=pointer]:
+            - generic [ref=f9e157]: TM
+            - generic [ref=f9e161]:
+              - generic [ref=f9e162]:
+                - generic [ref=f9e163]: Tariq Mehmood
+                - generic [ref=f9e164]: company
+              - generic [ref=f9e165]: Company Owner (CEO)
+      - main [ref=f9e168]:
+        - generic [ref=f9e453]:
+          - generic [ref=f9e454]:
+            - button "Subscribers" [ref=f9e455] [cursor=pointer]
+            - generic [ref=f9e460]:
+              - text: Usman Tariq (usman.home30)
+              - generic [ref=f9e461]: Live Telemetry
+          - generic [ref=f9e463]:
+            - generic [ref=f9e464]:
+              - generic [ref=f9e465] [cursor=pointer]: U
+              - generic [ref=f9e472]:
+                - heading "Usman Tariq(usman.home30)" [level=1] [ref=f9e474]:
+                  - text: Usman Tariq
+                  - generic [ref=f9e475]: (usman.home30)
+                - generic [ref=f9e476]:
+                  - generic [ref=f9e477]: Subscriber • CUS-1003
+                  - generic [ref=f9e478]: ONLINE
+                  - generic [ref=f9e479]: ACTIVE PROFILE
+                  - generic [ref=f9e480]: 30 Mbps Fiber Starter
+            - generic [ref=f9e481]:
+              - generic [ref=f9e482]:
+                - button [ref=f9e484] [cursor=pointer]
+                - button [ref=f9e492] [cursor=pointer]
+              - generic [ref=f9e496]:
+                - button "Edit Profile" [ref=f9e497] [cursor=pointer]
+                - button "Balance" [ref=f9e501] [cursor=pointer]
+                - button [ref=f9e504] [cursor=pointer]
+          - button [ref=f9e510] [cursor=pointer]
+          - generic [ref=f9e515]:
+            - generic [ref=f9e516]:
+              - generic [ref=f9e517]: Online Uptime
+              - generic [ref=f9e523]:
+                - generic [ref=f9e524]: 28d 14h
+                - generic [ref=f9e525]: Live
+            - generic [ref=f9e526]:
+              - generic [ref=f9e527]: Total Quota
+              - generic [ref=f9e532]:
+                - generic [ref=f9e533]: 1,000
+                - generic [ref=f9e534]: GB
+            - generic [ref=f9e535]:
+              - generic [ref=f9e536]: Data Used
+              - generic [ref=f9e542]:
+                - generic [ref=f9e543]: "342"
+                - generic [ref=f9e544]: GB
+            - generic [ref=f9e545]:
+              - generic [ref=f9e546]: Remaining
+              - generic [ref=f9e552]:
+                - generic [ref=f9e553]: "658"
+                - generic [ref=f9e554]: GB
+            - generic [ref=f9e555]:
+              - generic [ref=f9e556]: Ledger Balance
+              - generic [ref=f9e561]: Rs. 0
+            - generic [ref=f9e563]:
+              - generic [ref=f9e564]: Billing Due
+              - generic [ref=f9e570]: Rs. 0
+            - generic [ref=f9e572]:
+              - generic [ref=f9e573]: Trouble Tickets
+              - generic [ref=f9e578]:
+                - generic [ref=f9e579]: "1"
+                - generic [ref=f9e580]: Open
+          - generic [ref=f9e581]:
+            - generic [ref=f9e582]:
+              - button "Profile" [ref=f9e583] [cursor=pointer]
+              - button "Activities" [ref=f9e584] [cursor=pointer]
+              - button "Ledgers" [ref=f9e585] [cursor=pointer]
+              - button "Invoices" [ref=f9e586] [cursor=pointer]
+              - button "Session Log" [ref=f9e587] [cursor=pointer]
+              - button "Tickets" [ref=f9e588] [cursor=pointer]
+              - button "Login Log" [ref=f9e589] [cursor=pointer]
+              - button "MAC Address" [ref=f9e590] [cursor=pointer]
+              - button "Reports" [ref=f9e591] [cursor=pointer]
+              - button "Services" [ref=f9e592] [cursor=pointer]
+              - button "Documents" [ref=f9e593] [cursor=pointer]
+              - button "CoA Logs" [ref=f9e594] [cursor=pointer]
+              - button "Attributes" [ref=f9e595] [cursor=pointer]
+            - generic [ref=f9e597]:
+              - generic [ref=f9e598]:
+                - heading "Personal Information" [level=3] [ref=f9e603]
+                - generic [ref=f9e604]:
+                  - generic [ref=f9e605]:
+                    - generic [ref=f9e606]: Full Name
+                    - generic [ref=f9e607]: Usman Tariq
+                  - generic [ref=f9e608]:
+                    - generic [ref=f9e609]: Username
+                    - generic [ref=f9e610]: usman.home30
+                  - generic [ref=f9e611]:
+                    - generic [ref=f9e612]: National ID / CNIC
+                    - generic [ref=f9e613]: 37405-1122334-9
+                  - generic [ref=f9e614]:
+                    - generic [ref=f9e615]: Mobile Phone
+                    - generic [ref=f9e616]: +92 321 5566778
+                  - generic [ref=f9e617]:
+                    - generic [ref=f9e618]: Email Address
+                    - generic [ref=f9e619]: usman.t@yahoo.com
+                  - generic [ref=f9e620]:
+                    - generic [ref=f9e621]: Street Address
+                    - generic [ref=f9e622]: Flat 3, Al-Madina Arcade, Saddar, Rawalpindi
+                  - generic [ref=f9e623]:
+                    - generic [ref=f9e624]: Sector / Area
+                    - generic [ref=f9e625]: Sector F-10
+                  - generic [ref=f9e626]:
+                    - generic [ref=f9e627]: City
+                    - generic [ref=f9e628]: Islamabad
+                  - generic [ref=f9e629]:
+                    - generic [ref=f9e630]: Country
+                    - generic [ref=f9e631]: Pakistan
+              - generic [ref=f9e632]:
+                - heading "Company Information" [level=3] [ref=f9e637]
+                - generic [ref=f9e638]:
+                  - generic [ref=f9e639]:
+                    - generic [ref=f9e640]: ISP Tenant
+                    - generic [ref=f9e641]: Prime One Networks
+                  - generic [ref=f9e642]:
+                    - generic [ref=f9e643]: Branch Office
+                    - generic [ref=f9e644]: Rawalpindi Branch
+                  - generic [ref=f9e645]:
+                    - generic [ref=f9e646]: Assigned Salesperson
+                    - generic [ref=f9e647]: Ali NOC Lead
+                  - generic [ref=f9e648]:
+                    - generic [ref=f9e649]: Provisioned On
+                    - generic [ref=f9e650]: 2025-06-14
+              - generic [ref=f9e651]:
+                - heading "Connection Information" [level=3] [ref=f9e658]
+                - generic [ref=f9e659]:
+                  - generic [ref=f9e660]:
+                    - generic [ref=f9e661]: Profile Status
+                    - generic [ref=f9e662]: ACTIVE
+                  - generic [ref=f9e663]:
+                    - generic [ref=f9e664]: Connection Medium
+                    - generic [ref=f9e665]: FTTH GPON Drop
+                  - generic [ref=f9e666]:
+                    - generic [ref=f9e667]: Session State
+                    - generic [ref=f9e668]: ONLINE
+                  - generic [ref=f9e669]:
+                    - generic [ref=f9e670]: Framed IP
+                    - generic [ref=f9e671]: 0.0.0.0
+                  - generic [ref=f9e672]:
+                    - generic [ref=f9e673]: Hardware MAC
+                    - generic [ref=f9e674]: E8:94:F6:12:34:56
+                  - generic [ref=f9e675]:
+                    - generic [ref=f9e676]: Router Model
+                    - generic [ref=f9e677]: Huawei EchoLife HG8145V5
+                  - generic [ref=f9e678]:
+                    - generic [ref=f9e679]: Last Radius Login
+                    - generic [ref=f9e680]: Today at 08:30 AM
+                  - generic [ref=f9e681]:
+                    - generic [ref=f9e682]: NAS Server
+                    - generic [ref=f9e683]: ISB-F10-CCR2004-CORE
+              - generic [ref=f9e684]:
+                - heading "Package Information" [level=3] [ref=f9e692]
+                - generic [ref=f9e693]:
+                  - generic [ref=f9e694]:
+                    - generic [ref=f9e695]: Tariff Package
+                    - generic [ref=f9e696]: 30 Mbps Fiber Starter
+                  - generic [ref=f9e697]:
+                    - generic [ref=f9e698]: Expiration Date
+                    - generic [ref=f9e699]: Sep 01, 2026
+                  - generic [ref=f9e700]:
+                    - generic [ref=f9e701]: Billing Duration
+                    - generic [ref=f9e702]: 30 Days Recurring
+                  - generic [ref=f9e703]:
+                    - generic [ref=f9e704]: Bandwidth Policy
+                    - generic [ref=f9e705]: 50 Mbps Symmetric CIR
+                  - generic [ref=f9e706]:
+                    - generic [ref=f9e707]: Package Pool
+                    - generic [ref=f9e708]: pool_residential_dhcp
+                  - generic [ref=f9e709]:
+                    - generic [ref=f9e710]: Monthly Bill
+                    - generic [ref=f9e711]: Rs. 2,500
+                  - generic [ref=f9e712]:
+                    - generic [ref=f9e713]: Billing Due Day
+                    - generic [ref=f9e714]: Day 5 of month
+              - generic [ref=f9e715]:
+                - heading "Service Settings" [level=3] [ref=f9e720]
+                - generic [ref=f9e721]:
+                  - generic [ref=f9e722]:
+                    - generic [ref=f9e723]: SMS Notifications
+                    - generic [ref=f9e724]: Enabled
+                  - generic [ref=f9e725]:
+                    - generic [ref=f9e726]: Email Statements
+                    - generic [ref=f9e727]: Enabled
+                  - generic [ref=f9e728]:
+                    - generic [ref=f9e729]: Auto MAC Lock
+                    - generic [ref=f9e730]: Enabled
+                  - generic [ref=f9e731]:
+                    - generic [ref=f9e732]: Auto Renew Policy
+                    - generic [ref=f9e733]: Enabled
+                  - generic [ref=f9e734]:
+                    - generic [ref=f9e735]: Lock Session
+                    - generic [ref=f9e736]: Disabled
+              - generic [ref=f9e737]:
+                - heading "Discount and Quota" [level=3] [ref=f9e742]
+                - generic [ref=f9e743]:
+                  - generic [ref=f9e744]:
+                    - generic [ref=f9e745]: Used Session Time
+                    - generic [ref=f9e746]: 28d 14h 22m
+                  - generic [ref=f9e747]:
+                    - generic [ref=f9e748]: Total Data Quota
+                    - generic [ref=f9e749]: Unlimited FTTH (1000 GB FUP)
+                  - generic [ref=f9e750]:
+                    - generic [ref=f9e751]: Used Data Volume
+                    - generic [ref=f9e752]: "342 GB (Down: 294 GB, Up: 48 GB)"
+                  - generic [ref=f9e753]:
+                    - generic [ref=f9e754]: Remaining Volume
+                    - generic [ref=f9e755]: 658 GB FUP Remaining
+              - generic [ref=f9e756]:
+                - heading "Technical OLT Details" [level=3] [ref=f9e761]
+                - generic [ref=f9e762]:
+                  - generic [ref=f9e763]:
+                    - generic [ref=f9e764]: Core OLT Hostname
+                    - generic [ref=f9e765]: ISB-F10-OLT-01
+                  - generic [ref=f9e766]:
+                    - generic [ref=f9e767]: GPON Slot / Port
+                    - generic [ref=f9e768]: EPON0/3:2
+                  - generic [ref=f9e769]:
+                    - generic [ref=f9e770]: FAT Distribution Box
+                    - generic [ref=f9e771]: FAT-F10-12
+                  - generic [ref=f9e772]:
+                    - generic [ref=f9e773]: Modem Serial Number
+                    - generic [ref=f9e774]: HWTC-9B2F1048
+                  - generic [ref=f9e775]:
+                    - generic [ref=f9e776]: Optical Rx Power
+                    - generic [ref=f9e777]: "-27.8 dBm"
+                  - generic [ref=f9e778]:
+                    - generic [ref=f9e779]: Framed Protocol
+                    - generic [ref=f9e780]: PPP (PPPoE Encapsulation)
+                  - generic [ref=f9e781]:
+                    - generic [ref=f9e782]: Leased IPv6 Prefix
+                    - generic [ref=f9e783]: 2001:db8:85a3::/64
+  - button "Open Tanstack query devtools" [ref=f9e388] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f9e442] [cursor=pointer]
+  - alert [ref=f9e446]
+  - button [ref=f9e448] [cursor=pointer]:
+    - generic:
+      - generic:
+        - button
+      - generic:
+        - button
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button
+      - generic:
+        - button
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: https://agentation.com
+            - paragraph: v3.0.2
+            - button "Switch to light mode"
+          - generic:
+            - generic:
+              - generic: Output Detail
+              - button "Standard"
+            - generic:
+              - generic: React Components
+              - generic:
+                - checkbox [checked]
+            - generic:
+              - generic: Hide Until Restart
+              - generic:
+                - checkbox
+          - generic:
+            - generic: Marker Color
+            - generic:
+              - button "Indigo"
+              - button "Blue"
+              - button "Cyan"
+              - button "Green"
+              - button "Yellow"
+              - button "Orange"
+              - button "Red"
+          - generic:
+            - generic:
+              - generic:
+                - checkbox "Clear on copy/send"
+              - generic: Clear on copy/send
+            - generic:
+              - generic:
+                - checkbox "Block page interactions" [checked]
+              - generic: Block page interactions
+          - button "Manage MCP & Webhooks"
+        - generic:
+          - button "Manage MCP & Webhooks"
+          - generic:
+            - generic: MCP Connection
+            - paragraph:
+              - text: MCP connection allows agents to receive and act on annotations.
+              - link "Learn more":
+                - /url: https://agentation.dev/mcp
+          - generic:
+            - generic:
+              - generic: Webhooks
+              - generic:
+                - generic: Auto-Send
+                - generic:
+                  - checkbox "Auto-Send" [checked] [disabled]
+            - paragraph: The webhook URL will receive live annotation changes and annotation data.
+            - textbox "Webhook URL"

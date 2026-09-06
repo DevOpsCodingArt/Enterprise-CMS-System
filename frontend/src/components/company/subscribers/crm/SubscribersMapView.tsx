@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { MapPin, Server, Wifi, Activity, Radio, Users, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 interface SectorNode {
   id: string;

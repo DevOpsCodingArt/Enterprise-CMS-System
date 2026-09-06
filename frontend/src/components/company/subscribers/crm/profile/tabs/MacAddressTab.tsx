@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Search, Trash2, Plus, ShieldCheck } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { useToast } from "@/components/ui/toast";
 import { Tooltip } from "@/components/ui/tooltip";
 

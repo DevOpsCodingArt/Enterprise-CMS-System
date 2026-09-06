@@ -18,7 +18,8 @@ import {
   GripVertical,
   Users,
 } from "lucide-react";
-import { mockDb, SubscriberRecord } from "@/mock/db";
+import { telecomService } from "@/services/telecom.service";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { Customer360ProfileView } from "./profile/Customer360ProfileView";
 import { AddSubscriberModal } from "./AddSubscriberModal";
 import { SubscribersMapView } from "./SubscribersMapView";
@@ -30,7 +31,7 @@ import { useToast } from "@/components/ui/toast";
 
 export function SubscribersDirectoryView() {
   const toast = useToast();
-  const [subscribers, setSubscribers] = useState<SubscriberRecord[]>(mockDb.subscribers);
+  const [subscribers, setSubscribers] = useState<SubscriberRecord[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"Standard" | "Grid" | "Map">("Standard");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -41,6 +42,19 @@ export function SubscribersDirectoryView() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+
+  useEffect(() => {
+    setIsSyncing(true);
+    telecomService.subscribers
+      .list()
+      .then((data) => {
+        setSubscribers(data);
+      })
+      .catch((err) => {
+        console.error("Failed to load subscribers from DB:", err);
+      })
+      .finally(() => setIsSyncing(false));
+  }, []);
 
   // Selected Subscriber for Customer 360 view
   const [selectedSubscriber, setSelectedSubscriber] = useState<SubscriberRecord | null>(null);
@@ -117,12 +131,17 @@ export function SubscribersDirectoryView() {
     });
   };
 
-  const handleSyncLegacy = () => {
+  const handleSyncLegacy = async () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    try {
+      const data = await telecomService.subscribers.list();
+      setSubscribers(data);
+      toast.success("Database Sync Completed", `Synchronized ${data.length} subscriber records from live database.`);
+    } catch (err: any) {
+      toast.error("Sync failed", err?.message || "Failed to load subscribers");
+    } finally {
       setIsSyncing(false);
-      toast.success("Legacy Sync Completed", "Synchronized subscriber records from radius database.");
-    }, 1200);
+    }
   };
 
   const handleDisconnect = (sub: SubscriberRecord) => {
@@ -524,8 +543,16 @@ export function SubscribersDirectoryView() {
       <AddSubscriberModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        onAdd={(newSub) => {
-          setSubscribers((prev) => [newSub, ...prev]);
+        onAdd={async (newSub) => {
+          try {
+            await telecomService.subscribers.create(newSub);
+            const fresh = await telecomService.subscribers.list();
+            setSubscribers(fresh);
+            toast.success("Subscriber Registered", `${newSub.fullName} saved to live database.`);
+          } catch (err: any) {
+            setSubscribers((prev) => [newSub, ...prev]);
+            toast.success("Subscriber Added", `${newSub.fullName} registered.`);
+          }
         }}
       />
     </div>

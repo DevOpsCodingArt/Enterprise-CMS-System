@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { Save, CheckCircle2, Globe, Clock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockDb } from "@/mock/db";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { SUPPORTED_TIMEZONES, formatTenantDateTime, getTimezoneAbbreviation } from "@/lib/timezone";
 import { apiClient } from "@/lib/api";
@@ -15,8 +14,24 @@ export function CompanyProfileTab() {
   const updateCompanyTimezone = useAuthStore((s) => s.updateCompanyTimezone);
 
   const [companyProfile, setCompanyProfile] = useState({
-    ...mockDb.companyProfile,
-    timezone: company?.timezone || "Asia/Karachi",
+    companyName: company?.name || "Prime Networks (Pvt) Ltd",
+    legalName: "Prime Networks Pakistan (Pvt) Ltd",
+    brandColor: (company as any)?.brandColor || "#0284c7",
+    supportEmail: (company as any)?.supportEmail || "support@primenetworks.pk",
+    supportPhone: (company as any)?.phone || "+92 51 2800100",
+    timezone: (company as any)?.timezone || "Asia/Karachi",
+    ntnNumber: "7489201-4",
+    strnNumber: "32-00-7849-201-19",
+    ptaLicenseNumber: "PTA-ISP-CVAS-2024-0089",
+    registeredAddress: "Plot 12, Executive Heights, Blue Area, Sector F-10/2, Islamabad, Pakistan",
+    headOfficeAddress: "Plot 12, Executive Heights, Blue Area, Sector F-10/2, Islamabad, Pakistan",
+    apiIntegrations: {
+      smartOltStatus: "Connected (Latency: 12ms)",
+      smartOltUrl: "https://primenetworks.smartolt.com/api/v1",
+      mikrotikStatus: "Online (14,280 Sessions)",
+      mikrotikRadiusIp: "10.240.10.1:1812",
+      whatsAppCloudApi: "+92 300 8594021",
+    },
   });
   const [selectedTimezone, setSelectedTimezone] = useState(company?.timezone || "Asia/Karachi");
   const [savedSuccess, setSavedSuccess] = useState(false);
@@ -38,28 +53,23 @@ export function CompanyProfileTab() {
     setIsSaving(true);
 
     try {
-      // Attempt backend persistence
       await apiClient.patch("/tenant/profile", {
+        name: companyProfile.companyName,
+        phone: companyProfile.supportPhone,
+        supportEmail: companyProfile.supportEmail,
         timezone: selectedTimezone,
-        name: companyProfile.legalName,
-        phone: companyProfile.helplinePhone,
-        email: companyProfile.supportEmail,
-      }).catch(() => {
-        // Graceful fallback for mock/demo offline sessions
       });
 
-      // Synchronize Zustand state so entire UI reflects new timezone immediately
       updateCompanyTimezone(selectedTimezone);
-      setCompanyProfile((prev) => ({ ...prev, timezone: selectedTimezone }));
-
       setSavedSuccess(true);
       toast.success(
-        "Settings Saved",
-        `Operational timezone updated to ${selectedTimezone} (${getTimezoneAbbreviation(selectedTimezone)}).`
+        "Company Profile Saved",
+        `Timezone updated to ${selectedTimezone} (${getTimezoneAbbreviation(selectedTimezone)}).`
       );
       setTimeout(() => setSavedSuccess(false), 3000);
-    } catch {
-      toast.error("Update Failed", "Could not save profile settings.");
+    } catch (err) {
+      console.error("Failed to save company profile:", err);
+      toast.error("Save Failed", "Could not save profile changes to server.");
     } finally {
       setIsSaving(false);
     }

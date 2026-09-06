@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Globe, Tv, Shield, Wifi } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { useToast } from "@/components/ui/toast";
 
 export function ServicesTab({ subscriber }: { subscriber: SubscriberRecord }) {

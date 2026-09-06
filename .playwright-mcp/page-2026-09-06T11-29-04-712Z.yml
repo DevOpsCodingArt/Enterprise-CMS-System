@@ -1,0 +1,255 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - complementary [ref=f9e3]:
+      - generic [ref=f9e4]:
+        - generic [ref=f9e5]:
+          - generic [ref=f9e6]: P1
+          - generic [ref=f9e7]:
+            - generic [ref=f9e8]: Prime Networks
+            - generic [ref=f9e11]: ISP Command Center
+        - button "Collapse Sidebar" [ref=f9e12] [cursor=pointer]
+      - generic [ref=f9e15]:
+        - generic [ref=f9e16]:
+          - text: 1. OPERATIONS DESK
+          - link "Live Chat Desk 3 Live" [ref=f9e18] [cursor=pointer]:
+            - /url: /company/desk
+            - generic [ref=f9e21]:
+              - generic [ref=f9e22]: Live Chat Desk
+              - generic [ref=f9e23]: 3 Live
+          - link "Trouble Tickets & Jobs 5 Open" [ref=f9e25] [cursor=pointer]:
+            - /url: /company/tickets
+            - generic [ref=f9e28]:
+              - generic [ref=f9e29]: Trouble Tickets & Jobs
+              - generic [ref=f9e30]: 5 Open
+          - link "New Connections Pipeline 2 New" [ref=f9e32] [cursor=pointer]:
+            - /url: /company/connections
+            - generic [ref=f9e35]:
+              - generic [ref=f9e36]: New Connections Pipeline
+              - generic [ref=f9e37]: 2 New
+        - generic [ref=f9e38]:
+          - text: 2. SUBSCRIBERS (CRM)
+          - link "Active Directory (3,420) 3.4k" [ref=f9e40] [cursor=pointer]:
+            - /url: /company/subscribers
+            - generic [ref=f9e47]:
+              - generic [ref=f9e48]: Active Directory (3,420)
+              - generic [ref=f9e49]: 3.4k
+          - link "Tariff Packages & Speeds" [ref=f9e51] [cursor=pointer]:
+            - /url: /company/packages
+        - generic [ref=f9e58]:
+          - text: 3. WORKFORCE, HR & SHIFTS
+          - link "Departments (7 Depts)" [ref=f9e60] [cursor=pointer]:
+            - /url: /company/staff?tab=departments
+          - link "Staff Directory (52) 52" [ref=f9e67] [cursor=pointer]:
+            - /url: /company/staff?tab=staff
+            - generic [ref=f9e72]:
+              - generic [ref=f9e73]: Staff Directory (52)
+              - generic [ref=f9e74]: "52"
+          - link "Shift Rosters (24/7 NOC)" [ref=f9e76] [cursor=pointer]:
+            - /url: /company/staff?tab=shifts
+          - link "Attendance & Overtime" [ref=f9e83] [cursor=pointer]:
+            - /url: /company/staff?tab=attendance
+          - link "Task Allocation Board" [ref=f9e90] [cursor=pointer]:
+            - /url: /company/staff?tab=tasks
+        - generic [ref=f9e96]:
+          - text: 4. GOVERNANCE & SETTINGS
+          - link "RBAC Rights Matrix" [ref=f9e98] [cursor=pointer]:
+            - /url: /company/roles?tab=roles
+          - link "Canned Slash Shortcuts" [ref=f9e103] [cursor=pointer]:
+            - /url: /company/roles?tab=canned
+          - link "Working Hours & SLA Rules" [ref=f9e109] [cursor=pointer]:
+            - /url: /company/roles?tab=sla
+          - link "Company Profile & Tax" [ref=f9e115] [cursor=pointer]:
+            - /url: /company/roles?tab=profile
+      - generic [ref=f9e126]:
+        - generic [ref=f9e127]: Tariq Mehmood
+        - generic [ref=f9e128]: Company Owner (CEO)
+    - generic [ref=f9e129]:
+      - banner [ref=f9e130]:
+        - generic [ref=f9e132]:
+          - generic [ref=f9e133]: Prime Networks
+          - generic [ref=f9e134]: Company Operations Suite
+        - generic [ref=f9e137]:
+          - textbox "Search subscribers, OLT, tickets... (Ctrl+K)" [ref=f9e138]
+          - generic [ref=f9e139]: K
+        - generic [ref=f9e144]:
+          - button [ref=f9e146] [cursor=pointer]
+          - button [ref=f9e152] [cursor=pointer]
+          - button "TM Tariq Mehmood company Company Owner (CEO)" [ref=f9e156] [cursor=pointer]:
+            - generic [ref=f9e157]: TM
+            - generic [ref=f9e161]:
+              - generic [ref=f9e162]:
+                - generic [ref=f9e163]: Tariq Mehmood
+                - generic [ref=f9e164]: company
+              - generic [ref=f9e165]: Company Owner (CEO)
+      - main [ref=f9e168]:
+        - generic [ref=f9e170]:
+          - generic [ref=f9e171]:
+            - generic [ref=f9e172]:
+              - generic [ref=f9e173]:
+                - heading "All Subscribers" [level=1] [ref=f9e174]
+                - button "Search Instructions" [ref=f9e176] [cursor=pointer]
+              - paragraph [ref=f9e179]: Manage and view all customer connections & 360° telemetry.
+            - generic [ref=f9e180]:
+              - button [ref=f9e182] [cursor=pointer]
+              - button "Add Subscriber" [ref=f9e188] [cursor=pointer]
+          - generic [ref=f9e190]:
+            - generic [ref=f9e191]:
+              - button [ref=f9e193] [cursor=pointer]
+              - generic [ref=f9e197]:
+                - button "Standard View" [ref=f9e198] [cursor=pointer]
+                - button "Grid View" [ref=f9e200] [cursor=pointer]
+                - button "Map View" [ref=f9e206] [cursor=pointer]
+            - generic [ref=f9e210]:
+              - textbox "Quick find ID or Username..." [ref=f9e215]
+              - button "Columns" [ref=f9e217] [cursor=pointer]
+          - generic [ref=f9e222]:
+            - table [ref=f9e224]:
+              - rowgroup [ref=f9e225]:
+                - row [ref=f9e226]:
+                  - columnheader [ref=f9e227]:
+                    - checkbox [ref=f9e228] [cursor=pointer]
+                  - columnheader "ID" [ref=f9e229]
+                  - columnheader "Actions" [ref=f9e230]
+                  - columnheader "Subscriber" [ref=f9e231]
+                  - columnheader "Profile Status" [ref=f9e232]
+                  - columnheader "Connection Status" [ref=f9e233]
+                  - columnheader "IP Address" [ref=f9e234]
+                  - columnheader "Balance" [ref=f9e235]
+                  - columnheader "Package" [ref=f9e236]
+                  - columnheader "Expiration" [ref=f9e237]
+              - rowgroup [ref=f9e238]:
+                - row [ref=f9e239] [cursor=pointer]:
+                  - cell [ref=f9e240]:
+                    - checkbox [ref=f9e241]
+                  - cell "CUS-1003" [ref=f9e242]
+                  - cell [ref=f9e243]:
+                    - generic [ref=f9e244]:
+                      - button [ref=f9e246]
+                      - button [ref=f9e255]
+                  - cell "Usman Tariq usman.home30" [ref=f9e259]:
+                    - generic [ref=f9e260]:
+                      - generic [ref=f9e261]: Usman Tariq
+                      - generic [ref=f9e262]: usman.home30
+                  - cell "ACTIVE" [ref=f9e263]
+                  - cell "ONLINE" [ref=f9e264]
+                  - cell "0.0.0.0" [ref=f9e265]
+                  - cell "Rs. 0" [ref=f9e266]
+                  - cell "30 Mbps Fiber Starter" [ref=f9e268]
+                  - cell "-27.8 dBm" [ref=f9e269]
+                - row [ref=f9e271] [cursor=pointer]:
+                  - cell [ref=f9e272]:
+                    - checkbox [ref=f9e273]
+                  - cell "CUS-1002" [ref=f9e274]
+                  - cell [ref=f9e275]:
+                    - generic [ref=f9e276]:
+                      - button [ref=f9e278]
+                      - button [ref=f9e287]
+                  - cell "Fatima Corporate Services Ltd fatima.corp100" [ref=f9e291]:
+                    - generic [ref=f9e292]:
+                      - generic [ref=f9e293]: Fatima Corporate Services Ltd
+                      - generic [ref=f9e294]: fatima.corp100
+                  - cell "ACTIVE" [ref=f9e295]
+                  - cell "ONLINE" [ref=f9e296]
+                  - cell "192.168.10.82" [ref=f9e297]
+                  - cell "Rs. 0" [ref=f9e298]
+                  - cell "100 Mbps Dedicated Symmetrical Fiber" [ref=f9e300]
+                  - cell "-18.2 dBm" [ref=f9e301]
+                - row [ref=f9e303] [cursor=pointer]:
+                  - cell [ref=f9e304]:
+                    - checkbox [ref=f9e305]
+                  - cell "CUS-1001" [ref=f9e306]
+                  - cell [ref=f9e307]:
+                    - generic [ref=f9e308]:
+                      - button [ref=f9e310]
+                      - button [ref=f9e319]
+                  - cell "Muhammad Ali Khan ali.fiber50" [ref=f9e323]:
+                    - generic [ref=f9e324]:
+                      - generic [ref=f9e325]: Muhammad Ali Khan
+                      - generic [ref=f9e326]: ali.fiber50
+                  - cell "ACTIVE" [ref=f9e327]
+                  - cell "ONLINE" [ref=f9e328]
+                  - cell "192.168.10.45" [ref=f9e329]
+                  - cell "Rs. 0" [ref=f9e330]
+                  - cell "50 Mbps Fiber Unlimited" [ref=f9e332]
+                  - cell "-19.5 dBm" [ref=f9e333]
+            - generic [ref=f9e335]:
+              - generic [ref=f9e336]: Showing 3 total subscribers
+              - generic [ref=f9e337]: Click any row to open Customer 360° Profile
+  - button "Open Tanstack query devtools" [ref=f9e388] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f9e442] [cursor=pointer]
+  - alert [ref=f9e446]
+  - button [ref=f9e448] [cursor=pointer]:
+    - generic:
+      - generic:
+        - button
+      - generic:
+        - button
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button
+      - generic:
+        - button
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: https://agentation.com
+            - paragraph: v3.0.2
+            - button "Switch to light mode"
+          - generic:
+            - generic:
+              - generic: Output Detail
+              - button "Standard"
+            - generic:
+              - generic: React Components
+              - generic:
+                - checkbox [checked]
+            - generic:
+              - generic: Hide Until Restart
+              - generic:
+                - checkbox
+          - generic:
+            - generic: Marker Color
+            - generic:
+              - button "Indigo"
+              - button "Blue"
+              - button "Cyan"
+              - button "Green"
+              - button "Yellow"
+              - button "Orange"
+              - button "Red"
+          - generic:
+            - generic:
+              - generic:
+                - checkbox "Clear on copy/send"
+              - generic: Clear on copy/send
+            - generic:
+              - generic:
+                - checkbox "Block page interactions" [checked]
+              - generic: Block page interactions
+          - button "Manage MCP & Webhooks"
+        - generic:
+          - button "Manage MCP & Webhooks"
+          - generic:
+            - generic: MCP Connection
+            - paragraph:
+              - text: MCP connection allows agents to receive and act on annotations.
+              - link "Learn more":
+                - /url: https://agentation.dev/mcp
+          - generic:
+            - generic:
+              - generic: Webhooks
+              - generic:
+                - generic: Auto-Send
+                - generic:
+                  - checkbox "Auto-Send" [checked] [disabled]
+            - paragraph: The webhook URL will receive live annotation changes and annotation data.
+            - textbox "Webhook URL"

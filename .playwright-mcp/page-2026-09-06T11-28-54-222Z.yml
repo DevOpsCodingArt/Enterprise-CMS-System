@@ -1,0 +1,154 @@
+- generic [ref=f8e1]:
+  - generic [ref=f8e2]:
+    - generic [ref=f8e3]:
+      - img "Enterprise Software Abstract Light Wave" [ref=f8e5]
+      - generic [ref=f8e7]:
+        - generic [ref=f8e8]:
+          - generic [ref=f8e9]: Unified Cloud Platform
+          - blockquote [ref=f8e14]:
+            - paragraph [ref=f8e15]: “Simplicity is prerequisite for reliability.”
+            - contentinfo [ref=f8e16]: — Edsger W. Dijkstra
+        - generic [ref=f8e18]:
+          - paragraph [ref=f8e19]: A unified enterprise ecosystem designed to streamline business operations, automate workflows, and deliver real-time operational intelligence across any organization.
+          - generic [ref=f8e20]:
+            - generic [ref=f8e21]: 99.99% Uptime
+            - generic [ref=f8e23]: •
+            - generic [ref=f8e24]: Enterprise Security
+            - generic [ref=f8e25]: •
+            - generic [ref=f8e26]: Scalable Cloud
+    - generic [ref=f8e27]:
+      - button "Dark" [ref=f8e29] [cursor=pointer]
+      - generic [ref=f8e34]:
+        - generic [ref=f8e35]:
+          - generic [ref=f8e36]:
+            - generic [ref=f8e37]: P1
+            - generic [ref=f8e38]: Prime One
+          - generic [ref=f8e39]:
+            - heading "Welcome back" [level=1] [ref=f8e40]
+            - paragraph [ref=f8e41]: Sign in to access your operations console
+        - generic [ref=f8e42]:
+          - generic [ref=f8e43]:
+            - generic [ref=f8e44]: Select Demo Account
+            - generic [ref=f8e48]: 3 Core Systems
+          - generic [ref=f8e49]:
+            - button "Platform Owner Super Admin superadmin /platform" [ref=f8e50] [cursor=pointer]:
+              - generic [ref=f8e51]:
+                - generic [ref=f8e52]: Platform Owner
+                - paragraph [ref=f8e57]: Super Admin
+              - generic [ref=f8e58]:
+                - generic [ref=f8e59]: superadmin
+                - generic [ref=f8e60]: /platform
+            - button "Company Owner Tariq Mehmood admin /company" [active] [ref=f8e61] [cursor=pointer]:
+              - generic [ref=f8e62]:
+                - generic [ref=f8e63]: Company Owner
+                - paragraph [ref=f8e69]: Tariq Mehmood
+              - generic [ref=f8e70]:
+                - generic [ref=f8e71]: admin
+                - generic [ref=f8e72]: /company
+            - button "Customer Ali Khan ali.khan /portal" [ref=f8e73] [cursor=pointer]:
+              - generic [ref=f8e74]:
+                - generic [ref=f8e75]: Customer
+                - paragraph [ref=f8e80]: Ali Khan
+              - generic [ref=f8e81]:
+                - generic [ref=f8e82]: ali.khan
+                - generic [ref=f8e83]: /portal
+        - generic [ref=f8e84]:
+          - generic [ref=f8e85]:
+            - generic [ref=f8e86]: Email or Username
+            - textbox "name@example.com or username" [ref=f8e88]: admin@primenetworks.pk
+          - generic [ref=f8e89]:
+            - generic [ref=f8e90]:
+              - generic [ref=f8e91]: Password
+              - button "Forgot password?" [ref=f8e92] [cursor=pointer]
+            - generic [ref=f8e93]:
+              - textbox "••••••••••••" [ref=f8e94]: Password123!
+              - button [ref=f8e95] [cursor=pointer]
+          - generic [ref=f8e100] [cursor=pointer]:
+            - checkbox "Remember this device" [checked] [ref=f8e101]
+            - generic [ref=f8e102]: Remember this device
+          - button "Sign In to Console" [ref=f8e104] [cursor=pointer]
+          - generic [ref=f8e109]: 256-Bit Encrypted Enterprise Gateway
+      - contentinfo [ref=f8e115]: © 2026 Zayan Sheikh. All rights reserved.
+  - generic [ref=f8e125]:
+    - generic [ref=f8e128]:
+      - paragraph [ref=f8e129]: Demo Account Loaded
+      - paragraph [ref=f8e130]: Autofilled credentials for Tariq Mehmood (Company Owner). Click "Sign In" to enter.
+    - button [ref=f8e131] [cursor=pointer]
+  - button "Open Tanstack query devtools" [ref=f8e185] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f8e121] [cursor=pointer]
+  - alert [ref=f8e234]
+  - button [ref=f8e236] [cursor=pointer]:
+    - generic:
+      - generic:
+        - button
+      - generic:
+        - button
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button
+      - generic:
+        - button
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: https://agentation.com
+            - paragraph: v3.0.2
+            - button "Switch to light mode"
+          - generic:
+            - generic:
+              - generic: Output Detail
+              - button "Standard"
+            - generic:
+              - generic: React Components
+              - generic:
+                - checkbox [checked]
+            - generic:
+              - generic: Hide Until Restart
+              - generic:
+                - checkbox
+          - generic:
+            - generic: Marker Color
+            - generic:
+              - button "Indigo"
+              - button "Blue"
+              - button "Cyan"
+              - button "Green"
+              - button "Yellow"
+              - button "Orange"
+              - button "Red"
+          - generic:
+            - generic:
+              - generic:
+                - checkbox "Clear on copy/send"
+              - generic: Clear on copy/send
+            - generic:
+              - generic:
+                - checkbox "Block page interactions" [checked]
+              - generic: Block page interactions
+          - button "Manage MCP & Webhooks"
+        - generic:
+          - button "Manage MCP & Webhooks"
+          - generic:
+            - generic: MCP Connection
+            - paragraph:
+              - text: MCP connection allows agents to receive and act on annotations.
+              - link "Learn more":
+                - /url: https://agentation.dev/mcp
+          - generic:
+            - generic:
+              - generic: Webhooks
+              - generic:
+                - generic: Auto-Send
+                - generic:
+                  - checkbox "Auto-Send" [checked] [disabled]
+            - paragraph: The webhook URL will receive live annotation changes and annotation data.
+            - textbox "Webhook URL"

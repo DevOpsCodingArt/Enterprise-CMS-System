@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { mockDb, TroubleTicket } from "@/mock/db";
+import React, { useState, useMemo, useEffect } from "react";
+import type { TroubleTicket } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { TicketFilters } from "./TicketFilters";
 import { TicketList } from "./TicketList";
 import { TicketDetailPane, FullTroubleTicket, EttrHistoryItem, TransferHistoryItem, TicketNote } from "./TicketDetailPane";
@@ -10,140 +11,122 @@ import { useToast } from "@/components/ui/toast";
 
 export function TicketsManagerWorkspace() {
   const toast = useToast();
+  const [tickets, setTickets] = useState<FullTroubleTicket[]>([]);
 
-  // Initial rich seed from mockDb mapped to FullTroubleTicket
-  const [tickets, setTickets] = useState<FullTroubleTicket[]>(() =>
-    mockDb.tickets.map((t: TroubleTicket, idx: number) => {
-      const isClosed = t.status === "Resolved" || t.status === "Closed";
-      const isExpired = t.status === "Expired";
-      const isPending = t.status === "Open" || t.status === "Assigned";
+  useEffect(() => {
+    telecomService.tickets
+      .list()
+      .then((rawTickets) => {
+        if (!rawTickets) return;
+        const BASE_TIME = Date.now();
+        const addressList = [
+          "House 42, Street 18, Sector F-10/2, Islamabad",
+          "Plaza 5, Commercial Zone, Sector F-8 Markaz, Islamabad",
+          "House 109, Street 4, Sector E-11/3, Islamabad",
+          "Office 201, Sector G-9 Markaz, Islamabad",
+        ];
+        const coords = [
+          { lat: 33.6938, lng: 73.0135 },
+          { lat: 33.7077, lng: 73.0366 },
+          { lat: 33.6844, lng: 72.9796 },
+          { lat: 33.6892, lng: 73.0321 },
+        ];
 
-      const addressList = [
-        "House 24, Street 12, Sector F-10/2, Islamabad",
-        "House 105, St 4, Sector F-7/1, Islamabad",
-        "Flat 4B, Silver Heights, Sector E-11/2, Islamabad",
-        "House 18, St 2, Sector F-8/4, Islamabad",
-        "House 77, St 19, Sector G-9/3, Islamabad",
-        "House 12, St 5, Sector G-11/1, Islamabad",
-        "House 43, St 8, Sector F-11/3, Islamabad",
-        "House 90, St 14, Sector F-10/4, Islamabad",
-        "House 6, St 1, Sector F-6/2, Islamabad",
-        "Plaza 5, Mini Commercial, Sector F-10/2, Islamabad",
-      ];
+        const mapped: FullTroubleTicket[] = rawTickets.map((t, idx) => {
+          const isExpired = t.isSlaBreached;
+          const isClosed = t.status === "resolved" || t.status === "closed";
+          const isPending = t.status === "open";
+          const ettrHistoryList: EttrHistoryItem[] = [
+            {
+              timestamp: new Date(BASE_TIME - 7200 * 1000).toISOString(),
+              changedBy: "System SLA Matrix",
+              change: "Initial ETTR calculated from SLA rule",
+              reason: "Automatic calculation based on ticket category SLA rule.",
+            },
+          ];
+          const notesList: TicketNote[] = [
+            {
+              id: `note-${t.id}-1`,
+              author: "System Bot (NOC Telemetry)",
+              timestamp: t.createdAt || new Date(BASE_TIME - 3600 * 1000).toISOString(),
+              content: `Automated fault diagnostics ticket generated. Initial priority: ${t.priority}.`,
+            },
+          ];
+          const transferHistoryList: TransferHistoryItem[] = idx % 3 === 1 ? [
+            {
+              timestamp: new Date(BASE_TIME - 3600 * 1000).toISOString(),
+              transferredBy: "Farhan NOC (Remote Desk)",
+              transfer: `Transferred to ${(t.assignedEngineers && t.assignedEngineers[0]) || t.assignedTo || "Usman Ali"}`,
+              reason: "Physical OTDR test confirms cable fault requiring field splicer.",
+            },
+          ] : [];
 
-      const coords = [
-        { lat: 33.6844, lng: 73.0479 },
-        { lat: 33.7182, lng: 73.0605 },
-        { lat: 33.6938, lng: 73.0163 },
-        { lat: 33.7001, lng: 73.0381 },
-        { lat: 33.6685, lng: 73.0754 },
-        { lat: 33.6702, lng: 72.9984 },
-        { lat: 33.7123, lng: 73.0256 },
-        { lat: 33.6811, lng: 73.0543 },
-        { lat: 33.7290, lng: 73.0812 },
-        { lat: 33.6890, lng: 73.0410 },
-      ];
+          return {
+            id: t.id,
+            ticketNo: t.ticketNo || t.ticketNumber || `TK-${t.id.slice(0, 6)}`,
+            customerName: t.customerName || "Valued Subscriber",
+            username: t.pppoeUsername || `${(t.customerName || "subscriber").toLowerCase().replace(/[^a-z0-9]/g, "_")}_pppoe`,
+            contact: t.customerPhone || "+92 300 1234567",
+            type: t.category === "Fiber Break"
+              ? "Complaint - Fiber (Red LOS)"
+              : t.category === "High Optical Attenuation"
+              ? "Complaint - Optical Power Loss"
+              : t.category === "Speed Degradation"
+              ? "Speed Degradation"
+              : t.category === "Router Fault"
+              ? "Complaint - Hardware / ONT"
+              : "Billing Issue",
+            priority: (t.priority === "Critical"
+              ? "Urgent"
+              : t.priority === "High"
+              ? "High"
+              : "Normal") as FullTroubleTicket["priority"],
+            status: (isExpired
+              ? "Expired"
+              : isClosed
+              ? "Closed"
+              : isPending
+              ? "Pending"
+              : "In Progress") as FullTroubleTicket["status"],
+            assignedTo: (t.assignedEngineers && t.assignedEngineers[0]) || t.assignedTo || (idx % 2 === 0 ? "Usman Ali (Lead Splicer)" : "Bilal Hassan (Technician)"),
+            createdBy: "Admin (NOC Command)",
+            createdAt: t.createdAt || new Date(BASE_TIME - (idx + 1) * 3600000).toISOString(),
+            creationRemarks: t.description || "Field work order dispatched for optical investigation.",
+            staffDetails: {
+              closedBy: isClosed ? ((t.assignedEngineers && t.assignedEngineers[0]) || t.assignedTo || "Usman Ali (Lead Splicer)") : undefined,
+              closingDate: isClosed ? new Date(BASE_TIME - 1800000).toISOString() : undefined,
+              closingRemarks: isClosed ? "Issue resolved. Optical drop re-spliced, RX power normalized." : undefined,
+            },
+            ettr: t.slaExpiresAt || new Date(BASE_TIME + (idx + 1) * 3600000).toISOString(),
+            ettrHistory: ettrHistoryList,
+            transferHistory: transferHistoryList,
+            transferredFrom: idx % 3 === 1 ? "Helpdesk Desk 01" : undefined,
+            notes: notesList,
+            opticalDbm: t.opticalRxDbm || -28.4,
+            ontStatus: t.opticalRxDbm && t.opticalRxDbm < -30
+              ? "LOS / Offline (No Light)"
+              : t.opticalRxDbm && t.opticalRxDbm < -25
+              ? "High Attenuation (Degraded)"
+              : "Online / Normal Light",
+            address: addressList[idx % addressList.length],
+            lat: coords[idx % coords.length].lat,
+            lng: coords[idx % coords.length].lng,
+            vanNo: "Van #04 (OTDR Equipped)",
+            slaMinutesLeft: isExpired ? 0 : isClosed ? 0 : 45 + idx * 15,
+            description: t.description,
+            companyTimezone: (t as any).companyTimezone || "Asia/Karachi",
+          };
+        });
 
-      const BASE_TIME = 1788090000000;
+        setTickets(mapped);
+        if (mapped.length > 0) {
+          setSelectedTicketId((prev) => prev || mapped[0].id);
+        }
+      })
+      .catch((err) => console.error("Failed to load tickets:", err));
+  }, []);
 
-      const notesList: TicketNote[] = [
-        {
-          id: `note-${idx}-1`,
-          timestamp: new Date(BASE_TIME - (idx + 1) * 1800 * 1000).toISOString(),
-          author: "System Telemetry (SmartOLT)",
-          content: t.opticalRxDbm && t.opticalRxDbm < -30
-            ? `OLT GPON port alarm: Optical LOS red fault on ${t.customerName}'s drop.`
-            : `Optical status reported: ${t.opticalRxDbm || -19.5} dBm on GPON 0/1/4.`,
-        },
-        {
-          id: `note-${idx}-2`,
-          timestamp: new Date(BASE_TIME - (idx + 1) * 900 * 1000).toISOString(),
-          author: "NOC Dispatcher",
-          content: isClosed
-            ? "Subscriber confirmed link restored and online with full speed."
-            : `Work order dispatched to ${t.assignedEngineers[0] || "Field Splicer"}.`,
-        },
-      ];
-
-      const ettrHistoryList: EttrHistoryItem[] = [
-        {
-          timestamp: new Date(BASE_TIME - (idx + 2) * 1800 * 1000).toISOString(),
-          changedBy: "NOC Dispatcher",
-          change: `Target resolution calibrated to ${t.ettrHours || 2} Hours`,
-          reason: "Standard SLA schedule for FTTH operations.",
-        },
-      ];
-
-      const transferHistoryList: TransferHistoryItem[] = idx % 3 === 1 ? [
-        {
-          timestamp: new Date(BASE_TIME - 3600 * 1000).toISOString(),
-          transferredBy: "Farhan NOC (Remote Desk)",
-          transfer: `Transferred to ${t.assignedEngineers[0] || "Usman Ali"}`,
-          reason: "Physical OTDR test confirms cable fault requiring field splicer.",
-        },
-      ] : [];
-
-      return {
-        id: t.id,
-        ticketNo: t.ticketNo,
-        customerName: t.customerName,
-        username: t.pppoeUsername || `${t.customerName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_pppoe`,
-        contact: t.customerPhone || "+92 300 1234567",
-        type: t.category === "Fiber Break"
-          ? "Complaint - Fiber (Red LOS)"
-          : t.category === "High Optical Attenuation"
-          ? "Complaint - Optical Power Loss"
-          : t.category === "Speed Degradation"
-          ? "Speed Degradation"
-          : t.category === "Router Fault"
-          ? "Complaint - Hardware / ONT"
-          : "Billing Issue",
-        priority: (t.priority === "Critical"
-          ? "Urgent"
-          : t.priority === "High"
-          ? "High"
-          : "Normal") as FullTroubleTicket["priority"],
-        status: (isExpired
-          ? "Expired"
-          : isClosed
-          ? "Closed"
-          : isPending
-          ? "Pending"
-          : "In Progress") as FullTroubleTicket["status"],
-        assignedTo: t.assignedEngineers[0] || (idx % 2 === 0 ? "Usman Ali (Lead Splicer)" : "Bilal Hassan (Technician)"),
-        createdBy: "Admin (NOC Command)",
-        createdAt: t.createdAt || new Date(BASE_TIME - (idx + 1) * 3600000).toISOString(),
-        creationRemarks: t.description || "Field work order dispatched for optical investigation.",
-        staffDetails: {
-          closedBy: isClosed ? (t.assignedEngineers[0] || "Usman Ali (Lead Splicer)") : undefined,
-          closingDate: isClosed ? new Date(BASE_TIME - 1800000).toISOString() : undefined,
-          closingRemarks: isClosed ? "Issue resolved. Optical drop re-spliced, RX power normalized." : undefined,
-        },
-        ettr: t.slaExpiresAt || new Date(BASE_TIME + (idx + 1) * 3600000).toISOString(),
-        ettrHistory: ettrHistoryList,
-        transferHistory: transferHistoryList,
-        transferredFrom: idx % 3 === 1 ? "Helpdesk Desk 01" : undefined,
-        notes: notesList,
-        opticalDbm: t.opticalRxDbm || -28.4,
-        ontStatus: t.opticalRxDbm && t.opticalRxDbm < -30
-          ? "LOS / Offline (No Light)"
-          : t.opticalRxDbm && t.opticalRxDbm < -25
-          ? "High Attenuation (Degraded)"
-          : "Online / Normal Light",
-        address: addressList[idx % addressList.length],
-        lat: coords[idx % coords.length].lat,
-        lng: coords[idx % coords.length].lng,
-        vanNo: "Van #04 (OTDR Equipped)",
-        slaMinutesLeft: isExpired ? 0 : isClosed ? 0 : 45 + idx * 15,
-        description: t.description,
-        companyTimezone: (t as any).companyTimezone || "Asia/Karachi",
-      };
-    })
-  );
-
-  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(
-    tickets[0]?.id || null
-  );
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [priorityFilter, setPriorityFilter] = useState("All");

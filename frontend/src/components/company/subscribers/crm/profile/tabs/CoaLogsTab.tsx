@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Search, Zap } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 export function CoaLogsTab({ subscriber }: { subscriber: SubscriberRecord }) {
   const [searchTerm, setSearchTerm] = useState("");

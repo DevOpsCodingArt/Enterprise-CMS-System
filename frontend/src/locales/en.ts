@@ -66,7 +66,7 @@ export const en = {
   },
   branches: {
     title: "20-Branch Operational Matrix",
-    description: "Branch offices, field staff headcount, and localized subnet allocations from mockDb.",
+    description: "Branch offices, field staff headcount, and localized subnet allocations from database.",
     addBranchBtn: "Add Branch",
     thCodeName: "Code / Branch Name",
     thCity: "City",
@@ -78,7 +78,7 @@ export const en = {
   },
   tickets: {
     title: "Trouble Tickets & Dispatch Queue",
-    description: "Consolidated complaints from mockDb with ETTR countdowns and assigned engineers.",
+    description: "Consolidated complaints from database with ETTR countdowns and assigned engineers.",
     lodgeTicketBtn: "Lodge Ticket",
     thTicketNo: "Ticket #",
     thSubscriber: "Subscriber",

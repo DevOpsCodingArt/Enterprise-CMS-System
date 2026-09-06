@@ -1,15 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { mockDb, DepartmentRecord } from "@/mock/db";
+import type { DepartmentRecord } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function DepartmentsTab() {
-  const [departmentList] = useState<DepartmentRecord[]>(mockDb.departments);
+  const [departmentList, setDepartmentList] = useState<DepartmentRecord[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.workforce.getDepartments().then((data) => {
+      if (isMounted) setDepartmentList(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col overflow-hidden">

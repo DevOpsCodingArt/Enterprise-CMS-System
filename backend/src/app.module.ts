@@ -14,6 +14,11 @@ import { CustomerModule } from './modules/customer/customer.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { UsersModule } from './modules/users/users.module';
 import { TicketsModule } from './modules/tickets/tickets.module';
+import { PackagesModule } from './modules/packages/packages.module';
+import { ConnectionsModule } from './modules/connections/connections.module';
+import { WorkforceModule } from './modules/workforce/workforce.module';
+import { GovernanceModule } from './modules/governance/governance.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { validateEnv } from './config/env.schema';
 
 @Module({
@@ -32,6 +37,11 @@ import { validateEnv } from './config/env.schema';
     RbacModule,
     UsersModule,
     TicketsModule,
+    PackagesModule,
+    ConnectionsModule,
+    WorkforceModule,
+    GovernanceModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,246 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: P1
+          - generic [ref=e7]:
+            - generic [ref=e8]: Prime Networks
+            - generic [ref=e11]: ISP Command Center
+        - button "Collapse Sidebar" [ref=e12] [cursor=pointer]
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - text: 1. OPERATIONS DESK
+          - link "Live Chat Desk 3 Live" [ref=e18] [cursor=pointer]:
+            - /url: /company/desk
+            - generic [ref=e21]:
+              - generic [ref=e22]: Live Chat Desk
+              - generic [ref=e23]: 3 Live
+          - link "Trouble Tickets & Jobs 5 Open" [ref=e25] [cursor=pointer]:
+            - /url: /company/tickets
+            - generic [ref=e28]:
+              - generic [ref=e29]: Trouble Tickets & Jobs
+              - generic [ref=e30]: 5 Open
+          - link "New Connections Pipeline 2 New" [ref=e32] [cursor=pointer]:
+            - /url: /company/connections
+            - generic [ref=e35]:
+              - generic [ref=e36]: New Connections Pipeline
+              - generic [ref=e37]: 2 New
+        - generic [ref=e38]:
+          - text: 2. SUBSCRIBERS (CRM)
+          - link "Active Directory (3,420) 3.4k" [ref=e40] [cursor=pointer]:
+            - /url: /company/subscribers
+            - generic [ref=e46]:
+              - generic [ref=e47]: Active Directory (3,420)
+              - generic [ref=e48]: 3.4k
+          - link "Tariff Packages & Speeds" [ref=e50] [cursor=pointer]:
+            - /url: /company/packages
+        - generic [ref=e57]:
+          - text: 3. WORKFORCE, HR & SHIFTS
+          - link "Departments (7 Depts)" [ref=e59] [cursor=pointer]:
+            - /url: /company/staff?tab=departments
+          - link "Staff Directory (52) 52" [ref=e66] [cursor=pointer]:
+            - /url: /company/staff?tab=staff
+            - generic [ref=e71]:
+              - generic [ref=e72]: Staff Directory (52)
+              - generic [ref=e73]: "52"
+          - link "Shift Rosters (24/7 NOC)" [ref=e75] [cursor=pointer]:
+            - /url: /company/staff?tab=shifts
+          - link "Attendance & Overtime" [ref=e82] [cursor=pointer]:
+            - /url: /company/staff?tab=attendance
+          - link "Task Allocation Board" [ref=e89] [cursor=pointer]:
+            - /url: /company/staff?tab=tasks
+        - generic [ref=e95]:
+          - text: 4. GOVERNANCE & SETTINGS
+          - link "RBAC Rights Matrix" [ref=e97] [cursor=pointer]:
+            - /url: /company/roles?tab=roles
+          - link "Canned Slash Shortcuts" [ref=e103] [cursor=pointer]:
+            - /url: /company/roles?tab=canned
+          - link "Working Hours & SLA Rules" [ref=e109] [cursor=pointer]:
+            - /url: /company/roles?tab=sla
+          - link "Company Profile & Tax" [ref=e115] [cursor=pointer]:
+            - /url: /company/roles?tab=profile
+      - generic [ref=e126]:
+        - generic [ref=e127]: Eng. Moiz Ahmad
+        - generic [ref=e128]: Company Owner (CEO)
+    - generic [ref=e129]:
+      - banner [ref=e130]:
+        - generic [ref=e132]:
+          - generic [ref=e133]: Prime Networks (Pvt) Ltd
+          - generic [ref=e134]: Company Operations Suite
+        - generic [ref=e137]:
+          - textbox "Search subscribers, OLT, tickets... (Ctrl+K)" [ref=e138]
+          - generic [ref=e139]: K
+        - generic [ref=e144]:
+          - button [ref=e146] [cursor=pointer]
+          - button [ref=e152] [cursor=pointer]
+          - button "AO Operator ACTIVE Staff Member" [ref=e156] [cursor=pointer]:
+            - generic [ref=e157]: AO
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - generic [ref=e163]: Operator
+                - generic [ref=e164]: ACTIVE
+              - generic [ref=e165]: Staff Member
+      - main [ref=e168]:
+        - generic [ref=e172]:
+          - generic [ref=e173]:
+            - generic [ref=e174]:
+              - generic [ref=e175]: Configured Roles (8)
+              - button "Add Role" [ref=e176] [cursor=pointer]
+            - generic [ref=e178]:
+              - button "Company Owner / Super-Admin System Full unrestricted root access to all branches, billing, network telemetry, and audit trails. 2 Active Users Company-Wide" [ref=e179] [cursor=pointer]:
+                - generic [ref=e180]:
+                  - generic [ref=e181]: Company Owner / Super-Admin
+                  - generic [ref=e182]: System
+                - paragraph [ref=e183]: Full unrestricted root access to all branches, billing, network telemetry, and audit trails.
+                - generic [ref=e184]:
+                  - generic [ref=e185]: 2 Active Users
+                  - generic [ref=e186]: Company-Wide
+              - button "Branch Manager System Full management and supervisory privileges restricted to the assigned regional branch. 20 Active Users Branch Scoped" [ref=e187] [cursor=pointer]:
+                - generic [ref=e188]:
+                  - generic [ref=e189]: Branch Manager
+                  - generic [ref=e190]: System
+                - paragraph [ref=e191]: Full management and supervisory privileges restricted to the assigned regional branch.
+                - generic [ref=e192]:
+                  - generic [ref=e193]: 20 Active Users
+                  - generic [ref=e194]: Branch Scoped
+              - button "NOC Lead Engineer System Optical diagnostic control, SmartOLT telemetry, PPPoE kick/reset, and regional outage alerts. 8 Active Users Company-Wide" [ref=e195] [cursor=pointer]:
+                - generic [ref=e196]:
+                  - generic [ref=e197]: NOC Lead Engineer
+                  - generic [ref=e198]: System
+                - paragraph [ref=e199]: Optical diagnostic control, SmartOLT telemetry, PPPoE kick/reset, and regional outage alerts.
+                - generic [ref=e200]:
+                  - generic [ref=e201]: 8 Active Users
+                  - generic [ref=e202]: Company-Wide
+              - button "Helpdesk Agent (L1/L2) System Omnichannel customer chat handling, trouble ticket escalation, and canned responses. 12 Active Users Branch Scoped" [ref=e203] [cursor=pointer]:
+                - generic [ref=e204]:
+                  - generic [ref=e205]: Helpdesk Agent (L1/L2)
+                  - generic [ref=e206]: System
+                - paragraph [ref=e207]: Omnichannel customer chat handling, trouble ticket escalation, and canned responses.
+                - generic [ref=e208]:
+                  - generic [ref=e209]: 12 Active Users
+                  - generic [ref=e210]: Branch Scoped
+              - button "Field Technician / Splicer System Mobile work orders, OTDR test logging, on-site splicing photos, and van inventory. 40 Active Users Branch Scoped" [ref=e211] [cursor=pointer]:
+                - generic [ref=e212]:
+                  - generic [ref=e213]: Field Technician / Splicer
+                  - generic [ref=e214]: System
+                - paragraph [ref=e215]: Mobile work orders, OTDR test logging, on-site splicing photos, and van inventory.
+                - generic [ref=e216]:
+                  - generic [ref=e217]: 40 Active Users
+                  - generic [ref=e218]: Branch Scoped
+              - button "Billing & Recovery Officer System Invoicing generation, counter cash collection, doorstep recovery wallet, and ledger receipts. 6 Active Users Branch Scoped" [ref=e219] [cursor=pointer]:
+                - generic [ref=e220]:
+                  - generic [ref=e221]: Billing & Recovery Officer
+                  - generic [ref=e222]: System
+                - paragraph [ref=e223]: Invoicing generation, counter cash collection, doorstep recovery wallet, and ledger receipts.
+                - generic [ref=e224]:
+                  - generic [ref=e225]: 6 Active Users
+                  - generic [ref=e226]: Branch Scoped
+              - button "Warehouse Incharge System Hardware serial barcode scanning, drop cable issuance, and faulty RMA tracking. 2 Active Users Company-Wide" [ref=e227] [cursor=pointer]:
+                - generic [ref=e228]:
+                  - generic [ref=e229]: Warehouse Incharge
+                  - generic [ref=e230]: System
+                - paragraph [ref=e231]: Hardware serial barcode scanning, drop cable issuance, and faulty RMA tracking.
+                - generic [ref=e232]:
+                  - generic [ref=e233]: 2 Active Users
+                  - generic [ref=e234]: Company-Wide
+              - button "Auditor / Read-Only System Read-only access to immutable compliance logs, security streams, and financial ledgers. 1 Active Users Company-Wide" [ref=e235] [cursor=pointer]:
+                - generic [ref=e236]:
+                  - generic [ref=e237]: Auditor / Read-Only
+                  - generic [ref=e238]: System
+                - paragraph [ref=e239]: Read-only access to immutable compliance logs, security streams, and financial ledgers.
+                - generic [ref=e240]:
+                  - generic [ref=e241]: 1 Active Users
+                  - generic [ref=e242]: Company-Wide
+          - generic [ref=e243]:
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - heading "Company Owner / Super-Admin Permissions Matrix" [level=2] [ref=e246]
+                - paragraph [ref=e247]: Full unrestricted root access to all branches, billing, network telemetry, and audit trails.
+              - generic [ref=e248]: Company-Wide Root Scope
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - heading "💬 Helpdesk & Live Chat" [level=3] [ref=e251]
+                - generic [ref=e252]:
+                  - generic [ref=e253] [cursor=pointer]:
+                    - checkbox "View Active Chat Queues" [checked] [ref=e254]
+                    - generic [ref=e255]: View Active Chat Queues
+                  - generic [ref=e256] [cursor=pointer]:
+                    - checkbox "Send Public Replies to Subscribers" [checked] [ref=e257]
+                    - generic [ref=e258]: Send Public Replies to Subscribers
+                  - generic [ref=e259] [cursor=pointer]:
+                    - checkbox "Create & View Confidential Staff Notes" [checked] [ref=e260]
+                    - generic [ref=e261]: Create & View Confidential Staff Notes
+                  - generic [ref=e262] [cursor=pointer]:
+                    - checkbox "Transfer Chats Between Staff" [checked] [ref=e263]
+                    - generic [ref=e264]: Transfer Chats Between Staff
+                  - generic [ref=e265] [cursor=pointer]:
+                    - checkbox "Close & Resolve Conversations" [checked] [ref=e266]
+                    - generic [ref=e267]: Close & Resolve Conversations
+              - generic [ref=e268]:
+                - heading "🎫 Trouble Tickets & Dispatch" [level=3] [ref=e269]
+                - generic [ref=e270]:
+                  - generic [ref=e271] [cursor=pointer]:
+                    - checkbox "View All Tickets" [checked] [ref=e272]
+                    - generic [ref=e273]: View All Tickets
+                  - generic [ref=e274] [cursor=pointer]:
+                    - checkbox "Create New Trouble Tickets" [checked] [ref=e275]
+                    - generic [ref=e276]: Create New Trouble Tickets
+                  - generic [ref=e277] [cursor=pointer]:
+                    - checkbox "Assign Work Orders to Tech Vans" [checked] [ref=e278]
+                    - generic [ref=e279]: Assign Work Orders to Tech Vans
+                  - generic [ref=e280] [cursor=pointer]:
+                    - checkbox "Mark Tickets Resolved & Spliced" [checked] [ref=e281]
+                    - generic [ref=e282]: Mark Tickets Resolved & Spliced
+              - generic [ref=e283]:
+                - heading "👥 Subscribers & CRM" [level=3] [ref=e284]
+                - generic [ref=e285]:
+                  - generic [ref=e286] [cursor=pointer]:
+                    - checkbox "View Subscriber Directory" [checked] [ref=e287]
+                    - generic [ref=e288]: View Subscriber Directory
+                  - generic [ref=e289] [cursor=pointer]:
+                    - checkbox "Provision New Subscribers" [checked] [ref=e290]
+                    - generic [ref=e291]: Provision New Subscribers
+                  - generic [ref=e292] [cursor=pointer]:
+                    - checkbox "Modify KYC & Package Details" [checked] [ref=e293]
+                    - generic [ref=e294]: Modify KYC & Package Details
+                  - generic [ref=e295] [cursor=pointer]:
+                    - checkbox "Temporary Account Freeze" [checked] [ref=e296]
+                    - generic [ref=e297]: Temporary Account Freeze
+                  - generic [ref=e298] [cursor=pointer]:
+                    - checkbox "Suspend for Non-Payment" [checked] [ref=e299]
+                    - generic [ref=e300]: Suspend for Non-Payment
+              - generic [ref=e301]:
+                - heading "📡 Network Telemetry (OSS / SmartOLT)" [level=3] [ref=e302]
+                - generic [ref=e303]:
+                  - generic [ref=e304] [cursor=pointer]:
+                    - checkbox "View GPON OLT Optical Telemetry" [checked] [ref=e305]
+                    - generic [ref=e306]: View GPON OLT Optical Telemetry
+                  - generic [ref=e307] [cursor=pointer]:
+                    - checkbox "TR-069 Remote Router Reboot" [checked] [ref=e308]
+                    - generic [ref=e309]: TR-069 Remote Router Reboot
+                  - generic [ref=e310] [cursor=pointer]:
+                    - checkbox "Reset / Kick Radius PPPoE Sessions" [checked] [ref=e311]
+                    - generic [ref=e312]: Reset / Kick Radius PPPoE Sessions
+                  - generic [ref=e313] [cursor=pointer]:
+                    - checkbox "Trigger Area Outage Broadcasts" [checked] [ref=e314]
+                    - generic [ref=e315]: Trigger Area Outage Broadcasts
+              - generic [ref=e316]:
+                - heading "💳 Billing, Recovery & Accounts (BSS)" [level=3] [ref=e317]
+                - generic [ref=e318]:
+                  - generic [ref=e319] [cursor=pointer]:
+                    - checkbox "View Billing Invoices" [checked] [ref=e320]
+                    - generic [ref=e321]: View Billing Invoices
+                  - generic [ref=e322] [cursor=pointer]:
+                    - checkbox "Generate Monthly Billing Cycle" [checked] [ref=e323]
+                    - generic [ref=e324]: Generate Monthly Billing Cycle
+                  - generic [ref=e325] [cursor=pointer]:
+                    - checkbox "Counter Cash Collection" [checked] [ref=e326]
+                    - generic [ref=e327]: Counter Cash Collection
+                  - generic [ref=e328] [cursor=pointer]:
+                    - checkbox "Doorstep Staff Field Recovery Wallet" [checked] [ref=e329]
+                    - generic [ref=e330]: Doorstep Staff Field Recovery Wallet
+                  - generic [ref=e331] [cursor=pointer]:
+                    - checkbox "View General Ledger & Net Profit" [checked] [ref=e332]
+                    - generic [ref=e333]: View General Ledger & Net Profit
+  - button "Open Next.js Dev Tools" [ref=e339] [cursor=pointer]

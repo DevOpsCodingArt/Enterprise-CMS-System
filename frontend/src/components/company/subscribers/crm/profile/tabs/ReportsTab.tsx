@@ -11,23 +11,25 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 export function ReportsTab({ subscriber }: { subscriber: SubscriberRecord }) {
+  const fee = subscriber.monthlyFeePkr || Number(subscriber.monthlyBilling) || 0;
+
   const invoiceStats = [
     { label: "This Week", value: "Rs. 0.00", icon: Calendar },
-    { label: "This Month", value: `Rs. ${subscriber.monthlyFeePkr.toLocaleString()}`, icon: Calendar },
-    { label: "Last Month", value: `Rs. ${subscriber.monthlyFeePkr.toLocaleString()}`, icon: Calendar },
-    { label: "This Year", value: `Rs. ${(subscriber.monthlyFeePkr * 8).toLocaleString()}`, icon: Calendar },
-    { label: "Total Lifetime", value: `Rs. ${(subscriber.monthlyFeePkr * 18).toLocaleString()}`, icon: FileText, isTotal: true },
+    { label: "This Month", value: `Rs. ${fee.toLocaleString()}`, icon: Calendar },
+    { label: "Last Month", value: `Rs. ${fee.toLocaleString()}`, icon: Calendar },
+    { label: "This Year", value: `Rs. ${(fee * 8).toLocaleString()}`, icon: Calendar },
+    { label: "Total Lifetime", value: `Rs. ${(fee * 18).toLocaleString()}`, icon: FileText, isTotal: true },
   ];
 
   const paymentStats = [
     { label: "This Week", value: "Rs. 0.00", icon: Calendar },
-    { label: "This Month", value: `Rs. ${subscriber.monthlyFeePkr.toLocaleString()}`, icon: Calendar },
-    { label: "Last Month", value: `Rs. ${subscriber.monthlyFeePkr.toLocaleString()}`, icon: Calendar },
-    { label: "This Year", value: `Rs. ${(subscriber.monthlyFeePkr * 8).toLocaleString()}`, icon: Calendar },
-    { label: "Total Received", value: `Rs. ${(subscriber.monthlyFeePkr * 18).toLocaleString()}`, icon: DollarSign, isTotal: true },
+    { label: "This Month", value: `Rs. ${fee.toLocaleString()}`, icon: Calendar },
+    { label: "Last Month", value: `Rs. ${fee.toLocaleString()}`, icon: Calendar },
+    { label: "This Year", value: `Rs. ${(fee * 8).toLocaleString()}`, icon: Calendar },
+    { label: "Total Received", value: `Rs. ${(fee * 18).toLocaleString()}`, icon: DollarSign, isTotal: true },
   ];
 
   const invoiceChartData = [

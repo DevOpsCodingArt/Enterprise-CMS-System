@@ -1,0 +1,188 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - link "P1" [ref=f2e5] [cursor=pointer]:
+          - /url: /
+        - generic [ref=f2e6]:
+          - generic [ref=f2e7]:
+            - generic [ref=f2e8]: Prime Networks Self-Care
+            - generic [ref=f2e9]: SUBSCRIBER PORTAL
+          - generic [ref=f2e10]: Customer Portal • 24/7 Helpline 111-PRIME
+      - generic [ref=f2e11]:
+        - generic [ref=f2e12]:
+          - generic [ref=f2e17]: "GPON Link:"
+          - generic [ref=f2e18]: ACTIVE (100 Mbps)
+        - link "111-PRIME" [ref=f2e19] [cursor=pointer]:
+          - /url: tel:111774631
+        - button [ref=f2e25] [cursor=pointer]
+        - button "SU Ali Khan Sub-049281" [ref=f2e29] [cursor=pointer]:
+          - generic [ref=f2e30]: SU
+          - generic [ref=f2e34]:
+            - generic [ref=f2e35]: Ali Khan
+            - generic [ref=f2e36]: Sub-049281
+    - main [ref=f2e39]:
+      - navigation [ref=f2e40]:
+        - link "Overview" [ref=f2e41] [cursor=pointer]:
+          - /url: /portal
+        - link "Live Support" [ref=f2e50] [cursor=pointer]:
+          - /url: /portal/chat
+        - link "Trouble Tickets 1 Active" [ref=f2e55] [cursor=pointer]:
+          - /url: /portal/tickets
+          - generic [ref=f2e56]:
+            - generic [ref=f2e59]: Trouble Tickets
+            - generic [ref=f2e60]: 1 Active
+        - link "Billing & Invoices" [ref=f2e61] [cursor=pointer]:
+          - /url: /portal/billing
+        - link "Line Diagnostics LIVE" [ref=f2e67] [cursor=pointer]:
+          - /url: /portal/diagnostics
+          - generic [ref=f2e68]:
+            - generic [ref=f2e71]: Line Diagnostics
+            - generic [ref=f2e72]: LIVE
+        - link "My Account" [ref=f2e73] [cursor=pointer]:
+          - /url: /portal/profile
+      - generic [ref=f2e80]:
+        - generic [ref=f2e83]:
+          - generic [ref=f2e84]:
+            - generic [ref=f2e85]: AM
+            - generic [ref=f2e90]:
+              - generic [ref=f2e91]:
+                - heading "Welcome back, Ahmed Malik" [level=1] [ref=f2e92]
+                - generic [ref=f2e93]: FIBER ONLINE
+              - paragraph [ref=f2e97]: Your Fiber Pro 50 Mbps network is operating at peak efficiency. 99.98% uptime.
+              - generic [ref=f2e98]:
+                - generic [ref=f2e99]:
+                  - text: "Account:"
+                  - strong [ref=f2e100]: CUS-99482
+                - generic [ref=f2e101]: •
+                - generic [ref=f2e102]:
+                  - text: "PPPoE:"
+                  - strong [ref=f2e103]: ahmed_malik_isb
+                - generic [ref=f2e104]: •
+                - generic [ref=f2e105]:
+                  - text: "Branch:"
+                  - strong [ref=f2e106]: Islamabad HQ
+          - generic [ref=f2e115]:
+            - generic [ref=f2e116]:
+              - generic [ref=f2e117]: Subscribed Plan
+              - text: Fiber Pro 50 Mbps
+            - generic [ref=f2e118]:
+              - generic [ref=f2e119]: Billing Due
+              - generic [ref=f2e120]:
+                - generic [ref=f2e121]: PKR 3,500
+                - generic [ref=f2e122]: DUE IN 3 DAYS
+            - button "Pay Bill" [ref=f2e123] [cursor=pointer]
+        - generic [ref=f2e127]:
+          - generic [ref=f2e128]:
+            - generic [ref=f2e129]:
+              - generic [ref=f2e130]:
+                - generic [ref=f2e131]: 30-Day Data Consumption
+                - generic [ref=f2e135]: BILLING CYCLE
+              - generic [ref=f2e136]:
+                - generic [ref=f2e137]: 684.2GB Used
+                - generic [ref=f2e138]: Unlimited Quota Plan
+              - generic [ref=f2e143]:
+                - generic [ref=f2e144]:
+                  - text: "Download:"
+                  - strong [ref=f2e147]: 612.4 GB
+                - generic [ref=f2e148]:
+                  - text: "Upload:"
+                  - strong [ref=f2e151]: 71.8 GB
+            - generic [ref=f2e152]:
+              - generic [ref=f2e153]:
+                - text: "Daily Average:"
+                - strong [ref=f2e154]: 22.8 GB / Day
+              - generic [ref=f2e155]:
+                - text: "Period:"
+                - strong [ref=f2e156]: Aug 01 - Aug 26
+          - generic [ref=f2e157]:
+            - generic [ref=f2e158]:
+              - generic [ref=f2e159]:
+                - generic [ref=f2e160]: Last 24 Hours Usage
+                - generic [ref=f2e164]: LIVE SESSION
+              - generic [ref=f2e165]:
+                - generic [ref=f2e166]: 28.4GB (24h)
+                - generic [ref=f2e167]:
+                  - generic [ref=f2e168]: Current Active Throughput
+                  - text: 14.2 Mbps
+              - generic [ref=f2e169]:
+                - generic [ref=f2e170]:
+                  - generic [ref=f2e171]: Peak Speed Measured
+                  - text: 49.8 Mbps (100% SLA)
+                - generic [ref=f2e172]:
+                  - generic [ref=f2e173]: Optical Line Rx Power
+                  - text: "-27.4 dBm (High Drop)"
+            - generic [ref=f2e174]:
+              - generic [ref=f2e175]:
+                - text: "Session Uptime:"
+                - strong [ref=f2e176]: 4 Days 12h
+              - generic [ref=f2e177]:
+                - text: "Packet Loss:"
+                - strong [ref=f2e178]: 0.0%
+        - generic [ref=f2e179]:
+          - generic [ref=f2e180]:
+            - generic [ref=f2e181]:
+              - generic [ref=f2e182]: TK
+              - generic [ref=f2e183]:
+                - generic [ref=f2e184]:
+                  - 'heading "Ticket #TK-8842" [level=3] [ref=f2e185]'
+                  - generic [ref=f2e186]: IN PROGRESS
+                - paragraph [ref=f2e190]:
+                  - text: "Category:"
+                  - strong [ref=f2e191]: Fiber Break
+                  - text: "• Priority:"
+                  - strong [ref=f2e192]: High
+            - generic [ref=f2e194]:
+              - generic [ref=f2e195]: Estimated Resolution (ETTR)
+              - text: 3.5 Hours Remaining
+          - generic [ref=f2e196]:
+            - generic [ref=f2e198]:
+              - generic [ref=f2e199]:
+                - generic [ref=f2e200]: Complaint Lodged
+                - generic [ref=f2e206]:
+                  - paragraph [ref=f2e207]: Auto-diagnostic detected optical drop.
+                  - generic [ref=f2e208]: 01:30 PM
+              - generic [ref=f2e209]:
+                - generic [ref=f2e210]: Assigned to Branch NOC
+                - generic [ref=f2e216]:
+                  - paragraph [ref=f2e217]: Islamabad HQ Field Dispatch Queue.
+                  - generic [ref=f2e218]: 01:35 PM
+              - generic [ref=f2e219]:
+                - generic [ref=f2e220]:
+                  - generic [ref=f2e221]: "3"
+                  - generic [ref=f2e222]: Field Splicer En Route
+                - generic [ref=f2e223]:
+                  - paragraph [ref=f2e224]: "Technician Usman Ali (Van #04)."
+                  - generic [ref=f2e225]: 01:45 PM
+              - generic [ref=f2e226]:
+                - generic [ref=f2e227]:
+                  - generic [ref=f2e228]: "4"
+                  - generic [ref=f2e229]: Signal Calibration
+                - generic [ref=f2e230]:
+                  - paragraph [ref=f2e231]: "Target attenuation: < -20 dBm nominal."
+                  - generic [ref=f2e232]: "ETTR: ~2.5 hrs"
+            - generic [ref=f2e233]:
+              - generic [ref=f2e241]:
+                - generic [ref=f2e242]:
+                  - generic [ref=f2e243]: Usman Ali
+                  - generic [ref=f2e244]: "VAN #04 SPLICER"
+                - generic [ref=f2e245]: Islamabad Blue Area (HQ) Field Operations Team
+              - generic [ref=f2e246]:
+                - button "Call Technician" [ref=f2e247] [cursor=pointer]
+                - button "Chat with NOC" [ref=f2e253] [cursor=pointer]
+        - generic [ref=f2e255]:
+          - link "Live Support 24/7 CSR Chat" [ref=f2e256] [cursor=pointer]:
+            - /url: /portal/chat
+            - generic [ref=f2e260]: Live Support
+            - generic [ref=f2e261]: 24/7 CSR Chat
+          - button "Pay Bill Online JazzCash / Raast" [ref=f2e262] [cursor=pointer]:
+            - generic [ref=f2e266]: Pay Bill Online
+            - generic [ref=f2e267]: JazzCash / Raast
+          - link "Line Diagnostics Speed & Optical Test" [ref=f2e268] [cursor=pointer]:
+            - /url: /portal/diagnostics
+            - generic [ref=f2e272]: Line Diagnostics
+            - generic [ref=f2e273]: Speed & Optical Test
+          - button "Lodge Complaint Trouble Ticket" [ref=f2e274] [cursor=pointer]:
+            - generic [ref=f2e278]: Lodge Complaint
+            - generic [ref=f2e279]: Trouble Ticket
+  - button "Open Next.js Dev Tools" [ref=f2e285] [cursor=pointer]

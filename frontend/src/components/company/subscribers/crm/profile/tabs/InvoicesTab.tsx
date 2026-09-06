@@ -2,26 +2,27 @@
 
 import React, { useState } from "react";
 import { Search, Download, FileText } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { useToast } from "@/components/ui/toast";
 import { Tooltip } from "@/components/ui/tooltip";
 
 export function InvoicesTab({ subscriber }: { subscriber: SubscriberRecord }) {
   const toast = useToast();
   const [searchTerm, setSearchTerm] = useState("");
+  const fee = subscriber.monthlyFeePkr || Number(subscriber.monthlyBilling) || 0;
 
   const invoices = [
     {
       id: "INV-2026-0812",
       trxId: "TRX-98214-PK",
       status: "Paid",
-      username: subscriber.pppoeUsername,
+      username: subscriber.pppoeUsername || subscriber.username || "subscriber",
       salesperson: "Ali NOC Lead",
-      package: subscriber.packageName,
+      package: subscriber.packageName || "Tariff Package",
       discount: 0,
-      basePrice: subscriber.monthlyFeePkr,
+      basePrice: fee,
       extraFee: 0,
-      total: subscriber.monthlyFeePkr,
+      total: fee,
       by: "Online Portal / JazzCash",
       createdAt: "2026-08-01 10:24:00 AM",
     },
@@ -29,13 +30,13 @@ export function InvoicesTab({ subscriber }: { subscriber: SubscriberRecord }) {
       id: "INV-2026-0708",
       trxId: "TRX-87123-PK",
       status: "Paid",
-      username: subscriber.pppoeUsername,
+      username: subscriber.pppoeUsername || subscriber.username || "subscriber",
       salesperson: "Ali NOC Lead",
-      package: subscriber.packageName,
+      package: subscriber.packageName || "Tariff Package",
       discount: 0,
-      basePrice: subscriber.monthlyFeePkr,
+      basePrice: fee,
       extraFee: 0,
-      total: subscriber.monthlyFeePkr,
+      total: fee,
       by: "Easypaisa Direct",
       createdAt: "2026-07-01 09:15:30 AM",
     },
@@ -43,13 +44,13 @@ export function InvoicesTab({ subscriber }: { subscriber: SubscriberRecord }) {
       id: "INV-2026-0604",
       trxId: "TRX-76012-PK",
       status: "Paid",
-      username: subscriber.pppoeUsername,
+      username: subscriber.pppoeUsername || subscriber.username || "subscriber",
       salesperson: "Ali NOC Lead",
-      package: subscriber.packageName,
+      package: subscriber.packageName || "Tariff Package",
       discount: 0,
-      basePrice: subscriber.monthlyFeePkr,
+      basePrice: fee,
       extraFee: 5000, // OTC Setup Fee
-      total: subscriber.monthlyFeePkr + 5000,
+      total: fee + 5000,
       by: "Cash Collection / Staff",
       createdAt: "2026-06-01 11:45:00 AM",
     },
@@ -118,10 +119,10 @@ export function InvoicesTab({ subscriber }: { subscriber: SubscriberRecord }) {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-foreground font-semibold">{inv.package}</td>
-                <td className="px-4 py-3 text-right text-muted-foreground">Rs. {inv.discount.toLocaleString()}</td>
-                <td className="px-4 py-3 text-right text-muted-foreground">Rs. {inv.basePrice.toLocaleString()}</td>
-                <td className="px-4 py-3 text-right text-muted-foreground">Rs. {inv.extraFee.toLocaleString()}</td>
-                <td className="px-4 py-3 text-right font-bold text-foreground">Rs. {inv.total.toLocaleString()}</td>
+                <td className="px-4 py-3 text-right text-muted-foreground">Rs. {(inv.discount || 0).toLocaleString()}</td>
+                <td className="px-4 py-3 text-right text-muted-foreground">Rs. {(inv.basePrice || 0).toLocaleString()}</td>
+                <td className="px-4 py-3 text-right text-muted-foreground">Rs. {(inv.extraFee || 0).toLocaleString()}</td>
+                <td className="px-4 py-3 text-right font-bold text-foreground">Rs. {(inv.total || 0).toLocaleString()}</td>
                 <td className="px-4 py-3 text-muted-foreground">{inv.by}</td>
                 <td className="px-4 py-3 text-muted-foreground">{inv.createdAt}</td>
                 <td className="px-4 py-3 text-center">

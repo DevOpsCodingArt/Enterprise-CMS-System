@@ -1,0 +1,151 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - img "Enterprise Software Abstract Light Wave" [ref=e5]
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - generic [ref=e9]: Unified Cloud Platform
+          - blockquote [ref=e14]:
+            - paragraph [ref=e15]: “Simplicity is prerequisite for reliability.”
+            - contentinfo [ref=e16]: — Edsger W. Dijkstra
+        - generic [ref=e18]:
+          - paragraph [ref=e19]: A unified enterprise ecosystem designed to streamline business operations, automate workflows, and deliver real-time operational intelligence across any organization.
+          - generic [ref=e20]:
+            - generic [ref=e21]: 99.99% Uptime
+            - generic [ref=e23]: •
+            - generic [ref=e24]: Enterprise Security
+            - generic [ref=e25]: •
+            - generic [ref=e26]: Scalable Cloud
+    - generic [ref=e27]:
+      - button "Dark" [ref=e29] [cursor=pointer]
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - generic [ref=e37]: P1
+            - generic [ref=e38]: Prime One
+          - generic [ref=e39]:
+            - heading "Welcome back" [level=1] [ref=e40]
+            - paragraph [ref=e41]: Sign in to access your operations console
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: Quick Demo Switcher
+            - generic [ref=e48]: 1-Click Autofill
+          - generic [ref=e49]:
+            - button [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]: Company Owner
+              - paragraph [ref=e56]: Tariq Mehmood
+            - button [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]: Support Lead
+              - paragraph [ref=e62]: Khurram Shahzad
+            - button [ref=e63] [cursor=pointer]:
+              - generic [ref=e64]: NOC Engineer
+              - paragraph [ref=e68]: Zubair Ahmed
+            - button [ref=e69] [cursor=pointer]:
+              - generic [ref=e70]: Field Splicer
+              - paragraph [ref=e74]: Usman Ali
+            - button [active] [ref=e75] [cursor=pointer]:
+              - generic [ref=e76]: Subscriber
+              - paragraph [ref=e81]: Ali Khan
+            - button [ref=e82] [cursor=pointer]:
+              - generic [ref=e83]: Super Admin
+              - paragraph [ref=e88]: Prime One Cloud
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e91]: Email or Username
+            - textbox "name@example.com or username" [ref=e93]: ali.khan@gmail.com
+          - generic [ref=e94]:
+            - generic [ref=e95]:
+              - generic [ref=e96]: Password
+              - button "Forgot password?" [ref=e97] [cursor=pointer]
+            - generic [ref=e98]:
+              - textbox "••••••••••••" [ref=e99]: Password123!
+              - button [ref=e100] [cursor=pointer]
+          - generic [ref=e105] [cursor=pointer]:
+            - checkbox "Remember this device" [checked] [ref=e106]
+            - generic [ref=e107]: Remember this device
+          - button "Sign In to Console" [ref=e109] [cursor=pointer]
+          - generic [ref=e114]: 256-Bit Encrypted Enterprise Gateway
+      - contentinfo [ref=e120]: © 2026 Zayan Sheikh. All rights reserved.
+  - generic [ref=e246]:
+    - generic [ref=e249]:
+      - paragraph [ref=e250]: Demo Account Loaded
+      - paragraph [ref=e251]: Autofilled credentials for Ali Khan (Subscriber). Click "Sign In" to enter.
+    - button [ref=e252] [cursor=pointer]
+  - button "Open Tanstack query devtools" [ref=e180] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=e126] [cursor=pointer]
+  - alert [ref=e229]
+  - button [ref=e231] [cursor=pointer]:
+    - generic:
+      - generic:
+        - button
+      - generic:
+        - button
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button [disabled]
+      - generic:
+        - button
+      - generic:
+        - button
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: https://agentation.com
+            - paragraph: v3.0.2
+            - button "Switch to light mode"
+          - generic:
+            - generic:
+              - generic: Output Detail
+              - button "Standard"
+            - generic:
+              - generic: React Components
+              - generic:
+                - checkbox [checked]
+            - generic:
+              - generic: Hide Until Restart
+              - generic:
+                - checkbox
+          - generic:
+            - generic: Marker Color
+            - generic:
+              - button "Indigo"
+              - button "Blue"
+              - button "Cyan"
+              - button "Green"
+              - button "Yellow"
+              - button "Orange"
+              - button "Red"
+          - generic:
+            - generic:
+              - generic:
+                - checkbox "Clear on copy/send"
+              - generic: Clear on copy/send
+            - generic:
+              - generic:
+                - checkbox "Block page interactions" [checked]
+              - generic: Block page interactions
+          - button "Manage MCP & Webhooks"
+        - generic:
+          - button "Manage MCP & Webhooks"
+          - generic:
+            - generic: MCP Connection
+            - paragraph:
+              - text: MCP connection allows agents to receive and act on annotations.
+              - link "Learn more":
+                - /url: https://agentation.dev/mcp
+          - generic:
+            - generic:
+              - generic: Webhooks
+              - generic:
+                - generic: Auto-Send
+                - generic:
+                  - checkbox "Auto-Send" [checked] [disabled]
+            - paragraph: The webhook URL will receive live annotation changes and annotation data.
+            - textbox "Webhook URL"

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Activity } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 export function ActivitiesTab({ subscriber }: { subscriber: SubscriberRecord }) {
   const activities = [
@@ -17,7 +17,7 @@ export function ActivitiesTab({ subscriber }: { subscriber: SubscriberRecord }) 
     {
       id: "act-2",
       action: "Monthly Invoice Payment Cleared",
-      description: `Payment of Rs. ${subscriber.monthlyFeePkr.toLocaleString()} confirmed via JazzCash gateway.`,
+      description: `Payment of Rs. ${(subscriber.monthlyFeePkr || Number(subscriber.monthlyBilling) || 0).toLocaleString()} confirmed via JazzCash gateway.`,
       date: "Aug 01, 2026",
       time: "10:24 AM",
       by: "Online Payment",

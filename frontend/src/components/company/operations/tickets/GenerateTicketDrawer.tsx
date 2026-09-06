@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Search as SearchIcon, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/shared/DateTimePicker";
-import { mockDb, SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { FullTroubleTicket } from "./TicketDetailPane";
 
 function createTicketRecord(
@@ -25,12 +26,12 @@ function createTicketRecord(
     id: `TKT-${Math.floor(1000000000 + Math.random() * 9000000000)}`,
     ticketNo: `TK-${randomSuffix}`,
     customerName: customer.fullName,
-    username: customer.pppoeUsername || `${customer.fullName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_pppoe`,
+    username: customer.pppoeUsername || customer.username || `${customer.fullName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_pppoe`,
     contact: customer.phone,
-    address: customer.address,
+    address: customer.address || "Islamabad",
     type: category,
     priority: priority,
-    status: "Pending",
+    status: "assigned",
     assignedTo: assignedStaff,
     vanNo: vanNo,
     createdBy: "Admin (NOC)",
@@ -75,6 +76,17 @@ export function GenerateTicketDrawer({
   const [customerSearch, setCustomerSearch] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<SubscriberRecord | null>(null);
   const [isCustomerOpen, setIsCustomerOpen] = useState(false);
+  const [customersList, setCustomersList] = useState<SubscriberRecord[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.subscribers.list().then((data) => {
+      if (isMounted) setCustomersList(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const [category, setCategory] = useState("Fiber Drop Cut / Red LOS");
   const [priority, setPriority] = useState<"Urgent" | "High" | "Normal">("High");
@@ -83,14 +95,14 @@ export function GenerateTicketDrawer({
   const [vanNo, setVanNo] = useState("Van #04");
   const [remarks, setRemarks] = useState("");
 
-  const filteredCustomers = mockDb.subscribers.filter((s) => {
+  const filteredCustomers = customersList.filter((s) => {
     if (!customerSearch) return false;
     const q = customerSearch.toLowerCase();
     return (
       s.fullName.toLowerCase().includes(q) ||
       s.phone.includes(q) ||
       s.customerCode.toLowerCase().includes(q) ||
-      s.pppoeUsername.toLowerCase().includes(q)
+      (s.pppoeUsername && s.pppoeUsername.toLowerCase().includes(q))
     );
   });
 

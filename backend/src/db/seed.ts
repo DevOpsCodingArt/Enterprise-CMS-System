@@ -16,13 +16,20 @@ import {
   DEMO_QUICK_REPLIES,
   DEMO_CONVERSATION,
   DEMO_TICKETS,
-} from './dummy';
+  INITIAL_PACKAGES,
+  INITIAL_DEPARTMENTS,
+  INITIAL_LEADS,
+  INITIAL_SHIFTS,
+  INITIAL_ATTENDANCE,
+  INITIAL_WORK_ORDERS,
+  INITIAL_SLA_RULES,
+} from './seeds';
 
 dotenv.config();
 
 const connectionString =
   process.env.DATABASE_URL ||
-  'postgresql://primeone_user:securepassword123@localhost:5432/primeone';
+  'postgresql://primeone_user:securepassword123@localhost:5433/primeone';
 
 const client = postgres(connectionString, { max: 1 });
 const db = drizzle(client, { schema });
@@ -68,7 +75,7 @@ async function seed() {
       if (!existingCompany) {
         throw new Error('Failed to resolve company ID');
       }
-      return runTenantSeed(existingCompany.id, passwordHash);
+      return await runTenantSeed(existingCompany.id, passwordHash);
     }
 
     await runTenantSeed(companyId, passwordHash);
@@ -256,6 +263,17 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
     }
   }
 
+  if (userMap.size === 0) {
+    const existingUsers = await db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.companyId, companyId));
+    for (const eu of existingUsers) {
+      userMap.set(eu.username, eu.id);
+      if (!userMap.has('agent')) userMap.set('agent', eu.id);
+    }
+  }
+
   // 7. Seed ISP Customers from dummy presets
   console.log('7. Seeding ISP Customers from dummy presets...');
   const customerMap = new Map<string, string>();
@@ -295,6 +313,16 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
 
     if (insertedCust) {
       customerMap.set(c.customerCode, insertedCust.id);
+    }
+  }
+
+  if (customerMap.size === 0) {
+    const existingCusts = await db
+      .select()
+      .from(schema.customers)
+      .where(eq(schema.customers.companyId, companyId));
+    for (const ec of existingCusts) {
+      customerMap.set(ec.customerCode, ec.id);
     }
   }
 
@@ -418,6 +446,91 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
         }
       }
     }
+  }
+
+  // 11. Seed Tariff Packages
+  console.log('11. Seeding Tariff Packages...');
+  for (const pkg of INITIAL_PACKAGES) {
+    await db
+      .insert(schema.packages)
+      .values({
+        ...pkg,
+        companyId,
+      })
+      .onConflictDoNothing();
+  }
+
+  // 12. Seed Departments
+  console.log('12. Seeding Departments...');
+  for (const dept of INITIAL_DEPARTMENTS) {
+    await db
+      .insert(schema.departments)
+      .values({
+        ...dept,
+        companyId,
+      })
+      .onConflictDoNothing();
+  }
+
+  // 13. Seed Connection Leads
+  console.log('13. Seeding Connection Leads (CRM)...');
+  for (const lead of INITIAL_LEADS) {
+    await db
+      .insert(schema.connectionLeads)
+      .values({
+        ...lead,
+        companyId,
+        branchId: defaultBranchId,
+      })
+      .onConflictDoNothing();
+  }
+
+  // 14. Seed Shift Rosters
+  console.log('14. Seeding Shift Rosters...');
+  for (const shift of INITIAL_SHIFTS) {
+    await db
+      .insert(schema.shiftRosters)
+      .values({
+        ...shift,
+        companyId,
+      })
+      .onConflictDoNothing();
+  }
+
+  // 15. Seed Attendance Logs
+  console.log('15. Seeding Attendance Logs...');
+  for (const att of INITIAL_ATTENDANCE) {
+    await db
+      .insert(schema.attendanceLogs)
+      .values({
+        ...att,
+        companyId,
+      })
+      .onConflictDoNothing();
+  }
+
+  // 16. Seed Work Orders
+  console.log('16. Seeding Work Orders...');
+  for (const wo of INITIAL_WORK_ORDERS) {
+    await db
+      .insert(schema.workOrderTasks)
+      .values({
+        ...wo,
+        companyId,
+      })
+      .onConflictDoNothing();
+  }
+
+  // 17. Seed SLA Rules
+  console.log('17. Seeding SLA Rules...');
+  for (const sla of INITIAL_SLA_RULES) {
+    await db
+      .insert(schema.slaRules)
+      .values({
+        ...sla,
+        companyId,
+      })
+      .onConflictDoNothing();
   }
 
   console.log('✅ Prime One Database Seeding Completed Successfully!');

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FileImage, FileText, Download, Eye, UploadCloud } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { useToast } from "@/components/ui/toast";
 import { Tooltip } from "@/components/ui/tooltip";
 

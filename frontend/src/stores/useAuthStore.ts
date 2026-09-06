@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { UserProfile, UserRole } from "@/types/auth.types";
 import type { TenantCompany } from "@/types/tenant.types";
-import { mockDb } from "@/mock/db";
 
 interface AuthState {
   user: UserProfile | null;

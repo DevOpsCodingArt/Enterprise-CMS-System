@@ -44,13 +44,14 @@ export function ConnectionBottomPane({
     );
   }
 
+  const accounts = connection.accounts || { otc: 0, monthlyBill: 0, otcPaid: 0, monthlyBillPaid: 0, totalAmount: 0, extraCable: 0, discount: 0 };
   const totalAmount =
-    connection.accounts.totalAmount ||
-    connection.accounts.otc +
-      connection.accounts.monthlyBill +
-      (connection.accounts.extraCable || 0) -
-      (connection.accounts.discount || 0);
-  const totalPaid = connection.accounts.otcPaid + connection.accounts.monthlyBillPaid;
+    accounts.totalAmount ||
+    (accounts.otc || 0) +
+      (accounts.monthlyBill || 0) +
+      (accounts.extraCable || 0) -
+      (accounts.discount || 0);
+  const totalPaid = (accounts.otcPaid || 0) + (accounts.monthlyBillPaid || 0);
   const remainingBalance = totalAmount - totalPaid;
 
   const renderExpandedModal = () => {
@@ -180,13 +181,13 @@ export function ConnectionBottomPane({
             <div className="p-3.5 bg-muted/30 rounded-lg border border-border">
               <p className="text-[10px] text-muted-foreground font-mono uppercase mb-1 font-bold">OTC Setup Fee</p>
               <p className="font-mono font-medium text-base text-foreground">
-                Rs. {connection.accounts.otc.toLocaleString()}
+                Rs. {(accounts.otc || 0).toLocaleString()}
               </p>
             </div>
             <div className="p-3.5 bg-muted/30 rounded-lg border border-border">
               <p className="text-[10px] text-muted-foreground font-mono uppercase mb-1 font-bold">Monthly Recurring Bill</p>
               <p className="font-mono font-medium text-base text-foreground">
-                Rs. {connection.accounts.monthlyBill.toLocaleString()}
+                Rs. {(accounts.monthlyBill || 0).toLocaleString()}
               </p>
             </div>
           </div>
@@ -194,15 +195,15 @@ export function ConnectionBottomPane({
           <div className="p-4 bg-muted/50 rounded-lg border border-border space-y-2.5 font-mono text-xs">
             <div className="flex justify-between items-center pb-2 border-b border-border/50">
               <span className="font-sans font-bold uppercase text-muted-foreground text-[11px]">Total Expected</span>
-              <span className="font-bold text-sm text-foreground">Rs. {totalAmount.toLocaleString()}</span>
+              <span className="font-bold text-sm text-foreground">Rs. {(totalAmount || 0).toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center pb-2 border-b border-border/50">
               <span className="font-sans font-bold uppercase text-muted-foreground text-[11px]">Amount Paid</span>
-              <span className="font-bold text-sm text-success">Rs. {totalPaid.toLocaleString()}</span>
+              <span className="font-bold text-sm text-success">Rs. {(totalPaid || 0).toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center pt-1">
               <span className="font-sans font-bold uppercase text-muted-foreground text-[11px]">Remaining Balance</span>
-              <span className="font-bold text-base text-destructive">Rs. {remainingBalance.toLocaleString()}</span>
+              <span className="font-bold text-base text-destructive">Rs. {(remainingBalance || 0).toLocaleString()}</span>
             </div>
           </div>
         </motion.div>
@@ -504,23 +505,23 @@ export function ConnectionBottomPane({
             <div className="space-y-1 py-1 text-xs font-mono">
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground text-[11px]">OTC Setup:</span>
-                <span className="font-bold text-foreground">Rs. {connection.accounts.otc.toLocaleString()}</span>
+                <span className="font-bold text-foreground">Rs. {(accounts.otc || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground text-[11px]">Monthly Bill:</span>
-                <span className="font-bold text-foreground">Rs. {connection.accounts.monthlyBill.toLocaleString()}</span>
+                <span className="font-bold text-foreground">Rs. {(accounts.monthlyBill || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center text-success">
                 <span className="text-[11px]">Amount Paid:</span>
-                <span className="font-bold">Rs. {totalPaid.toLocaleString()}</span>
+                <span className="font-bold">Rs. {(totalPaid || 0).toLocaleString()}</span>
               </div>
             </div>
 
             <div className="pt-1.5 border-t border-border/60 flex items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-[9px] font-mono uppercase text-muted-foreground font-bold">Remaining:</span>
-                <span className={`text-xs font-mono font-black ${remainingBalance > 0 ? "text-destructive" : "text-success"}`}>
-                  Rs. {remainingBalance.toLocaleString()}
+                <span className={`text-xs font-mono font-black ${(remainingBalance || 0) > 0 ? "text-destructive" : "text-success"}`}>
+                  Rs. {(remainingBalance || 0).toLocaleString()}
                 </span>
               </div>
               {remainingBalance > 0 ? (

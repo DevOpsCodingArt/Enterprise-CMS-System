@@ -1,13 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { mockDb, SlaRule } from "@/mock/db";
+import type { SlaRule } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function SlaRulesTab() {
-  const [slaRules] = useState<SlaRule[]>(mockDb.slaRules);
+  const [slaRules, setSlaRules] = useState<SlaRule[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.governance.getSlaRules().then((data) => {
+      if (isMounted) setSlaRules(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col overflow-hidden">

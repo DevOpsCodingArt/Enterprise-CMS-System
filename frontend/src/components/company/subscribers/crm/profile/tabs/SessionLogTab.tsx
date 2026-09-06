@@ -15,7 +15,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 // Helper to format bytes
 const formatBytes = (bytes: number, decimals = 2) => {
@@ -98,7 +98,7 @@ export function SessionLogTab({ subscriber }: { subscriber: SubscriberRecord }) 
   const mockSessions: SessionRecord[] = [
     {
       id: "sess-994812",
-      username: subscriber.pppoeUsername,
+      username: subscriber.pppoeUsername || "subscriber_pppoe",
       message: "User-Request / Active Session",
       login: "Today 08:30:14 AM",
       logoff: "Active (Current)",
@@ -112,7 +112,7 @@ export function SessionLogTab({ subscriber }: { subscriber: SubscriberRecord }) 
     },
     {
       id: "sess-994109",
-      username: subscriber.pppoeUsername,
+      username: subscriber.pppoeUsername || "subscriber_pppoe",
       message: "NAS-Reboot",
       login: "Yesterday 09:12:00 AM",
       logoff: "Yesterday 11:58:30 PM",
@@ -126,7 +126,7 @@ export function SessionLogTab({ subscriber }: { subscriber: SubscriberRecord }) 
     },
     {
       id: "sess-989201",
-      username: subscriber.pppoeUsername,
+      username: subscriber.pppoeUsername || "subscriber_pppoe",
       message: "Lost-Carrier / Fiber Drop Blip",
       login: "2026-08-25 10:00:00 AM",
       logoff: "2026-08-25 04:30:15 PM",

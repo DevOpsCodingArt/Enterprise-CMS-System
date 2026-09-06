@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import { Search, DollarSign } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 export function LedgersTab({ subscriber }: { subscriber: SubscriberRecord }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const fee = subscriber.monthlyFeePkr || Number(subscriber.monthlyBilling) || 0;
 
   const ledgers = [
     {
@@ -13,7 +14,7 @@ export function LedgersTab({ subscriber }: { subscriber: SubscriberRecord }) {
       trxId: "TRX-98214-PK",
       type: "Payment (Credit)",
       refId: "INV-2026-0812",
-      amount: subscriber.monthlyFeePkr,
+      amount: fee,
       isCredit: true,
       balance: 0,
       actionBy: "Online Gateway (JazzCash)",
@@ -24,9 +25,9 @@ export function LedgersTab({ subscriber }: { subscriber: SubscriberRecord }) {
       trxId: "SYS-BILL-08",
       type: "Monthly Bill (Debit)",
       refId: "INV-2026-0812",
-      amount: subscriber.monthlyFeePkr,
+      amount: fee,
       isCredit: false,
-      balance: subscriber.monthlyFeePkr,
+      balance: fee,
       actionBy: "System (Auto Billing Cycle)",
       createdAt: "2026-08-01 12:00:00 AM",
     },
@@ -35,7 +36,7 @@ export function LedgersTab({ subscriber }: { subscriber: SubscriberRecord }) {
       trxId: "TRX-87123-PK",
       type: "Payment (Credit)",
       refId: "INV-2026-0708",
-      amount: subscriber.monthlyFeePkr,
+      amount: fee,
       isCredit: true,
       balance: 0,
       actionBy: "Online Gateway (Easypaisa)",
@@ -46,9 +47,9 @@ export function LedgersTab({ subscriber }: { subscriber: SubscriberRecord }) {
       trxId: "SYS-BILL-07",
       type: "Monthly Bill (Debit)",
       refId: "INV-2026-0708",
-      amount: subscriber.monthlyFeePkr,
+      amount: fee,
       isCredit: false,
-      balance: subscriber.monthlyFeePkr,
+      balance: fee,
       actionBy: "System (Auto Billing Cycle)",
       createdAt: "2026-07-01 12:00:00 AM",
     },
@@ -57,7 +58,7 @@ export function LedgersTab({ subscriber }: { subscriber: SubscriberRecord }) {
       trxId: "TRX-76012-PK",
       type: "Setup & Deposit (Credit)",
       refId: "INV-2026-0604",
-      amount: 5000 + subscriber.monthlyFeePkr,
+      amount: 5000 + fee,
       isCredit: true,
       balance: 0,
       actionBy: "Staff (Ali NOC Lead)",
@@ -130,13 +131,13 @@ export function LedgersTab({ subscriber }: { subscriber: SubscriberRecord }) {
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">{l.refId}</td>
                 <td className="px-4 py-3 text-right font-bold text-destructive">
-                  {!l.isCredit ? `Rs. ${l.amount.toLocaleString()}` : "-"}
+                  {!l.isCredit ? `Rs. ${(l.amount || 0).toLocaleString()}` : "-"}
                 </td>
                 <td className="px-4 py-3 text-right font-bold text-success">
-                  {l.isCredit ? `Rs. ${l.amount.toLocaleString()}` : "-"}
+                  {l.isCredit ? `Rs. ${(l.amount || 0).toLocaleString()}` : "-"}
                 </td>
                 <td className="px-4 py-3 text-right font-bold text-foreground">
-                  Rs. {l.balance.toLocaleString()}
+                  Rs. {(l.balance || 0).toLocaleString()}
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">{l.actionBy}</td>
                 <td className="px-4 py-3 text-muted-foreground">{l.createdAt}</td>

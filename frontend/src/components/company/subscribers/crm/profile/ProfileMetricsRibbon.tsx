@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Clock, HardDrive, Download, Upload, DollarSign, FileText, Ticket } from "lucide-react";
-import { SubscriberRecord } from "@/mock/db";
+import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
 export function ProfileMetricsRibbon({ subscriber }: { subscriber: SubscriberRecord }) {
   const cards = [
@@ -49,7 +49,7 @@ export function ProfileMetricsRibbon({ subscriber }: { subscriber: SubscriberRec
     },
     {
       label: "Billing Due",
-      value: subscriber.ledgerBalancePkr > 0 ? `Rs. ${subscriber.ledgerBalancePkr.toLocaleString()}` : "Rs. 0",
+      value: (subscriber.ledgerBalancePkr || 0) > 0 ? `Rs. ${(subscriber.ledgerBalancePkr || 0).toLocaleString()}` : "Rs. 0",
       unit: "",
       icon: FileText,
       color: "text-destructive",

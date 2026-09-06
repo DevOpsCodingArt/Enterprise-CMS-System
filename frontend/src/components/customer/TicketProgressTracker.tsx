@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TroubleTicket } from "@/mock/db";
+import type { TroubleTicket } from "@/types/telecom-entities.types";
 
 export interface TicketProgressTrackerProps {
   ticket: TroubleTicket;

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import type { Conversation, ChatMessage } from "@/types/chat.types";
-import { mockDb } from "@/mock/db";
 
 interface ChatState {
   conversations: Conversation[];
@@ -14,9 +13,9 @@ interface ChatState {
 }
 
 export const useChatStore = create<ChatState>((set) => ({
-  conversations: mockDb.conversations,
-  activeConversationId: "conv-01",
-  messages: mockDb.messages,
+  conversations: [],
+  activeConversationId: null,
+  messages: {},
   typingMap: {},
 
   setActiveConversationId: (activeConversationId) => set({ activeConversationId }),

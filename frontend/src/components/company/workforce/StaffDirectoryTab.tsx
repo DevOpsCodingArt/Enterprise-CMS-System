@@ -1,17 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Plus, X, CheckCircle2, UserCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SmartSearchInput } from "@/components/ui/shared/SmartSearchInput";
 import { RichEmptyState } from "@/components/ui/shared/RichEmptyState";
-import { mockDb, StaffUserRecord } from "@/mock/db";
+import type { StaffUserRecord, DepartmentRecord } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 
 export function StaffDirectoryTab() {
-  const [staffList, setStaffList] = useState<StaffUserRecord[]>(mockDb.staff);
+  const [staffList, setStaffList] = useState<StaffUserRecord[]>([]);
+  const [departments, setDepartments] = useState<DepartmentRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchStaff, setSearchStaff] = useState("");
   const [isProvisionStaffOpen, setIsProvisionStaffOpen] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.workforce
+      .getStaff()
+      .then((data) => {
+        if (isMounted) setStaffList(data);
+      })
+      .catch((err) => console.error("[Staff] Fetch failed:", err))
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+
+    telecomService.workforce
+      .getDepartments()
+      .then((depts) => {
+        if (isMounted) setDepartments(depts);
+      })
+      .catch((err) => console.error("[Staff] Depts fetch failed:", err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // New Staff Form State
   const [newStaffName, setNewStaffName] = useState("");
@@ -214,7 +241,7 @@ export function StaffDirectoryTab() {
                   onChange={(e) => setNewStaffDept(e.target.value)}
                   className="w-full bg-muted/30 rounded-lg p-2 border border-border text-foreground"
                 >
-                  {mockDb.departments.map((d) => (
+                  {departments.map((d) => (
                     <option key={d.id} value={d.name}>
                       {d.name}
                     </option>

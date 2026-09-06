@@ -1,15 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { mockDb, ShiftRoster } from "@/mock/db";
+import type { ShiftRoster } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function ShiftRostersTab() {
-  const [shiftList] = useState<ShiftRoster[]>(mockDb.shifts);
+  const [shiftList, setShiftList] = useState<ShiftRoster[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.workforce.getShifts().then((data) => {
+      if (isMounted) setShiftList(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col overflow-hidden">

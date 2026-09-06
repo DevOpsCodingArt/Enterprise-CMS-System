@@ -1,36 +1,67 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, CheckCircle2, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { mockDb, CannedTemplate } from "@/mock/db";
+import type { CannedTemplate } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 import { staggerContainer, staggerItem, modalVariants } from "@/lib/motion";
 
 export function CannedShortcutsTab() {
-  const [cannedList, setCannedList] = useState<CannedTemplate[]>(mockDb.cannedShortcuts);
+  const [cannedList, setCannedList] = useState<CannedTemplate[]>([]);
   const [isCreateCannedOpen, setIsCreateCannedOpen] = useState(false);
   const [newShortcut, setNewShortcut] = useState("");
   const [newLabel, setNewLabel] = useState("");
   const [newTemplate, setNewTemplate] = useState("");
   const [newCategory, setNewCategory] = useState<"NOC Diagnostic" | "Billing" | "Field Dispatch" | "General">("General");
 
-  const handleAddCanned = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newCanned: CannedTemplate = {
-      id: `can-${Date.now()}`,
-      shortcut: newShortcut.startsWith("/") ? newShortcut : `/${newShortcut}`,
-      label: newLabel || "Quick Shortcut",
-      category: newCategory,
-      templateText: newTemplate,
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.governance.getCannedShortcuts().then((data) => {
+      if (isMounted) {
+        setCannedList(
+          data.map((d: any) => ({
+            ...d,
+            label: d.title || d.label || d.shortcut,
+            templateText: d.body || d.content || d.templateText,
+          }))
+        );
+      }
+    });
+    return () => {
+      isMounted = false;
     };
+  }, []);
 
-    setCannedList([...cannedList, newCanned]);
-    setIsCreateCannedOpen(false);
-    setNewShortcut("");
-    setNewLabel("");
-    setNewTemplate("");
+  const handleAddCanned = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formattedShortcut = newShortcut.startsWith("/") ? newShortcut : `/${newShortcut}`;
+    try {
+      const created = await telecomService.governance.createCannedShortcut({
+        shortcut: formattedShortcut,
+        title: newLabel || "Quick Shortcut",
+        body: newTemplate,
+        category: newCategory,
+      });
+
+      const newCanned: CannedTemplate = {
+        id: created.id || `can-${Date.now()}`,
+        shortcut: formattedShortcut,
+        label: newLabel || "Quick Shortcut",
+        category: newCategory,
+        templateText: newTemplate,
+      };
+
+      setCannedList((prev) => [...prev, newCanned]);
+      setIsCreateCannedOpen(false);
+      setNewShortcut("");
+      setNewLabel("");
+      setNewTemplate("");
+    } catch (err) {
+      console.error("Failed to create canned shortcut:", err);
+    }
   };
 
   return (

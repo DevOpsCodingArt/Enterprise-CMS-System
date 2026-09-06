@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Plus, Download, Upload, Flame, Edit, X, CheckCircle2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { mockDb, TariffPackage } from "@/mock/db";
+import type { TariffPackage } from "@/types/telecom-entities.types";
+import { telecomService } from "@/services/telecom.service";
 
 export function TariffPackagesView() {
-  const [packagesList, setPackagesList] = useState<TariffPackage[]>(mockDb.packages);
+  const [packagesList, setPackagesList] = useState<TariffPackage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchPackage, setSearchPackage] = useState("");
   const [isCreatePackageOpen, setIsCreatePackageOpen] = useState(false);
   const [newPkgName, setNewPkgName] = useState("");
@@ -16,6 +18,22 @@ export function TariffPackagesView() {
   const [newPkgPrice, setNewPkgPrice] = useState(3850);
   const [newPkgContention, setNewPkgContention] = useState("1:4 Shared");
   const [newPkgIpPool, setNewPkgIpPool] = useState("pool_residential_dhcp");
+
+  useEffect(() => {
+    let isMounted = true;
+    telecomService.packages
+      .list()
+      .then((data) => {
+        if (isMounted) setPackagesList(data);
+      })
+      .catch((err) => console.error("[Packages] Fetch failed:", err))
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col overflow-hidden">
@@ -141,21 +159,23 @@ export function TariffPackagesView() {
             </div>
 
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                const newP: TariffPackage = {
-                  id: `pkg-${Date.now()}`,
-                  name: newPkgName || "Custom High-Speed Fiber",
-                  speedDownMbps: Number(newPkgSpeedDown) || 50,
-                  speedUpMbps: Number(newPkgSpeedUp) || 50,
-                  contentionRatio: newPkgContention,
-                  pricePkrMonthly: Number(newPkgPrice) || 3850,
-                  ipPool: newPkgIpPool,
-                  activeSubscribers: 0,
-                };
-                setPackagesList([...packagesList, newP]);
-                setIsCreatePackageOpen(false);
-                setNewPkgName("");
+                try {
+                  const created = await telecomService.packages.create({
+                    name: newPkgName,
+                    speedDownMbps: Number(newPkgSpeedDown) || 50,
+                    speedUpMbps: Number(newPkgSpeedUp) || 50,
+                    contentionRatio: newPkgContention,
+                    pricePkrMonthly: Number(newPkgPrice) || 3850,
+                    ipPool: newPkgIpPool,
+                  });
+                  setPackagesList((prev) => [created, ...prev]);
+                  setIsCreatePackageOpen(false);
+                  setNewPkgName("");
+                } catch (err) {
+                  console.error("Failed to create package:", err);
+                }
               }}
               className="space-y-3 text-xs"
             >

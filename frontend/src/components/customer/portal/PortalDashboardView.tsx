@@ -23,7 +23,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/toast";
 import { TicketProgressTracker } from "@/components/customer/TicketProgressTracker";
 import { PaymentModal } from "@/components/customer/PaymentModal";
-import { mockDb } from "@/mock/db";
+import { telecomService } from "@/services/telecom.service";
+import type { TroubleTicket } from "@/types/telecom-entities.types";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 
 export function PortalDashboardView() {
@@ -32,17 +33,40 @@ export function PortalDashboardView() {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [complaintCategory, setComplaintCategory] = useState("Optical / No Internet");
   const [complaintDesc, setComplaintDesc] = useState("");
+  const [activeTicket, setActiveTicket] = useState<TroubleTicket | null>(null);
 
-  const activeTicket = mockDb.tickets[0]; // Active complaint #TK-8842
+  React.useEffect(() => {
+    telecomService.tickets
+      .list()
+      .then((tickets) => {
+        if (tickets && tickets.length > 0) {
+          setActiveTicket(tickets[0]);
+        }
+      })
+      .catch((err) => console.error("Error loading tickets:", err));
+  }, []);
 
-  const handleLodgeComplaint = (e: React.FormEvent) => {
+  const handleLodgeComplaint = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success(
-      "Complaint Lodged",
-      "Ticket #TK-8902 registered. Assigned to Islamabad HQ Field Team."
-    );
-    setIsComplaintModalOpen(false);
-    setComplaintDesc("");
+    try {
+      const newTicket = await telecomService.tickets.create({
+        category: complaintCategory,
+        description: complaintDesc,
+        priority: "High",
+        title: `${complaintCategory} Complaint`,
+      });
+      toast.success(
+        "Complaint Lodged",
+        `Ticket #${newTicket?.ticketNo || newTicket?.ticketNumber || "TK-NEW"} registered in system.`
+      );
+      if (newTicket) {
+        setActiveTicket(newTicket);
+      }
+      setIsComplaintModalOpen(false);
+      setComplaintDesc("");
+    } catch (err: any) {
+      toast.error("Failed to lodge complaint", err?.message || "Server error");
+    }
   };
 
   return (

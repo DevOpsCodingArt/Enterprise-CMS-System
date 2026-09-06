@@ -1,0 +1,72 @@
+- generic [active] [ref=f5e1]:
+  - generic [ref=f5e2]:
+    - generic [ref=f5e3]:
+      - img "Enterprise Software Abstract Light Wave" [ref=f5e5]
+      - generic [ref=f5e7]:
+        - generic [ref=f5e8]:
+          - generic [ref=f5e9]: Unified Cloud Platform
+          - blockquote [ref=f5e14]:
+            - paragraph [ref=f5e15]: “Simplicity is prerequisite for reliability.”
+            - contentinfo [ref=f5e16]: — Edsger W. Dijkstra
+        - generic [ref=f5e18]:
+          - paragraph [ref=f5e19]: A unified enterprise ecosystem designed to streamline business operations, automate workflows, and deliver real-time operational intelligence across any organization.
+          - generic [ref=f5e20]:
+            - generic [ref=f5e21]: 99.99% Uptime
+            - generic [ref=f5e23]: •
+            - generic [ref=f5e24]: Enterprise Security
+            - generic [ref=f5e25]: •
+            - generic [ref=f5e26]: Scalable Cloud
+    - generic [ref=f5e27]:
+      - button "Dark" [ref=f5e29] [cursor=pointer]
+      - generic [ref=f5e34]:
+        - generic [ref=f5e35]:
+          - generic [ref=f5e36]:
+            - generic [ref=f5e37]: P1
+            - generic [ref=f5e38]: Prime One
+          - generic [ref=f5e39]:
+            - heading "Welcome back" [level=1] [ref=f5e40]
+            - paragraph [ref=f5e41]: Sign in to access your operations console
+        - generic [ref=f5e42]:
+          - generic [ref=f5e43]:
+            - generic [ref=f5e44]: Select Demo Account
+            - generic [ref=f5e48]: 3 Core Systems
+          - generic [ref=f5e49]:
+            - button "Platform Owner /platform Super Admin superadmin@primeone.io" [ref=f5e50] [cursor=pointer]:
+              - generic [ref=f5e51]:
+                - generic [ref=f5e52]:
+                  - generic [ref=f5e53]: Platform Owner
+                  - generic [ref=f5e58]: /platform
+                - paragraph [ref=f5e59]: Super Admin
+              - paragraph [ref=f5e60]: superadmin@primeone.io
+            - button "Company Owner /company Tariq Mehmood admin@primenetworks.pk" [ref=f5e61] [cursor=pointer]:
+              - generic [ref=f5e62]:
+                - generic [ref=f5e63]:
+                  - generic [ref=f5e64]: Company Owner
+                  - generic [ref=f5e70]: /company
+                - paragraph [ref=f5e71]: Tariq Mehmood
+              - paragraph [ref=f5e72]: admin@primenetworks.pk
+            - button "Customer /portal Ali Khan ali.khan@gmail.com" [ref=f5e73] [cursor=pointer]:
+              - generic [ref=f5e74]:
+                - generic [ref=f5e75]:
+                  - generic [ref=f5e76]: Customer
+                  - generic [ref=f5e81]: /portal
+                - paragraph [ref=f5e82]: Ali Khan
+              - paragraph [ref=f5e83]: ali.khan@gmail.com
+        - generic [ref=f5e84]:
+          - generic [ref=f5e85]:
+            - generic [ref=f5e86]: Email or Username
+            - textbox "name@example.com or username" [ref=f5e88]
+          - generic [ref=f5e89]:
+            - generic [ref=f5e90]:
+              - generic [ref=f5e91]: Password
+              - button "Forgot password?" [ref=f5e92] [cursor=pointer]
+            - generic [ref=f5e93]:
+              - textbox "••••••••••••" [ref=f5e94]
+              - button [ref=f5e95] [cursor=pointer]
+          - generic [ref=f5e100] [cursor=pointer]:
+            - checkbox "Remember this device" [checked] [ref=f5e101]
+            - generic [ref=f5e102]: Remember this device
+          - button "Sign In to Console" [ref=f5e104] [cursor=pointer]
+          - generic [ref=f5e109]: 256-Bit Encrypted Enterprise Gateway
+      - contentinfo [ref=f5e115]: © 2026 Zayan Sheikh. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=f5e121] [cursor=pointer]
