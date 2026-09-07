@@ -117,11 +117,9 @@ export function SidebarNav({
         },
         {
           id: "staff",
-          label: "Staff Directory (52)",
+          label: "Staff Directory",
           href: "/company/staff?tab=staff",
           icon: UserCheck,
-          badge: "52",
-          badgeVariant: "secondary",
         },
         {
           id: "shifts",
