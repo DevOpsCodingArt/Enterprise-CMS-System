@@ -4,41 +4,39 @@ import React, { useState } from "react";
 import { Search, Ticket, AlertCircle } from "lucide-react";
 import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
-export function TicketsTab({ subscriber }: { subscriber: SubscriberRecord }) {
+export function TicketsTab({
+  subscriber,
+  recentTickets,
+}: {
+  subscriber: SubscriberRecord;
+  recentTickets?: any[];
+}) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const tickets = [
-    {
-      id: "TK-99482",
-      title: "High Attenuation / Red LOS Alarm on Drop FAT-F10-12",
-      totalReply: 4,
-      priority: "Urgent",
-      category: "Optical Degradation",
-      status: "In Progress",
-      createdAt: "Today 09:15 AM",
-    },
-    {
-      id: "TK-98120",
-      title: "ONT Power Adapter Replacement Request",
-      totalReply: 2,
-      priority: "Medium",
-      category: "CPE Hardware",
-      status: "Closed",
-      createdAt: "2026-07-14 02:20 PM",
-    },
-    {
-      id: "TK-92041",
-      title: "Static IP Binding Verification for CCTV NVR",
-      totalReply: 6,
-      priority: "Low",
-      category: "Network Configuration",
-      status: "Closed",
-      createdAt: "2026-06-20 11:05 AM",
-    },
-  ];
+  const realTickets = (recentTickets && recentTickets.length > 0)
+    ? recentTickets.map((t: any) => ({
+        id: t.ticketNumber || t.id.slice(0, 10),
+        title: t.title,
+        totalReply: 2,
+        priority: t.priority ? t.priority.charAt(0).toUpperCase() + t.priority.slice(1) : "Normal",
+        category: t.category ? t.category.replace(/_/g, " ").toUpperCase() : "GENERAL",
+        status: t.status === "in_progress" ? "In Progress" : t.status === "resolved" ? "Resolved" : t.status === "closed" ? "Closed" : "Open",
+        createdAt: new Date(t.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      }))
+    : [
+        {
+          id: "INC-260902-0001",
+          title: "Red LOS Light - Subscriber Drop Cable Break in Saddar",
+          totalReply: 4,
+          priority: "Urgent",
+          category: "Optical Degradation",
+          status: "In Progress",
+          createdAt: "Today 09:15 AM",
+        },
+      ];
 
-  const filteredTickets = tickets.filter(
-    (t) =>
+  const filteredTickets = realTickets.filter(
+    (t: any) =>
       t.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       t.category.toLowerCase().includes(searchTerm.toLowerCase())

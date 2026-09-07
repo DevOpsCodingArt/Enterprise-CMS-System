@@ -42,7 +42,10 @@ import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toast";
 import { telecomService } from "@/services/telecom.service";
+import { socketService, type NocTelemetryAlert } from "@/services/socket.service";
 import type { SubscriberRecord, CannedTemplate } from "@/types/telecom-entities.types";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { NewConversationModal } from "./NewConversationModal";
 import { cn } from "@/lib/utils";
 
 interface ConversationThread {
@@ -56,23 +59,6 @@ interface ConversationThread {
   category: "Fiber Outage" | "Billing Query" | "Speed Upgrade" | "General";
   isOnline: boolean;
 }
-
-const DEFAULT_SUBSCRIBER: SubscriberRecord = {
-  id: "sub-ali-01",
-  customerCode: "CUS-99482",
-  fullName: "Ali Hassan",
-  cnic: "61101-1234567-1",
-  phone: "+92 300 1234567",
-  address: "House 14-B, Street 32, Sector F-10/1, Islamabad",
-  branchName: "Islamabad Core (F-10 HQ)",
-  packageName: "Fiber Pro 50 Mbps",
-  monthlyFeePkr: 3500,
-  ledgerBalancePkr: 0,
-  pppoeUsername: "ali_hassan_f10",
-  opticalRxDbm: -27.4,
-  opticalStatus: "warning",
-  status: "active",
-};
 
 interface ChatMessage {
   id: string;
@@ -88,101 +74,162 @@ interface ChatMessage {
 
 export function LiveChatWorkspace() {
   const toast = useToast();
+  const currentUser = useAuthStore((s) => s.user);
+  const accessToken = useAuthStore((s) => s.accessToken);
   const [activeFilter, setActiveFilter] = useState<"all" | "unread" | "mine" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isInternalNote, setIsInternalNote] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [customerTyping, setCustomerTyping] = useState<string | null>(null);
+  const [activeTelemetryAlert, setActiveTelemetryAlert] = useState<NocTelemetryAlert | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatInputRef = useRef<HTMLInputElement>(null);
 
   // Customer 360 / Contact Info Drawer - closed by default
   const [isCustomerHudOpen, setIsCustomerHudOpen] = useState(false);
 
-  // Realistic WhatsApp/Telegram-style conversation threads
-  const [threads, setThreads] = useState<ConversationThread[]>([
-    {
-      id: "thread-1",
-      subscriber: DEFAULT_SUBSCRIBER,
-      channel: "whatsapp",
-      lastMessage: "Our technician Usman is en route with OTDR meter.",
-      lastMessageTime: "10:43 AM",
-      unreadCount: 0,
-      status: "mine",
-      category: "Fiber Outage",
-      isOnline: true,
-    },
-    {
-      id: "thread-2",
-      subscriber: {
-        ...DEFAULT_SUBSCRIBER,
-        id: "sub-farooq-02",
-        customerCode: "CUS-88412",
-        fullName: "Dr. Farooq Khan",
-        phone: "+92 321 9876543",
-        packageName: "Ultra Giga 100 Mbps",
-      },
-      channel: "whatsapp",
-      lastMessage: "I want to upgrade my package to 100 Mbps Gigabit plan.",
-      lastMessageTime: "10:20 AM",
-      unreadCount: 2,
-      status: "unassigned",
-      category: "Speed Upgrade",
-      isOnline: true,
-    },
-    {
-      id: "thread-3",
-      subscriber: {
-        ...DEFAULT_SUBSCRIBER,
-        id: "sub-bilal-03",
-        customerCode: "CUS-77391",
-        fullName: "Bilal Qureshi",
-        phone: "+92 333 4567890",
-        packageName: "Fiber Starter 25 Mbps",
-      },
-      channel: "mobile_app",
-      lastMessage: "Invoice for August has been settled via JazzCash.",
-      lastMessageTime: "09:15 AM",
-      unreadCount: 0,
-      status: "mine",
-      category: "Billing Query",
-      isOnline: false,
-    },
-    {
-      id: "thread-4",
-      subscriber: {
-        ...DEFAULT_SUBSCRIBER,
-        id: "sub-zainab-04",
-        customerCode: "CUS-66280",
-        fullName: "Zainab Bibi",
-        phone: "+92 345 6789012",
-        packageName: "Fiber Pro 50 Mbps",
-      },
-      channel: "web_chat",
-      lastMessage: "Router reconnected successfully. Thank you for your support!",
-      lastMessageTime: "Yesterday",
-      unreadCount: 0,
-      status: "resolved",
-      category: "General",
-      isOnline: false,
-    },
-  ]);
-
+  // Active conversation threads from PostgreSQL
+  const [threads, setThreads] = useState<ConversationThread[]>([]);
   const [cannedShortcuts, setCannedShortcuts] = useState<CannedTemplate[]>([]);
+  const [selectedThreadId, setSelectedThreadId] = useState<string>("");
+  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
 
+  const selectedThread = threads.find((t) => t.id === selectedThreadId) || (threads.length > 0 ? threads[0] : null);
+  const selectedCustomer = selectedThread?.subscriber;
+
+  // Active message history for current thread
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  const handleConversationCreated = (conv: any) => {
+    const rxSignal = conv.customerSignal != null ? Number(conv.customerSignal) : null;
+    const newThread: ConversationThread = {
+      id: conv.id,
+      subscriber: {
+        id: conv.customerId,
+        customerCode: conv.customerCode || "—",
+        fullName: conv.customerName || "Customer",
+        cnic: conv.customerCnic || "—",
+        phone: conv.customerPhone || "—",
+        address:
+          conv.customerAddress ||
+          (conv.customerArea
+            ? `${conv.customerArea}, ${conv.customerCity || "Islamabad"}`
+            : conv.customerCity || "—"),
+        branchName: conv.branchName || "Main Office",
+        packageName: conv.customerPackage || "Fiber Broadband",
+        monthlyFeePkr: Number(conv.customerMonthlyBilling) || 0,
+        ledgerBalancePkr: 0,
+        pppoeUsername: conv.customerUsername || "—",
+        opticalRxDbm: rxSignal ?? -19.5,
+        opticalStatus:
+          rxSignal != null
+            ? rxSignal < -25
+              ? "critical"
+              : rxSignal < -22
+              ? "warning"
+              : "optimal"
+            : "optimal",
+        status: "active",
+        oltPonPort: conv.customerPonPort || "—",
+        macAddress: conv.customerMac || "—",
+        onuSerial: conv.customerMac || "—",
+        currentIp: conv.customerIp || "—",
+      },
+      channel: conv.channel || "web_chat",
+      lastMessage: conv.subject || "Customer inquiry",
+      lastMessageTime: "Just now",
+      unreadCount: 0,
+      status: "mine",
+      category:
+        conv.subject?.toLowerCase().includes("optical") || conv.subject?.toLowerCase().includes("speed")
+          ? "Fiber Outage"
+          : conv.subject?.toLowerCase().includes("billing")
+          ? "Billing Query"
+          : "General",
+      isOnline: true,
+    };
+
+    setThreads((prev) => {
+      const exists = prev.some((t) => t.id === conv.id);
+      if (exists) {
+        return prev.map((t) => (t.id === conv.id ? newThread : t));
+      }
+      return [newThread, ...prev];
+    });
+
+    setSelectedThreadId(conv.id);
+    toast.success("Chat Started", `Active conversation opened with ${conv.customerName || "subscriber"}.`);
+    setTimeout(() => {
+      chatInputRef.current?.focus();
+    }, 150);
+  };
+
+  // 1. Initial Data Fetch (Conversations & Canned Shortcuts)
   useEffect(() => {
-    telecomService.subscribers
-      .list()
-      .then((subs) => {
-        if (subs && subs.length > 0) {
-          setThreads((prev) =>
-            prev.map((t, idx) => ({
-              ...t,
-              subscriber: subs[idx % subs.length] || t.subscriber,
-            }))
-          );
+    setIsLoading(true);
+    telecomService.chat
+      .getConversations()
+      .then((dbConvs) => {
+        if (dbConvs && dbConvs.length > 0) {
+          const liveThreads: ConversationThread[] = dbConvs.map((c: any, idx: number) => {
+            const rxSignal = c.customerSignal != null ? Number(c.customerSignal) : null;
+            return {
+              id: c.id,
+              subscriber: {
+                id: c.customerId || `sub-${idx}`,
+                customerCode: c.customerCode || "—",
+                fullName: c.customerName || "Subscriber",
+                cnic: c.customerCnic || "—",
+                phone: c.customerPhone || "—",
+                address: c.customerAddress || (c.customerArea ? `${c.customerArea}, ${c.customerCity || "Islamabad"}` : (c.customerCity || "—")),
+                branchName: c.branchName || "Main Office",
+                packageName: c.customerPackage || "Fiber Broadband",
+                monthlyFeePkr: Number(c.customerMonthlyBilling) || 0,
+                ledgerBalancePkr: 0,
+                pppoeUsername: c.customerUsername || "—",
+                opticalRxDbm: rxSignal ?? -19.5,
+                opticalStatus:
+                  rxSignal != null
+                    ? rxSignal < -25
+                      ? "critical"
+                      : rxSignal < -22
+                      ? "warning"
+                      : "optimal"
+                    : "optimal",
+                status: "active",
+                oltPonPort: c.customerPonPort || "—",
+                macAddress: c.customerMac || "—",
+                onuSerial: c.customerMac || "—",
+                currentIp: c.customerIp || "—",
+              },
+              channel: c.channel || (c.metadata?.channel) || "web_chat",
+              lastMessage: c.subject || "Customer inquiry",
+              lastMessageTime: new Date(c.lastMessageAt || c.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              unreadCount: c.unreadCountStaff || 0,
+              status: "mine",
+              category: c.subject?.toLowerCase().includes("attenuation") || c.subject?.toLowerCase().includes("speed") || c.subject?.toLowerCase().includes("loss")
+                ? "Fiber Outage"
+                : c.subject?.toLowerCase().includes("billing") || c.subject?.toLowerCase().includes("invoice")
+                ? "Billing Query"
+                : c.subject?.toLowerCase().includes("upgrade")
+                ? "Speed Upgrade"
+                : "General",
+              isOnline: true,
+            };
+          });
+          setThreads(liveThreads);
+          setSelectedThreadId((prev) => prev || liveThreads[0].id);
+        } else {
+          setThreads([]);
         }
       })
-      .catch((err) => console.error("Failed to load subscribers in chat:", err));
+      .catch((err) => console.error("Failed to load conversations in chat:", err))
+      .finally(() => setIsLoading(false));
 
     telecomService.governance
       .getCannedShortcuts()
@@ -194,86 +241,147 @@ export function LiveChatWorkspace() {
       .catch((err) => console.error("Failed to load canned shortcuts in chat:", err));
   }, []);
 
-  const [selectedThreadId, setSelectedThreadId] = useState<string>("thread-1");
-  const selectedThread = threads.find((t) => t.id === selectedThreadId) || threads[0];
-  const selectedCustomer = selectedThread?.subscriber || DEFAULT_SUBSCRIBER;
+  // 2. Real-Time WebSocket Connection & Message Stream
+  useEffect(() => {
+    if (accessToken) {
+      socketService.connect(accessToken);
+    }
+  }, [accessToken]);
 
-  // Active message history for current thread
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "msg-1",
-      sender: "customer",
-      senderName: "Ali Hassan",
-      content: "Salam, my internet stopped working about 10 minutes ago and the LOS light on the optical router is blinking red.",
-      isInternalNote: false,
-      time: "10:40 AM",
-      status: "read",
-      type: "text",
-    },
-    {
-      id: "msg-2",
-      sender: "system",
-      senderName: "SmartOLT Radar",
-      content: "Optical RX signal dropped below nominal threshold to -27.4 dBm on Slot 0/2, PON-04 (High Attenuation detected).",
-      isInternalNote: false,
-      time: "10:41 AM",
-      status: "read",
-      type: "system",
-    },
-    {
-      id: "msg-3",
-      sender: "customer",
-      senderName: "Ali Hassan",
-      content: "Voice note from customer describing router lights.",
-      isInternalNote: false,
-      time: "10:41 AM",
-      status: "read",
-      type: "voice",
-      audioDuration: "0:14",
-    },
-    {
-      id: "msg-4",
-      sender: "staff",
-      senderName: "Eng. Moiz Ahmad",
-      content: "Checked FAT-12 port 3 on pole. Field Splicer Usman (Van #04) is en route with OTDR meter.",
-      isInternalNote: true,
-      time: "10:42 AM",
-      status: "read",
-      type: "text",
-    },
-    {
-      id: "msg-5",
-      sender: "staff",
-      senderName: "Eng. Moiz Ahmad (NOC)",
-      content: "Walaikum Assalam Ali! We verified the optical drop on your sector. Ticket #TK-8842 has been dispatched and Splicer Usman is 4 minutes away.",
-      isInternalNote: false,
-      time: "10:43 AM",
-      status: "delivered",
-      type: "text",
-    },
-  ]);
+  useEffect(() => {
+    if (!selectedThreadId) return;
 
-  const handleSendMessage = () => {
-    if (!chatInput.trim()) return;
+    if (accessToken) {
+      socketService.connect(accessToken);
+    }
+    socketService.joinConversation(selectedThreadId);
 
-    const newMsg: ChatMessage = {
+    // Fetch message history for selected conversation
+    telecomService.chat
+      .getMessages(selectedThreadId)
+      .then((dbMsgs) => {
+        if (dbMsgs && dbMsgs.length > 0) {
+          const formatted: ChatMessage[] = dbMsgs.map((m: any) => ({
+            id: m.id,
+            sender: m.senderType === "customer" ? "customer" : m.senderType === "system" ? "system" : "staff",
+            senderName: m.senderName || (m.senderType === "customer" ? (selectedCustomer?.fullName || "Customer") : (currentUser?.name || "Support Staff")),
+            content: m.content || "",
+            isInternalNote: Boolean(m.isInternalNote),
+            time: new Date(m.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            status: m.status || "delivered",
+            type: m.messageType || "text",
+          }));
+          setMessages(formatted);
+        } else {
+          setMessages([]);
+        }
+      })
+      .catch((err) => console.error("Failed to load messages:", err));
+
+    // Listen to incoming messages
+    const unsubMsg = socketService.onNewMessage((msg) => {
+      if (msg.conversationId === selectedThreadId) {
+        setMessages((prev) => {
+          if (prev.some((existing) => existing.id === msg.id)) return prev;
+          return [
+            ...prev,
+            {
+              id: msg.id,
+              sender: msg.senderType === "customer" ? "customer" : msg.senderType === "system" ? "system" : "staff",
+              senderName: msg.senderName || (msg.senderType === "customer" ? "Customer" : "Support Agent"),
+              content: msg.content,
+              isInternalNote: Boolean(msg.isInternalNote),
+              time: new Date(msg.createdAt || Date.now()).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              status: msg.status || "delivered",
+              type: msg.messageType || "text",
+            },
+          ];
+        });
+      }
+
+      // Update thread lastMessage snippet in sidebar
+      setThreads((prev) =>
+        prev.map((t) =>
+          t.id === msg.conversationId
+            ? { ...t, lastMessage: msg.content, lastMessageTime: "Just now" }
+            : t
+        )
+      );
+    });
+
+    // Listen for customer typing indicator
+    const unsubTyping = socketService.onTyping((data) => {
+      if (data.conversationId === selectedThreadId) {
+        setCustomerTyping(data.isTyping ? data.userName || "Customer" : null);
+      }
+    });
+
+    // Listen for NOC telemetry alerts
+    const unsubAlert = socketService.onTelemetryAlert((alert) => {
+      setActiveTelemetryAlert(alert);
+      toast.warning("NOC Fiber Telemetry Alert", alert.message);
+    });
+
+    return () => {
+      socketService.leaveConversation(selectedThreadId);
+      unsubMsg();
+      unsubTyping();
+      unsubAlert();
+    };
+  }, [selectedThreadId]);
+
+  const handleSendMessage = async () => {
+    if (!chatInput.trim() || !selectedThreadId) return;
+    const content = chatInput.trim();
+    setChatInput("");
+    socketService.sendTyping(selectedThreadId, false);
+
+    const staffDisplayName = currentUser?.name || "Support Operations";
+    const optimisticMsg: ChatMessage = {
       id: `msg-${Date.now()}`,
       sender: "staff",
-      senderName: isInternalNote ? "Eng. Moiz Ahmad (Private Note)" : "Eng. Moiz Ahmad (NOC)",
-      content: chatInput.trim(),
+      senderName: isInternalNote ? `${staffDisplayName} (Private Note)` : staffDisplayName,
+      content,
       isInternalNote,
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       status: "sent",
       type: "text",
     };
 
-    setMessages((prev) => [...prev, newMsg]);
-    setChatInput("");
+    setMessages((prev) => [...prev, optimisticMsg]);
+
+    const payload = {
+      conversationId: selectedThreadId,
+      content,
+      isInternalNote,
+      messageType: "text" as const,
+      senderType: "staff" as const,
+      senderName: staffDisplayName,
+    };
+
+    try {
+      if (socketService.isConnected()) {
+        await socketService.sendMessage(payload);
+      } else {
+        await telecomService.chat.sendMessage(payload);
+      }
+    } catch (err) {
+      console.warn("Socket send failed, falling back to REST API:", err);
+      try {
+        await telecomService.chat.sendMessage(payload);
+      } catch (restErr) {
+        console.error("Failed to send message via both socket and REST:", restErr);
+        toast.error("Delivery Failed", "Could not send message. Please check your connection.");
+      }
+    }
   };
 
   const handleCannedInsert = (template?: string) => {
-    if (!template) return;
-    setChatInput(template.replace("{{optical_signal}}", `${selectedCustomer.opticalRxDbm}`));
+    if (!template || !selectedCustomer) return;
+    setChatInput(template.replace("{{optical_signal}}", selectedCustomer.opticalRxDbm != null ? `${selectedCustomer.opticalRxDbm}` : "N/A"));
   };
 
   const filteredThreads = threads.filter((t) => {
@@ -299,15 +407,15 @@ export function LiveChatWorkspace() {
         <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-card shrink-0">
           <div className="flex items-center gap-3">
             <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground font-heading font-extrabold text-sm shadow-xs">
-              M
+              {(currentUser?.name || "S").charAt(0).toUpperCase()}
               <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading font-extrabold text-sm text-foreground leading-tight">
-                Chats
+                Chats Desk
               </span>
               <span className="text-[10px] text-muted-foreground font-mono">
-                Eng. Moiz (NOC Lead)
+                {currentUser?.name || "Support Lead"}
               </span>
             </div>
           </div>
@@ -315,8 +423,9 @@ export function LiveChatWorkspace() {
           <div className="flex items-center gap-1">
             <Tooltip content="New Conversation" position="bottom">
               <button
-                onClick={() => toast.info("New Chat", "Select customer from subscriber directory.")}
+                onClick={() => setIsNewChatModalOpen(true)}
                 className="p-2 rounded-xl text-muted-foreground hover:bg-card-subtle hover:text-foreground transition-colors cursor-pointer"
+                aria-label="Start new customer chat"
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -388,57 +497,66 @@ export function LiveChatWorkspace() {
 
         {/* 4. WhatsApp / Telegram Thread List */}
         <div className="flex-1 overflow-y-auto divide-y divide-border/40 custom-scrollbar">
-          {filteredThreads.map((thread) => {
-            const isSelected = selectedThreadId === thread.id;
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center h-48 p-6 text-center text-xs text-muted-foreground space-y-2">
+              <RefreshCw className="h-4 w-4 animate-spin text-primary" />
+              <span>Loading conversations...</span>
+            </div>
+          ) : filteredThreads.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-48 p-6 text-center text-xs text-muted-foreground space-y-1">
+              <p className="font-bold text-foreground">No conversations found</p>
+              <p className="text-[11px]">Customer inquiries will appear here.</p>
+            </div>
+          ) : (
+            filteredThreads.map((thread) => {
+              const isSelected = selectedThreadId === thread.id;
 
-            return (
-              <button
-                key={thread.id}
-                onClick={() => setSelectedThreadId(thread.id)}
-                className={cn(
-                  "w-full text-left p-3.5 transition-all cursor-pointer flex items-center gap-3 relative",
-                  isSelected
-                    ? "bg-primary/10 border-l-4 border-primary"
-                    : "hover:bg-card-hover"
-                )}
-              >
-                {/* Avatar */}
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary font-heading font-extrabold text-sm shrink-0 border border-primary/25 shadow-2xs">
-                  {thread.subscriber.fullName.charAt(0)}
-                  {thread.isOnline && (
-                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
+              return (
+                <button
+                  key={thread.id}
+                  onClick={() => setSelectedThreadId(thread.id)}
+                  className={cn(
+                    "w-full text-left p-3.5 transition-all cursor-pointer flex items-center gap-3 relative",
+                    isSelected
+                      ? "bg-primary/10 border-l-4 border-primary"
+                      : "hover:bg-card-hover"
                   )}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-0.5">
-                    <span className="font-heading font-bold text-xs text-foreground truncate">
-                      {thread.subscriber.fullName}
-                    </span>
-                    <span className="text-[10px] font-mono text-muted-foreground shrink-0 ml-1">
-                      {thread.lastMessageTime}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1 min-w-0 flex-1 mr-2">
-                      {thread.id === "thread-1" && (
-                        <CheckCheck className="h-3.5 w-3.5 text-info shrink-0" />
-                      )}
-                      <span className="truncate text-[11px]">{thread.lastMessage}</span>
-                    </div>
-
-                    {thread.unreadCount > 0 && (
-                      <span className="flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-primary-foreground font-mono text-[9.5px] font-bold shrink-0 shadow-2xs">
-                        {thread.unreadCount}
-                      </span>
+                >
+                  {/* Avatar */}
+                  <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary font-heading font-extrabold text-sm shrink-0 border border-primary/25 shadow-2xs">
+                    {thread.subscriber.fullName.charAt(0)}
+                    {thread.isOnline && (
+                      <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
                     )}
                   </div>
-                </div>
-              </button>
-            );
-          })}
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <span className="font-heading font-bold text-xs text-foreground truncate">
+                        {thread.subscriber.fullName}
+                      </span>
+                      <span className="text-[10px] font-mono text-muted-foreground shrink-0 ml-1">
+                        {thread.lastMessageTime}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1 min-w-0 flex-1 mr-2">
+                        <span className="truncate text-[11px]">{thread.lastMessage}</span>
+                      </div>
+
+                      {thread.unreadCount > 0 && (
+                        <span className="flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-primary-foreground font-mono text-[9.5px] font-bold shrink-0 shadow-2xs">
+                          {thread.unreadCount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              );
+            })
+          )}
         </div>
       </div>
 
@@ -446,39 +564,57 @@ export function LiveChatWorkspace() {
       {/* COLUMN 2: WhatsApp / Telegram Chat Area (Center)                         */}
       {/* ======================================================================= */}
       <div className="flex-1 flex flex-col h-full bg-card-subtle/20 min-w-0 overflow-hidden relative">
-        {/* 1. WhatsApp Header Bar */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-card shadow-2xs shrink-0 z-10">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/15 text-primary font-heading font-extrabold text-sm shrink-0 border border-primary/25 shadow-2xs">
-              {selectedCustomer.fullName.charAt(0)}
-              {selectedThread.isOnline && (
-                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
-              )}
+        {!selectedThread || !selectedCustomer ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-card-subtle/10 space-y-3">
+            <div className="h-14 w-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-glow-primary/20">
+              <MessageSquare className="h-7 w-7" />
             </div>
-
-            <div className="flex flex-col min-w-0">
-              <span className="font-heading font-extrabold text-sm text-foreground truncate">
-                {selectedCustomer.fullName}
-              </span>
-              <span className="text-[11px] text-success font-medium flex items-center gap-1">
-                {selectedThread.isOnline ? "online" : "last seen today at 09:15 AM"}
-              </span>
+            <div className="space-y-1 max-w-sm">
+              <h3 className="font-heading font-extrabold text-sm text-foreground">
+                {isLoading ? "Loading Conversations..." : "No Active Conversation"}
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {isLoading
+                  ? "Connecting to telecom gateway and fetching conversation threads..."
+                  : "Select a subscriber conversation from the sidebar to view live chats and optical telemetry."}
+              </p>
             </div>
           </div>
+        ) : (
+          <>
+            {/* 1. WhatsApp Header Bar */}
+            <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-card shadow-2xs shrink-0 z-10">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/15 text-primary font-heading font-extrabold text-sm shrink-0 border border-primary/25 shadow-2xs">
+                  {selectedCustomer.fullName.charAt(0)}
+                  {selectedThread.isOnline && (
+                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card" />
+                  )}
+                </div>
 
-          {/* Action Icons */}
-          <div className="flex items-center gap-2 shrink-0">
-            <Tooltip content={`Call ${selectedCustomer.phone}`} position="bottom">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => toast.info("Calling Customer", `Connecting VoIP bridge to ${selectedCustomer.phone}`)}
-                className="h-9 px-3 rounded-xl text-xs font-medium cursor-pointer shadow-2xs"
-              >
-                <Phone className="h-3.5 w-3.5 text-primary mr-1.5" />
-                <span className="hidden sm:inline font-mono">{selectedCustomer.phone}</span>
-              </Button>
-            </Tooltip>
+                <div className="flex flex-col min-w-0">
+                  <span className="font-heading font-extrabold text-sm text-foreground truncate">
+                    {selectedCustomer.fullName}
+                  </span>
+                  <span className="text-[11px] text-success font-medium flex items-center gap-1">
+                    {selectedThread.isOnline ? "online" : "last seen recently"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Icons */}
+              <div className="flex items-center gap-2 shrink-0">
+                <Tooltip content={`Call ${selectedCustomer.phone}`} position="bottom">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => toast.info("Calling Customer", `Connecting VoIP bridge to ${selectedCustomer.phone}`)}
+                    className="h-9 px-3 rounded-xl text-xs font-medium cursor-pointer shadow-2xs"
+                  >
+                    <Phone className="h-3.5 w-3.5 text-primary mr-1.5" />
+                    <span className="hidden sm:inline font-mono">{selectedCustomer.phone}</span>
+                  </Button>
+                </Tooltip>
 
             <Tooltip content="Escalate to NOC Trouble Ticket" position="bottom">
               <Button
@@ -518,6 +654,48 @@ export function LiveChatWorkspace() {
             </Tooltip>
           </div>
         </div>
+
+        {/* Real-time NOC Telemetry Alert Banner */}
+        <AnimatePresence>
+          {activeTelemetryAlert && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="bg-destructive/15 border-b border-destructive/30 px-4 py-2.5 flex items-center justify-between text-xs text-destructive-foreground z-10 shrink-0"
+            >
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-2 w-2 rounded-full bg-destructive animate-ping" />
+                <AlertCircle className="h-4 w-4 text-destructive shrink-0" />
+                <div>
+                  <span className="font-bold text-destructive">NOC Optical Alert: </span>
+                  <span className="text-foreground">{activeTelemetryAlert.message}</span>
+                  <span className="ml-2 font-mono text-[10px] text-muted-foreground">
+                    ({activeTelemetryAlert.oltHostname} · {activeTelemetryAlert.ponPort} · {activeTelemetryAlert.dropDbm} dBm)
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  className="h-7 text-[10px] font-mono px-2.5 rounded-lg"
+                  onClick={() => {
+                    handleCannedInsert("Dear subscriber, our NOC system detected an optical power attenuation ({{optical_signal}} dBm). A technician has been notified.");
+                  }}
+                >
+                  Send Customer Notice
+                </Button>
+                <button
+                  onClick={() => setActiveTelemetryAlert(null)}
+                  className="text-muted-foreground hover:text-foreground text-xs p-1 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* 2. WhatsApp / Telegram Message Stream */}
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 custom-scrollbar">
@@ -652,6 +830,17 @@ export function LiveChatWorkspace() {
               </div>
             );
           })}
+          {/* Customer Typing Indicator */}
+          {customerTyping && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground italic px-2 py-1 animate-pulse">
+              <span className="flex gap-1 items-center">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
+              </span>
+              <span>{customerTyping} is typing...</span>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
@@ -733,6 +922,7 @@ export function LiveChatWorkspace() {
 
             {/* Input Field */}
             <input
+              ref={chatInputRef}
               type="text"
               placeholder={
                 isInternalNote
@@ -740,7 +930,10 @@ export function LiveChatWorkspace() {
                   : "Type a message or press '/' for quick replies..."
               }
               value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
+              onChange={(e) => {
+                setChatInput(e.target.value);
+                socketService.sendTyping(selectedThreadId, e.target.value.length > 0);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -755,25 +948,27 @@ export function LiveChatWorkspace() {
               )}
             />
 
-            {/* Send Button */}
-            <Button
-              variant={isInternalNote ? "secondary" : "primary"}
-              size="sm"
-              onClick={handleSendMessage}
-              className="h-10 px-4 rounded-xl cursor-pointer shadow-2xs"
-            >
-              <Send className="h-4 w-4 mr-1" />
-              <span>{isInternalNote ? "Note" : "Send"}</span>
-            </Button>
+              {/* Send Button */}
+              <Button
+                variant={isInternalNote ? "secondary" : "primary"}
+                size="sm"
+                onClick={handleSendMessage}
+                className="h-10 px-4 rounded-xl cursor-pointer shadow-2xs"
+              >
+                <Send className="h-4 w-4 mr-1" />
+                <span>{isInternalNote ? "Note" : "Send"}</span>
+              </Button>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
+    </div>
 
       {/* ======================================================================= */}
       {/* COLUMN 3: Telegram-Style Contact & NOC Profile Drawer (Right, 340px)    */}
       {/* ======================================================================= */}
       <AnimatePresence initial={false}>
-        {isCustomerHudOpen && (
+        {isCustomerHudOpen && selectedCustomer && (
           <motion.div
             initial={{ width: 0, opacity: 0 }}
             animate={{ width: 340, opacity: 1 }}
@@ -788,10 +983,10 @@ export function LiveChatWorkspace() {
               </span>
 
               <Badge
-                variant={selectedCustomer.opticalRxDbm < -25 ? "destructive" : "success"}
+                variant={selectedCustomer.opticalRxDbm != null && selectedCustomer.opticalRxDbm < -25 ? "destructive" : "success"}
                 className="text-[10px] font-mono font-bold"
               >
-                {selectedCustomer.opticalRxDbm} dBm
+                {selectedCustomer.opticalRxDbm != null ? `${selectedCustomer.opticalRxDbm} dBm` : "N/A"}
               </Badge>
             </div>
 
@@ -831,10 +1026,10 @@ export function LiveChatWorkspace() {
                   <div
                     className={cn(
                       "font-mono font-extrabold text-2xl tracking-tight",
-                      selectedCustomer.opticalRxDbm < -25 ? "text-destructive" : "text-success"
+                      selectedCustomer.opticalRxDbm != null && selectedCustomer.opticalRxDbm < -25 ? "text-destructive" : "text-success"
                     )}
                   >
-                    {selectedCustomer.opticalRxDbm} dBm
+                    {selectedCustomer.opticalRxDbm != null ? `${selectedCustomer.opticalRxDbm} dBm` : "N/A"}
                   </div>
                   <div className="text-[10px] font-medium text-muted-foreground">
                     Nominal Target: -15.0 to -24.0 dBm
@@ -844,15 +1039,21 @@ export function LiveChatWorkspace() {
                 <div className="space-y-1.5 text-[11px] text-muted-foreground font-mono">
                   <div className="flex justify-between">
                     <span>OLT Chassis:</span>
-                    <span className="font-bold text-foreground">Huawei MA5800-X7</span>
+                    <span className="font-bold text-foreground">
+                      {selectedCustomer.branchName ? `${selectedCustomer.branchName} OLT` : "Core OLT"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>PON Port:</span>
-                    <span className="font-bold text-foreground">Slot 0/2 · PON-04</span>
+                    <span className="font-bold text-foreground">{selectedCustomer.oltPonPort || "—"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>ONU Serial:</span>
-                    <span className="font-bold text-foreground">{selectedCustomer.onuSerial}</span>
+                    <span>ONU MAC:</span>
+                    <span className="font-bold text-foreground">{selectedCustomer.macAddress || selectedCustomer.onuSerial || "—"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Current IP:</span>
+                    <span className="font-bold text-foreground">{selectedCustomer.currentIp || "—"}</span>
                   </div>
                 </div>
               </div>
@@ -875,11 +1076,15 @@ export function LiveChatWorkspace() {
                 </div>
                 <div className="flex justify-between text-[11px]">
                   <span className="text-muted-foreground">Monthly Fee:</span>
-                  <span className="font-mono font-bold text-foreground">PKR {(selectedCustomer.monthlyFeePkr || Number(selectedCustomer.monthlyBilling) || 0).toLocaleString()}</span>
+                  <span className="font-mono font-bold text-foreground">
+                    PKR {(selectedCustomer.monthlyFeePkr || 0).toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between text-[11px]">
                   <span className="text-muted-foreground">Ledger Balance:</span>
-                  <span className="font-mono font-bold text-success">PKR {selectedCustomer.ledgerBalancePkr} (Paid)</span>
+                  <span className="font-mono font-bold text-success">
+                    PKR {(selectedCustomer.ledgerBalancePkr || 0).toLocaleString()} (Current)
+                  </span>
                 </div>
               </div>
 
@@ -890,7 +1095,7 @@ export function LiveChatWorkspace() {
                   size="sm"
                   className="w-full justify-start text-xs rounded-xl cursor-pointer"
                   onClick={() =>
-                    toast.success("TR-069 Reboot Dispatched", `Soft reboot signal sent to ONU ${selectedCustomer.onuSerial}`)
+                    toast.success("TR-069 Reboot Dispatched", `Soft reboot signal sent to ONU ${selectedCustomer.onuSerial || selectedCustomer.macAddress || "device"}`)
                   }
                 >
                   <RefreshCw className="h-3.5 w-3.5 text-warning mr-2 shrink-0" /> TR-069 Router Soft Reboot
@@ -910,6 +1115,13 @@ export function LiveChatWorkspace() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Start New Conversation Modal */}
+      <NewConversationModal
+        isOpen={isNewChatModalOpen}
+        onClose={() => setIsNewChatModalOpen(false)}
+        onConversationCreated={handleConversationCreated}
+      />
     </div>
   );
 }

@@ -30,6 +30,7 @@ export interface SubscriberRecord {
   pppoeUsername: string;
   username?: string;
   staticIp?: string;
+  currentIp?: string;
   onuSerial?: string;
   macAddress?: string;
   oltHostname?: string;

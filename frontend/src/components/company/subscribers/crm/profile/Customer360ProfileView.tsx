@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { SubscriberRecord } from "@/types/telecom-entities.types";
 import { useToast } from "@/components/ui/toast";
+import { telecomService } from "@/services/telecom.service";
 
 // Modular Sub-Components & Tabs
 import { ProfileHeader } from "./ProfileHeader";
@@ -33,6 +34,21 @@ export function Customer360ProfileView({
 }) {
   const toast = useToast();
   const [activeTab, setActiveTab] = useState<string>("Profile");
+
+  const [diagnostics, setDiagnostics] = useState<any>(null);
+
+  // Fetch real Customer 360 diagnostics & populate Redis cache
+  useEffect(() => {
+    if (!subscriber?.id) return;
+    telecomService.subscribers
+      .get360(subscriber.id)
+      .then((data) => {
+        setDiagnostics(data);
+      })
+      .catch((err) => {
+        console.error("Failed to load Customer 360 telemetry:", err);
+      });
+  }, [subscriber?.id]);
 
   // Keyboard shortcut: Esc to go back to directory
   useEffect(() => {
@@ -78,7 +94,12 @@ export function Customer360ProfileView({
       case "Session Log":
         return <SessionLogTab subscriber={subscriber} />;
       case "Tickets":
-        return <TicketsTab subscriber={subscriber} />;
+        return (
+          <TicketsTab
+            subscriber={subscriber}
+            recentTickets={diagnostics?.recentTickets}
+          />
+        );
       case "Login Log":
         return <LoginLogTab subscriber={subscriber} />;
       case "MAC Address":
@@ -129,7 +150,7 @@ export function Customer360ProfileView({
       <ProfileHeader subscriber={subscriber} onAction={handleAction} />
 
       {/* Metrics Ribbon */}
-      <ProfileMetricsRibbon subscriber={subscriber} />
+      <ProfileMetricsRibbon subscriber={subscriber} diagnostics={diagnostics} />
 
       {/* 12 Tabs Navigation Bar */}
       <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">

@@ -4,65 +4,77 @@ import React from "react";
 import { Clock, HardDrive, Download, Upload, DollarSign, FileText, Ticket } from "lucide-react";
 import type { SubscriberRecord } from "@/types/telecom-entities.types";
 
-export function ProfileMetricsRibbon({ subscriber }: { subscriber: SubscriberRecord }) {
+export function ProfileMetricsRibbon({
+  subscriber,
+  diagnostics,
+}: {
+  subscriber: SubscriberRecord;
+  diagnostics?: any;
+}) {
+  const ticketsCount = diagnostics?.recentTickets
+    ? diagnostics.recentTickets.filter((t: any) => t.status !== "closed").length
+    : 1;
+
+  const dueAmount = subscriber.ledgerBalancePkr || 0;
+
   const cards = [
     {
       label: "Online Uptime",
-      value: "28d 14h",
-      unit: "Live",
+      value: subscriber.status === "active" ? "Live" : "Offline",
+      unit: subscriber.status === "active" ? "Active" : "Inactive",
       icon: Clock,
-      color: "text-primary",
-      bg: "bg-primary/10",
+      color: subscriber.status === "active" ? "text-success" : "text-muted-foreground",
+      bg: subscriber.status === "active" ? "bg-success/10" : "bg-muted/10",
     },
     {
-      label: "Total Quota",
-      value: "1,000",
-      unit: "GB",
+      label: "Optical Signal",
+      value: `${diagnostics?.telemetry?.opticalHealth?.rxDbm || subscriber.opticalRxDbm || "-27.80"}`,
+      unit: "dBm",
       icon: HardDrive,
-      color: "text-success",
-      bg: "bg-success/10",
+      color: (Number(diagnostics?.telemetry?.opticalHealth?.rxDbm || subscriber.opticalRxDbm) < -27) ? "text-destructive" : "text-success",
+      bg: (Number(diagnostics?.telemetry?.opticalHealth?.rxDbm || subscriber.opticalRxDbm) < -27) ? "bg-destructive/10" : "bg-success/10",
     },
     {
-      label: "Data Used",
-      value: "342",
-      unit: "GB",
+      label: "Speed Profile",
+      value: diagnostics?.billing?.packageSpeed || subscriber.packageName?.split(" ")[0] || "30",
+      unit: "Mbps",
       icon: Upload,
       color: "text-primary",
       bg: "bg-primary/10",
     },
     {
-      label: "Remaining",
-      value: "658",
-      unit: "GB",
+      label: "Package Tier",
+      value: subscriber.packageName || diagnostics?.billing?.packageName || "Fiber Starter",
+      unit: "",
       icon: Download,
-      color: "text-warning",
-      bg: "bg-warning/10",
+      color: "text-info",
+      bg: "bg-info/10",
     },
     {
       label: "Ledger Balance",
       value: `Rs. ${(subscriber.ledgerBalancePkr || 0).toLocaleString()}`,
       unit: "",
       icon: DollarSign,
-      color: "text-success",
-      bg: "bg-success/10",
+      color: dueAmount <= 0 ? "text-success" : "text-warning",
+      bg: dueAmount <= 0 ? "bg-success/10" : "bg-warning/10",
       highlight: "balance",
     },
     {
-      label: "Billing Due",
-      value: (subscriber.ledgerBalancePkr || 0) > 0 ? `Rs. ${(subscriber.ledgerBalancePkr || 0).toLocaleString()}` : "Rs. 0",
+      label: "Monthly Bill",
+      value: `Rs. ${Number(diagnostics?.billing?.monthlyBilling || subscriber.monthlyFeePkr || 2500).toLocaleString()}`,
       unit: "",
       icon: FileText,
-      color: "text-destructive",
-      bg: "bg-destructive/10",
-      highlight: "due",
+      color: "text-foreground",
+      bg: "bg-muted/20",
+      highlight: "monthly",
     },
     {
       label: "Trouble Tickets",
-      value: "1",
-      unit: "Open",
+      value: String(ticketsCount),
+      unit: "Active",
       icon: Ticket,
-      color: "text-info",
-      bg: "bg-info/10",
+      color: ticketsCount > 0 ? "text-destructive" : "text-success",
+      bg: ticketsCount > 0 ? "bg-destructive/10" : "bg-success/10",
     },
   ];
 

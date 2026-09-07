@@ -351,7 +351,7 @@ export class CustomerService {
           recentConversations,
         };
       },
-      60, // 60s cache
+      300, // 300s (5 minutes) cache in Redis
     );
   }
 

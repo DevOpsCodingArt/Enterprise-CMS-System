@@ -68,6 +68,10 @@ export const telecomService = {
       const data = res.data?.data || res.data;
       return data ? normalizeSubscriber(data) : data;
     },
+    async get360(id: string) {
+      const res = await apiClient.get(`/customers/${id}/360`);
+      return res.data?.data || res.data;
+    },
     async create(payload: Partial<SubscriberRecord>) {
       const res = await apiClient.post("/customers", payload);
       return res.data?.data || res.data;
@@ -225,7 +229,7 @@ export const telecomService = {
         title: r.title,
         body: r.content,
         category: r.category || "General",
-        useCount: 15,
+        useCount: r.useCount || 0,
       })) as CannedTemplate[];
     },
     async createCannedShortcut(payload: any) {
@@ -247,6 +251,26 @@ export const telecomService = {
     async getConversations() {
       const res = await apiClient.get("/chat/conversations");
       return res.data?.data || res.data || [];
+    },
+    async createConversation(payload: {
+      customerId?: string;
+      phone?: string;
+      fullName?: string;
+      subject?: string;
+      priority?: "low" | "normal" | "high" | "urgent";
+      initialMessage?: string;
+    }) {
+      const res = await apiClient.post("/chat/conversations", payload, {
+        validateStatus: (status) => status < 500,
+      });
+      if (res.status >= 400 || res.data?.success === false) {
+        const errorMsg =
+          res.data?.error?.message ||
+          res.data?.message ||
+          "No registered subscriber found with this mobile number.";
+        return { error: errorMsg, notFound: res.status === 404 };
+      }
+      return res.data?.data || res.data;
     },
     async getMessages(conversationId: string) {
       const res = await apiClient.get(`/chat/conversations/${conversationId}/messages`);

@@ -28,6 +28,14 @@ export class ConnectionsController {
     return this.connectionsService.listLeads(companyId, stage);
   }
 
+  @Get('leads')
+  async listLeadsAlias(
+    @TenantId() companyId: string,
+    @Query('stage') stage?: string,
+  ) {
+    return this.connectionsService.listLeads(companyId, stage);
+  }
+
   @Get(':id')
   async getLeadById(@TenantId() companyId: string, @Param('id') id: string) {
     return this.connectionsService.getLeadById(companyId, id);

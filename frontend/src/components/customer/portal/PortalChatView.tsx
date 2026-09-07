@@ -20,66 +20,170 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
-import { useChatStore } from "@/stores/useChatStore";
+import { telecomService } from "@/services/telecom.service";
+import { socketService } from "@/services/socket.service";
+import { useAuthStore } from "@/stores/useAuthStore";
+
+interface PortalMessage {
+  id: string;
+  senderRole: "customer" | "agent" | "system";
+  senderName: string;
+  content: string;
+  isPrivateNote?: boolean;
+  type?: string;
+  status?: string;
+  createdAt: string;
+}
 
 export function PortalChatView() {
   const toast = useToast();
-  const { messages, addMessage, activeConversationId } = useChatStore();
+  const currentUser = useAuthStore((s) => s.user);
+  const [conversationId, setConversationId] = useState("");
+  const [messages, setMessages] = useState<PortalMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const [agentTypingText, setAgentTypingText] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const conversationId = activeConversationId || "conv-01";
-  const chatMessages = messages[conversationId] || [];
-
   // Filter out internal private staff notes from customer view
-  const visibleMessages = chatMessages.filter((m) => !m.isPrivateNote);
+  const visibleMessages = messages.filter((m) => !m.isPrivateNote);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // 1. Initial Load & Real-Time WebSocket Connection
+  useEffect(() => {
+    // Resolve active conversation ID if available
+    telecomService.chat
+      .getConversations()
+      .then((convs) => {
+        if (convs && convs.length > 0) {
+          setConversationId(convs[0].id);
+        }
+      })
+      .catch((err) => console.error("Failed to load customer conversations:", err));
+  }, []);
+
+  useEffect(() => {
+    if (!conversationId) return;
+
+    socketService.connect();
+    socketService.joinConversation(conversationId);
+
+    // Fetch initial chat message history
+    telecomService.chat
+      .getMessages(conversationId)
+      .then((dbMsgs) => {
+        if (dbMsgs && dbMsgs.length > 0) {
+          const formatted: PortalMessage[] = dbMsgs
+            .filter((m: any) => !m.isInternalNote)
+            .map((m: any) => ({
+              id: m.id,
+              senderRole: m.senderType === "customer" ? "customer" : m.senderType === "system" ? "system" : "agent",
+              senderName: m.senderName || (m.senderType === "customer" ? (currentUser?.name || "You") : "Support Desk"),
+              content: m.content || "",
+              isPrivateNote: Boolean(m.isInternalNote),
+              type: m.messageType || "text",
+              status: m.status || "delivered",
+              createdAt: m.createdAt,
+            }));
+          setMessages(formatted);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch messages for portal chat:", err));
+
+    // Listen for incoming messages from Agent or System
+    const unsubMsg = socketService.onMessage((msg: any) => {
+      if (msg.conversationId === conversationId) {
+        if (msg.isInternalNote) return; // Strict boundary: never display private notes to customer
+
+        setMessages((prev) => {
+          if (prev.some((existing) => existing.id === msg.id)) return prev;
+          return [
+            ...prev,
+            {
+              id: msg.id,
+              senderRole: msg.senderType === "customer" ? "customer" : msg.senderType === "system" ? "system" : "agent",
+              senderName: msg.senderName || (msg.senderType === "customer" ? (currentUser?.name || "You") : "Support Desk"),
+              content: msg.content,
+              isPrivateNote: false,
+              type: msg.messageType || "text",
+              status: msg.status || "delivered",
+              createdAt: msg.createdAt || new Date().toISOString(),
+            },
+          ];
+        });
+      }
+    });
+
+    // Listen for agent typing indicator
+    const unsubTyping = socketService.onTyping((data) => {
+      if (data.conversationId === conversationId) {
+        if (data.isTyping && data.userName && !data.userName.toLowerCase().includes("customer")) {
+          setAgentTypingText(data.userName);
+        } else {
+          setAgentTypingText(null);
+        }
+      }
+    });
+
+    return () => {
+      socketService.leaveConversation(conversationId);
+      unsubMsg();
+      unsubTyping();
+    };
+  }, [conversationId]);
+
   useEffect(() => {
     scrollToBottom();
-  }, [visibleMessages.length, isTyping]);
+  }, [visibleMessages.length, agentTypingText]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    // 1. Add customer message
-    addMessage(conversationId, {
+    const content = inputText.trim();
+    setInputText("");
+    socketService.sendTyping(conversationId, false);
+
+    // 1. Optimistic customer message
+    const customerName = currentUser?.name || "Customer";
+    const optimisticMsg: PortalMessage = {
       id: `msg-${Date.now()}`,
-      conversationId,
-      senderId: "cus-99482",
-      senderName: "Ahmed Malik",
       senderRole: "customer",
-      content: inputText.trim(),
+      senderName: customerName,
+      content,
       type: "text",
       status: "sent",
       createdAt: new Date().toISOString(),
-    });
+    };
+    setMessages((prev) => [...prev, optimisticMsg]);
 
-    setInputText("");
-    setIsTyping(true);
+    // 2. Real-time emit to WebSocket Gateway with REST fallback
+    const payload = {
+      conversationId,
+      content,
+      senderType: "customer" as const,
+      senderName: customerName,
+      messageType: "text" as const,
+    };
 
-    // 2. Simulate CSR typing and response
-    setTimeout(() => {
-      setIsTyping(false);
-      addMessage(conversationId, {
-        id: `msg-${Date.now() + 1}`,
-        conversationId,
-        senderId: "usr-csr-01",
-        senderName: "Fatima Noor (CSR #03)",
-        senderRole: "agent",
-        content: "Thank you Ahmed! Splicer Usman Ali (Van #04) has reached your street and is calibrating GPON Splitter #4 now.",
-        type: "text",
-        status: "delivered",
-        createdAt: new Date().toISOString(),
-      });
-      toast.info("New Message", "Fatima Noor replied to your message.");
-    }, 2200);
+    try {
+      if (socketService.isConnected()) {
+        await socketService.sendMessage(payload);
+      } else {
+        await telecomService.chat.sendMessage(payload);
+      }
+    } catch (err) {
+      console.warn("Socket transmission failed, falling back to REST API:", err);
+      try {
+        await telecomService.chat.sendMessage(payload);
+      } catch (restErr) {
+        console.error("Failed to send message via both socket and REST:", restErr);
+        toast.error("Transmission Error", "Failed to deliver message to support desk.");
+      }
+    }
   };
 
   const handleQuickPrompt = (prompt: string) => {
@@ -92,22 +196,22 @@ export function PortalChatView() {
       <header className="flex h-16 items-center justify-between border-b border-border bg-card-subtle px-4 py-2 select-none shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Avatar name="Fatima Noor" size="md" />
+            <Avatar name="Support Lead" size="md" />
             <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-card-subtle" />
           </div>
 
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-heading font-bold text-sm text-foreground">
-                Prime Support Helpdesk
+                Prime NOC Support Desk
               </span>
               <ShieldCheck className="h-3.5 w-3.5 text-success fill-success/20" />
             </div>
             <span className="font-mono text-[11px] text-muted-foreground block">
-              {isTyping ? (
-                <span className="text-primary font-bold animate-pulse">typing...</span>
+              {agentTypingText ? (
+                <span className="text-primary font-bold animate-pulse">{agentTypingText} is typing...</span>
               ) : (
-                "Fatima Noor (CSR #03) • Online"
+                "Support Desk • Online"
               )}
             </span>
           </div>
@@ -262,12 +366,12 @@ export function PortalChatView() {
           </div>
 
           {/* Typing Indicator */}
-          {isTyping && (
+          {agentTypingText && (
             <div className="flex items-center gap-1.5 rounded-full bg-card-subtle border border-border px-3 py-1.5 w-fit text-xs text-muted-foreground shadow-2xs">
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.2s]" />
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.4s]" />
-              <span className="text-[10px] font-mono ml-1">Fatima is typing...</span>
+              <span className="text-[10px] font-mono ml-1">{agentTypingText} is typing...</span>
             </div>
           )}
 
@@ -328,7 +432,10 @@ export function PortalChatView() {
         <form onSubmit={handleSendMessage} className="flex-1 flex items-center gap-2">
           <Input
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e) => {
+              setInputText(e.target.value);
+              socketService.sendTyping(conversationId, e.target.value.length > 0);
+            }}
             placeholder="Type a message..."
             className="text-xs h-10 rounded-xl bg-card-subtle border-border focus-visible:ring-primary"
           />

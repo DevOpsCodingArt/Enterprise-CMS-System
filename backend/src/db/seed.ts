@@ -235,6 +235,7 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
         companyId,
         branchId,
         email: u.email,
+        phone: u.phone,
         username: u.username,
         fullName: u.fullName,
         displayName: u.displayName,
@@ -344,49 +345,8 @@ async function runTenantSeed(companyId: string, passwordHash: string) {
       .onConflictDoNothing();
   }
 
-  // 9. Seed Demo Live Chat Conversation from dummy presets
-  console.log('9. Seeding Demo Chat from dummy presets...');
-  const chatCustomerId =
-    customerMap.get(DEMO_CONVERSATION.customerCode) ||
-    Array.from(customerMap.values())[0];
-
-  if (chatCustomerId && agentUserId) {
-    const [conv1] = await db
-      .insert(schema.conversations)
-      .values({
-        companyId,
-        customerId: chatCustomerId,
-        initiatedBy: DEMO_CONVERSATION.initiatedBy,
-        status: DEMO_CONVERSATION.status,
-        assignedTo: agentUserId,
-        assignedAt: new Date(),
-        priority: DEMO_CONVERSATION.priority,
-        subject: DEMO_CONVERSATION.subject,
-        lastMessageAt: new Date(),
-        unreadCountStaff: 0,
-        unreadCountCustomer: 0,
-      })
-      .onConflictDoNothing()
-      .returning();
-
-    if (conv1) {
-      for (const msg of DEMO_CONVERSATION.messages) {
-        await db.insert(schema.messages).values({
-          conversationId: conv1.id,
-          companyId,
-          senderType: msg.senderType,
-          senderCustomerId:
-            msg.senderType === 'customer' ? chatCustomerId : null,
-          senderUserId: msg.senderType === 'staff' ? agentUserId : null,
-          senderName: msg.senderName,
-          messageType: msg.messageType,
-          isInternalNote: msg.isInternalNote ?? false,
-          content: msg.content,
-          status: msg.status,
-        });
-      }
-    }
-  }
+  // 9. Live Chat Conversations (Clean: no dummy chats seeded)
+  console.log('9. Live Chat: Skipping dummy chat seed (clean empty state).');
 
   // 10. Seed Demo Trouble Ticket from dummy presets
   console.log('10. Seeding Demo Tickets from dummy presets...');

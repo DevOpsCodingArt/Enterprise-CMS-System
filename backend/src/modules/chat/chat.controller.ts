@@ -23,6 +23,23 @@ export class ChatController {
     return this.chatService.listConversations(companyId);
   }
 
+  @Post('conversations')
+  async createConversation(
+    @TenantId() companyId: string,
+    @CurrentUser() user: AuthenticatedUser,
+    @Body()
+    body: {
+      customerId?: string;
+      phone?: string;
+      fullName?: string;
+      subject?: string;
+      priority?: 'low' | 'normal' | 'high' | 'urgent';
+      initialMessage?: string;
+    },
+  ) {
+    return this.chatService.createConversation(companyId, body, user.id);
+  }
+
   @Get('conversations/:id/messages')
   async getMessages(
     @TenantId() companyId: string,
